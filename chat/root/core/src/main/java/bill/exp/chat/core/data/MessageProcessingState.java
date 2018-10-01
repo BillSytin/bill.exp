@@ -20,6 +20,7 @@ public class MessageProcessingState {
         this.processingMessage = null;
         this.processor = processor;
         this.finalCompletionHandler = null;
+        this.outputBuffer = null;
     }
 
     public final Session getSession() { return session; }

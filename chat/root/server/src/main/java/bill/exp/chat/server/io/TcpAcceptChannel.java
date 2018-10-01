@@ -20,8 +20,8 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.concurrent.TimeUnit;
 
-@Component("tcpChannel")
-public class TcpChannel implements Channel, DisposableBean {
+@Component("tcpAcceptChannel")
+public class TcpAcceptChannel implements Channel, DisposableBean {
     @Autowired
     @Qualifier("poolExecutor")
     private TaskExecutor poolExecutor;
@@ -40,7 +40,7 @@ public class TcpChannel implements Channel, DisposableBean {
     private AsynchronousChannelGroup group;
     private AsynchronousServerSocketChannel server;
 
-    public TcpChannel() {
+    public TcpAcceptChannel() {
     }
 
     @Override

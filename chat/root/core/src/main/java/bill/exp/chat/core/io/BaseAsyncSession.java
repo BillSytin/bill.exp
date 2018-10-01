@@ -32,6 +32,7 @@ public abstract class BaseAsyncSession implements AsyncSession {
     protected abstract MessageProcessingManager getProcessingManager();
 
     private void readNext() {
+
         channel.read(readBuffer, this, readCompletionHandler);
     }
 
@@ -78,14 +79,16 @@ public abstract class BaseAsyncSession implements AsyncSession {
     }
 
     private void writeNext(ByteBuffer output) {
+
         channel.write(output, this, writeCompletionHandler);
     }
 
     private synchronized void writeReplyMessage(MessageProcessingState state) {
 
         ByteBuffer output = state.getOutputBuffer();
-        if (output != null)
+        if (output != null) {
             getQueueExecutor().execute(() -> writeNext(output));
+        }
     }
 
     private void writeCompleted(Integer writeCount) {

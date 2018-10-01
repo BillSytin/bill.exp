@@ -15,7 +15,7 @@ public class MainWorker implements Runnable, DisposableBean {
     private TaskExecutor executor;
 
     @Autowired
-    @Qualifier("tcpChannel")
+    @Qualifier("tcpAcceptChannel")
     private Channel channel;
 
     @Autowired
