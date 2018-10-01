@@ -1,4 +1,4 @@
-package bill.exp.chat.server.tcpio;
+package bill.exp.chat.server.io;
 
 import bill.exp.chat.core.data.MessageProcessingManager;
 import bill.exp.chat.core.io.BaseAsyncSession;
