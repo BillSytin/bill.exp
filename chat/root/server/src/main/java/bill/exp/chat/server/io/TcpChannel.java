@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -19,10 +20,11 @@ import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.concurrent.TimeUnit;
 
+@Component("tcpChannel")
 public class TcpChannel implements Channel, DisposableBean {
     @Autowired
-    @Qualifier("threadPoolExecutor")
-    private TaskExecutor threadPoolExecutor;
+    @Qualifier("poolExecutor")
+    private TaskExecutor poolExecutor;
 
     @Autowired
     @Qualifier("mainLifetimeManager")
@@ -49,7 +51,7 @@ public class TcpChannel implements Channel, DisposableBean {
 
     @PostConstruct
     public void init() throws IOException {
-        group = AsynchronousChannelGroup.withThreadPool(((ThreadPoolTaskExecutor) threadPoolExecutor).getThreadPoolExecutor());
+        group = AsynchronousChannelGroup.withThreadPool(((ThreadPoolTaskExecutor) poolExecutor).getThreadPoolExecutor());
         server = AsynchronousServerSocketChannel.open(group);
         server.bind(address);
     }
