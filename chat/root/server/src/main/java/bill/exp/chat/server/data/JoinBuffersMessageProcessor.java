@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.CompletionHandler;
 
 @Component
-@Order(-100)
+@Order(-10)
 public class JoinBuffersMessageProcessor implements MessageProcessor {
 
     @Override
@@ -22,8 +22,8 @@ public class JoinBuffersMessageProcessor implements MessageProcessor {
         if (state.getIncomingMessage() instanceof ByteBufferMessage) {
             final ByteBuffer incoming = ((ByteBufferMessage) state.getIncomingMessage()).getBuffer();
             final int endPosition = incoming.position();
-            if (endPosition >= 1 && incoming.get(endPosition) == 0 && incoming.get(endPosition - 1) == 0) {
-                incoming.position(endPosition - 2);
+            if (incoming.get(endPosition) == 0) {
+                incoming.position(endPosition - 1);
                 incoming.flip();
             }
             else {

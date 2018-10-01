@@ -12,4 +12,9 @@ public class StringMessage implements Message {
     public Object getContent() {
         return content;
     }
+
+    public final String getString() {
+
+        return content;
+    }
 }

@@ -11,14 +11,16 @@ import java.nio.channels.CompletionHandler;
 public abstract class BaseAsyncSession implements AsyncSession {
     private AsynchronousSocketChannel channel;
     private final ByteBuffer readBuffer;
-    private final CompletionHandler<Integer, Session> readHandler;
+    private final CompletionHandler<Integer, Session> readCompletionHandler;
+    private final CompletionHandler<Integer, Session> writeCompletionHandler;
     private final MessageProcessingCompletionHandler processingCompletionHandler;
     private MessageProcessingState currentProcessingState;
 
-    public BaseAsyncSession() {
+    protected BaseAsyncSession(int bufferSize) {
 
-        readBuffer = ByteBuffer.allocate(8192);
-        readHandler = new ReadHandler();
+        readBuffer = ByteBuffer.allocate(bufferSize);
+        readCompletionHandler = new ReadCompletionHandler();
+        writeCompletionHandler = new WriteCompletionHandler();
         processingCompletionHandler = new MessageProcessingCompletionHandler();
         currentProcessingState = null;
     }
@@ -30,7 +32,7 @@ public abstract class BaseAsyncSession implements AsyncSession {
     protected abstract MessageProcessingManager getProcessingManager();
 
     private void readNext() {
-        channel.read(readBuffer, this, readHandler);
+        channel.read(readBuffer, this, readCompletionHandler);
     }
 
     @Override
@@ -41,7 +43,7 @@ public abstract class BaseAsyncSession implements AsyncSession {
         readNext();
     }
 
-    private void readCompleted(Integer readCount) {
+    private synchronized void readCompleted(Integer readCount) {
 
         if (readCount < 0)
             return;
@@ -57,12 +59,12 @@ public abstract class BaseAsyncSession implements AsyncSession {
         clone.flip();
         original.clear();
 
-        getQueueExecutor().execute(() -> processMessage(new ByteBufferMessage(clone, isIncomplete)));
+        getQueueExecutor().execute(() -> processReadMessage(new ByteBufferMessage(clone, isIncomplete)));
 
         readNext();
     }
 
-    private void processMessage(Message message) {
+    private void processReadMessage(Message message) {
 
         MessageProcessingState processingState = currentProcessingState;
         if (processingState == null) {
@@ -73,6 +75,21 @@ public abstract class BaseAsyncSession implements AsyncSession {
         }
 
         processingState.getProcessor().process(processingState, processingCompletionHandler);
+    }
+
+    private void writeNext(ByteBuffer output) {
+        channel.write(output, this, writeCompletionHandler);
+    }
+
+    private synchronized void writeReplyMessage(MessageProcessingState state) {
+
+        ByteBuffer output = state.getOutputBuffer();
+        if (output != null)
+            getQueueExecutor().execute(() -> writeNext(output));
+    }
+
+    private void writeCompleted(Integer writeCount) {
+
     }
 
     @Override
@@ -96,7 +113,9 @@ public abstract class BaseAsyncSession implements AsyncSession {
                     currentProcessingState = attachment;
                     break;
                 case NEXT:
+                    break;
                 case REPLY:
+                    writeReplyMessage(attachment);
                     break;
             }
         }
@@ -107,11 +126,24 @@ public abstract class BaseAsyncSession implements AsyncSession {
         }
     }
 
-    private final class ReadHandler implements CompletionHandler<Integer, Session> {
+    private final class ReadCompletionHandler implements CompletionHandler<Integer, Session> {
 
         @Override
         public void completed(Integer result, Session attachment) {
             ((BaseAsyncSession)attachment).readCompleted(result);
+        }
+
+        @Override
+        public void failed(Throwable exc, Session attachment) {
+
+        }
+    }
+
+    private final class WriteCompletionHandler implements CompletionHandler<Integer, Session> {
+
+        @Override
+        public void completed(Integer result, Session attachment) {
+            ((BaseAsyncSession)attachment).writeCompleted(result);
         }
 
         @Override

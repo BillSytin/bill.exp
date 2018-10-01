@@ -13,6 +13,7 @@ public class MessageProcessingManager extends BaseMessageProcessingManager {
 
     @Override
     protected MessageProcessor[] getProcessors() {
+
         return processors;
     }
 }
