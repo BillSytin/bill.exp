@@ -4,9 +4,9 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.stereotype.Component;
 
 @Component("queueExecutor")
-public class QueueExecutor extends SimpleAsyncTaskExecutor {
+public class QueueTaskExecutor extends SimpleAsyncTaskExecutor {
 
-    public QueueExecutor() {
+    public QueueTaskExecutor() {
         setConcurrencyLimit(1);
         setThreadNamePrefix("queue_task_executor_thread");
     }
