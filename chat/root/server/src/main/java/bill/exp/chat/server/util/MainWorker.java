@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component("mainWorker")
-public class MainWorker implements Runnable, DisposableBean {
+public class MainWorker implements Runnable, Stoppable, DisposableBean {
     @Autowired
     @Qualifier("inplaceExecutor")
     private TaskExecutor executor;
@@ -29,12 +31,37 @@ public class MainWorker implements Runnable, DisposableBean {
     }
 
     @Override
-    public void destroy() throws Exception {
+    public void destroy() {
+
+        setIsStopping();
+
+    }
+
+    @Override
+    public boolean getIsStopping() {
+
+        return lifeTimeManager.getIsStopping();
+    }
+
+    @Override
+    public void setIsStopping() {
 
         lifeTimeManager.setIsStopping();
 
-        if (channel instanceof DisposableBean)
-            ((DisposableBean) channel).destroy();
+        if (channel instanceof Stoppable) {
+            ((Stoppable) channel).setIsStopping();
+        }
+    }
 
+    @Override
+    public void setIsStopped() {
+
+        lifeTimeManager.setIsStopped();
+    }
+
+    @Override
+    public boolean waitStopped(int timeout) {
+
+        return lifeTimeManager.waitStopped(timeout);
     }
 }

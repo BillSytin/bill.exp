@@ -48,6 +48,6 @@ public class MainLifetimeManager implements Stoppable {
             }
         }
 
-        return true;
+        return isStopped;
     }
 }

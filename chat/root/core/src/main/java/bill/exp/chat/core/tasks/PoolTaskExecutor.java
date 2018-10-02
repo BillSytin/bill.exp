@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 public class PoolTaskExecutor extends ThreadPoolTaskExecutor {
 
     public PoolTaskExecutor() {
-        setCorePoolSize(40);
         setThreadNamePrefix("thread_pool_task_executor_thread");
+        setCorePoolSize(40);
         initialize();
     }
 }

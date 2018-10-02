@@ -20,7 +20,7 @@ import java.nio.channels.CompletionHandler;
 import java.util.concurrent.TimeUnit;
 
 @Component("tcpAcceptChannel")
-public class TcpAcceptChannel implements Channel, DisposableBean {
+public class TcpAcceptChannel implements Channel, Stoppable, DisposableBean {
     @Autowired
     private AsynchronousChannelGroupFactory groupFactory;
 
@@ -113,5 +113,29 @@ public class TcpAcceptChannel implements Channel, DisposableBean {
     public void run() {
 
         acceptNext(createAcceptHandler());
+    }
+
+    @Override
+    public boolean getIsStopping() {
+
+        return lifeTimeManager.getIsStopping();
+    }
+
+    @Override
+    public void setIsStopping() {
+
+        stop();
+    }
+
+    @Override
+    public void setIsStopped() {
+
+        lifeTimeManager.setIsStopped();
+    }
+
+    @Override
+    public boolean waitStopped(int timeout) {
+
+        return lifeTimeManager.waitStopped(timeout);
     }
 }

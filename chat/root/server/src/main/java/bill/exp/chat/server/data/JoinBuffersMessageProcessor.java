@@ -21,13 +21,14 @@ public class JoinBuffersMessageProcessor implements MessageProcessor {
 
         if (state.getIncomingMessage() instanceof ByteBufferMessage) {
             final ByteBuffer incoming = ((ByteBufferMessage) state.getIncomingMessage()).getBuffer();
-            final int endPosition = incoming.position();
-            if (incoming.get(endPosition) == 0) {
-                incoming.position(endPosition - 1);
-                incoming.flip();
-            }
-            else {
-                isComplete = false;
+            final int endPosition = incoming.limit() - 1;
+            if (endPosition >= 0) {
+                if (incoming.get(endPosition) == 0) {
+                    incoming.position(endPosition);
+                    incoming.flip();
+                } else {
+                    isComplete = false;
+                }
             }
 
             ByteBuffer resulting;

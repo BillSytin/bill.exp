@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class ServerApplicationTests {
 
 	@MockBean
+	@Qualifier("mainLifetimeManager")
 	private Stoppable lifeTimeManager;
 
 	@Autowired

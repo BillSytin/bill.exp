@@ -25,7 +25,8 @@ public abstract class BaseAsyncSession implements AsyncSession {
         currentProcessingState = null;
     }
 
-    protected abstract TaskExecutor getQueueExecutor();
+    protected abstract TaskExecutor getWriteQueueExecutor();
+    protected abstract TaskExecutor getProcessingQueueExecutor();
 
     protected abstract SessionManager getSessionManager();
 
@@ -60,7 +61,7 @@ public abstract class BaseAsyncSession implements AsyncSession {
         clone.flip();
         original.clear();
 
-        getQueueExecutor().execute(() -> processReadMessage(new ByteBufferMessage(clone, isIncomplete)));
+        getProcessingQueueExecutor().execute(() -> processReadMessage(new ByteBufferMessage(clone, isIncomplete)));
 
         readNext();
     }
@@ -87,8 +88,13 @@ public abstract class BaseAsyncSession implements AsyncSession {
 
         ByteBuffer output = state.getOutputBuffer();
         if (output != null) {
-            getQueueExecutor().execute(() -> writeNext(output));
+
+            writeBuffer(output);
         }
+    }
+
+    protected synchronized void writeBuffer(ByteBuffer output) {
+        getWriteQueueExecutor().execute(() -> writeNext(output));
     }
 
     private void writeCompleted(Integer writeCount) {
@@ -101,7 +107,8 @@ public abstract class BaseAsyncSession implements AsyncSession {
         getSessionManager().removeSession(this);
 
         try {
-            channel.close();
+            if (channel != null)
+                channel.close();
         }
         catch (final IOException e) {
         }

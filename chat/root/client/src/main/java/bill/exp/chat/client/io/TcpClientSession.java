@@ -9,12 +9,18 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
+import java.nio.ByteBuffer;
+
 @Component
 @Scope("prototype")
 public class TcpClientSession extends BaseAsyncSession implements ClientSession {
     @Autowired
     @Qualifier("queueExecutor")
-    private TaskExecutor queueExecutor;
+    private TaskExecutor writeQueueExecutor;
+
+    @Autowired
+    @Qualifier("queueExecutor")
+    private TaskExecutor processingQueueExecutor;
 
     @Autowired
     private SessionManager sessionManager;
@@ -23,8 +29,13 @@ public class TcpClientSession extends BaseAsyncSession implements ClientSession 
     private MessageProcessingManager processingManager;
 
     @Override
-    protected TaskExecutor getQueueExecutor() {
-        return queueExecutor;
+    protected TaskExecutor getWriteQueueExecutor() {
+        return writeQueueExecutor;
+    }
+
+    @Override
+    protected TaskExecutor getProcessingQueueExecutor() {
+        return processingQueueExecutor;
     }
 
     @Override
@@ -39,5 +50,11 @@ public class TcpClientSession extends BaseAsyncSession implements ClientSession 
 
     public TcpClientSession() {
         super(8192);
+    }
+
+    @Override
+    public void write(ByteBuffer output) {
+
+        super.writeBuffer(output);
     }
 }

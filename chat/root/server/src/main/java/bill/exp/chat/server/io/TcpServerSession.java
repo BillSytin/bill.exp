@@ -14,7 +14,10 @@ import org.springframework.stereotype.Component;
 public class TcpServerSession extends BaseAsyncSession implements ServerSession {
     @Autowired
     @Qualifier("queueExecutor")
-    private TaskExecutor queueExecutor;
+    private TaskExecutor writeQueueExecutor;
+    @Autowired
+    @Qualifier("queueExecutor")
+    private TaskExecutor processingQueueExecutor;
 
     @Autowired
     private SessionManager sessionManager;
@@ -23,8 +26,13 @@ public class TcpServerSession extends BaseAsyncSession implements ServerSession 
     private MessageProcessingManager processingManager;
 
     @Override
-    protected TaskExecutor getQueueExecutor() {
-        return queueExecutor;
+    protected TaskExecutor getWriteQueueExecutor() {
+        return writeQueueExecutor;
+    }
+
+    @Override
+    protected TaskExecutor getProcessingQueueExecutor() {
+        return processingQueueExecutor;
     }
 
     @Override

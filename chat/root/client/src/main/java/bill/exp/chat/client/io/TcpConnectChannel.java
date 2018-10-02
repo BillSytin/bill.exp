@@ -19,7 +19,7 @@ import java.nio.channels.CompletionHandler;
 import java.util.concurrent.TimeUnit;
 
 @Component("tcpConnectChannel")
-public class TcpConnectChannel implements DisposableBean {
+public class TcpConnectChannel implements ClientChannel, Stoppable, DisposableBean {
 
     @Autowired
     private AsynchronousChannelGroupFactory groupFactory;
@@ -38,16 +38,19 @@ public class TcpConnectChannel implements DisposableBean {
     private AsynchronousChannelGroup group;
     private AsynchronousSocketChannel client;
 
+    @Override
     public <A> void connect(A attachment, CompletionHandler<ClientSession, A> completionHandler) {
 
         client.connect(address, attachment, new CompletionHandler<Void, A>() {
             @Override
             public void completed(Void result, A attachment) {
+
                 completionHandler.completed(openSession(), attachment);
             }
 
             @Override
             public void failed(Throwable exc, A attachment) {
+
                 completionHandler.failed(exc, attachment);
             }
         });
@@ -97,6 +100,29 @@ public class TcpConnectChannel implements DisposableBean {
             }
         }
 
+    }
+
+    @Override
+    public boolean getIsStopping() {
+
+        return lifeTimeManager.getIsStopping();
+    }
+
+    @Override
+    public void setIsStopping() {
+
+        stop();
+    }
+
+    @Override
+    public void setIsStopped() {
+
         lifeTimeManager.setIsStopped();
+    }
+
+    @Override
+    public boolean waitStopped(int timeout) {
+
+        return lifeTimeManager.waitStopped(timeout);
     }
 }

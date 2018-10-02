@@ -20,11 +20,14 @@ public class EncodeOutputMessageProcessor implements MessageProcessor {
             final ByteBuffer encodeBuffer = StandardCharsets.UTF_8.encode(outputString);
 
             ByteBuffer outputBuffer;
-            if ((encodeBuffer.position() + 1) < encodeBuffer.limit()) {
+            encodeBuffer.rewind();
+            final int endPosition = encodeBuffer.limit();
+            if (endPosition < encodeBuffer.capacity()) {
                 outputBuffer = encodeBuffer;
+                outputBuffer.limit(endPosition + 1);
+                outputBuffer.position(endPosition);
             }
             else {
-                encodeBuffer.rewind();
                 outputBuffer = ByteBuffer
                         .allocate(encodeBuffer.remaining() + 1)
                         .put(encodeBuffer);
