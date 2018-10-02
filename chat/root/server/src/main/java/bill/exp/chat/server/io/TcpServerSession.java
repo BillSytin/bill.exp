@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
-public class TcpAsyncSession extends BaseAsyncSession {
+public class TcpServerSession extends BaseAsyncSession implements ServerSession {
     @Autowired
     @Qualifier("queueExecutor")
     private TaskExecutor queueExecutor;
@@ -37,7 +37,7 @@ public class TcpAsyncSession extends BaseAsyncSession {
         return processingManager;
     }
 
-    public TcpAsyncSession() {
+    public TcpServerSession() {
         super(8192);
     }
 }

@@ -1,4 +1,4 @@
-package bill.exp.chat.server.io;
+package bill.exp.chat.client.io;
 
 import bill.exp.chat.core.io.AsyncSession;
 import bill.exp.chat.core.io.Channel;
@@ -14,13 +14,13 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousChannelGroup;
-import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.util.concurrent.TimeUnit;
 
-@Component("tcpAcceptChannel")
-public class TcpAcceptChannel implements Channel, DisposableBean {
+@Component("tcpConnectChannel")
+public class TcpConnectChannel implements DisposableBean {
+
     @Autowired
     private AsynchronousChannelGroupFactory groupFactory;
 
@@ -36,9 +36,21 @@ public class TcpAcceptChannel implements Channel, DisposableBean {
     private ApplicationContext context;
 
     private AsynchronousChannelGroup group;
-    private AsynchronousServerSocketChannel server;
+    private AsynchronousSocketChannel client;
 
-    public TcpAcceptChannel() {
+    public <A> void connect(A attachment, CompletionHandler<ClientSession, A> completionHandler) {
+
+        client.connect(address, attachment, new CompletionHandler<Void, A>() {
+            @Override
+            public void completed(Void result, A attachment) {
+                completionHandler.completed(openSession(), attachment);
+            }
+
+            @Override
+            public void failed(Throwable exc, A attachment) {
+                completionHandler.failed(exc, attachment);
+            }
+        });
     }
 
     @Override
@@ -47,20 +59,25 @@ public class TcpAcceptChannel implements Channel, DisposableBean {
         stop();
     }
 
+    private ClientSession openSession() {
+        ClientSession session = context.getBean(ClientSession.class);
+        session.open(client);
+        return session;
+    }
+
     @PostConstruct
     public void init() throws IOException {
         group = groupFactory.getInstance();
-        server = AsynchronousServerSocketChannel.open(group);
-        server.bind(address);
+        client = AsynchronousSocketChannel.open(group);
     }
 
     private void stop() {
 
         lifeTimeManager.setIsStopping();
 
-        if (server != null && server.isOpen()) {
+        if (client != null && client.isOpen()) {
             try {
-                server.close();
+                client.close();
             }
             catch (final IOException e) {
             }
@@ -81,37 +98,5 @@ public class TcpAcceptChannel implements Channel, DisposableBean {
         }
 
         lifeTimeManager.setIsStopped();
-    }
-
-    private CompletionHandler<AsynchronousSocketChannel, AsyncSession> createAcceptHandler() {
-
-        return new CompletionHandler<AsynchronousSocketChannel, AsyncSession>() {
-            @Override
-            public void completed(AsynchronousSocketChannel result, AsyncSession attachment) {
-                acceptNext(this);
-                attachment.open(result);
-            }
-
-            @Override
-            public void failed(Throwable exc, AsyncSession attachment) {
-                attachment.close();
-                stop();
-            }
-        };
-    }
-
-    private void acceptNext(CompletionHandler<AsynchronousSocketChannel, AsyncSession> handler) {
-        if (lifeTimeManager.getIsStopping() || !server.isOpen()) {
-            stop();
-        } else {
-            AsyncSession session = context.getBean(ServerSession.class);
-            server.accept(session, handler);
-        }
-    }
-
-    @Override
-    public void run() {
-
-        acceptNext(createAcceptHandler());
     }
 }
