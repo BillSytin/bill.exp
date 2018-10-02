@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Scanner;
 
 @Component
-@Profile("!test")
+@Profile({"server"})
 public class CommandLineConsole implements CommandLineRunner {
     @Autowired
     @Qualifier("inplaceExecutor")
