@@ -1,19 +1,9 @@
-package bill.exp.chat.server.data;
-
-import bill.exp.chat.core.data.ByteBufferMessage;
-import bill.exp.chat.core.data.MessageProcessingAction;
-import bill.exp.chat.core.data.MessageProcessingState;
-import bill.exp.chat.core.data.MessageProcessor;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
+package bill.exp.chat.core.data;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.CompletionHandler;
 
-@Component
-@Order(-10)
-public class JoinBuffersMessageProcessor implements MessageProcessor {
-
+public class BaseJoinBuffersMessageProcessor implements MessageProcessor {
     @Override
     public void process(MessageProcessingState state, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
 

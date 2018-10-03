@@ -1,17 +1,10 @@
-package bill.exp.chat.server.data;
-
-import bill.exp.chat.core.data.*;
-import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
+package bill.exp.chat.core.data;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.StandardCharsets;
 
-@Component
-@Order(1000)
-public class EncodeOutputMessageProcessor implements MessageProcessor {
-
+public class BaseEncodeOutputMessageProcessor implements MessageProcessor {
     @Override
     public void process(MessageProcessingState state, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
 

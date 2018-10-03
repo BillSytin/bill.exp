@@ -44,7 +44,7 @@ public class TcpClientSession extends BaseAsyncSession implements ClientSession 
             @Qualifier("queueExecutor") TaskExecutor writeQueueExecutor,
             @Qualifier("queueExecutor") TaskExecutor processingQueueExecutor,
             @Qualifier("clientSessionManager") SessionManager sessionManager,
-            MessageProcessingManager processingManager
+            @Qualifier("clientMessageProcessingManager") MessageProcessingManager processingManager
     ) {
 
         super(8192);
