@@ -1,17 +1,16 @@
 package bill.exp.chat.client.io;
 
-import bill.exp.chat.core.io.AsyncSession;
-import bill.exp.chat.core.io.Channel;
+import bill.exp.chat.core.io.Session;
+import bill.exp.chat.core.io.SessionFactory;
 import bill.exp.chat.core.tasks.AsynchronousChannelGroupFactory;
 import bill.exp.chat.core.util.Stoppable;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousSocketChannel;
@@ -21,57 +20,68 @@ import java.util.concurrent.TimeUnit;
 @Component("tcpConnectChannel")
 public class TcpConnectChannel implements ClientChannel, Stoppable, DisposableBean {
 
-    @Autowired
-    private AsynchronousChannelGroupFactory groupFactory;
+    private final Stoppable lifeTimeManager;
+    private final InetSocketAddress address;
+    private final SessionFactory sessionFactory;
+    private final AsynchronousChannelGroup group;
+    private final AsynchronousSocketChannel client;
 
     @Autowired
-    @Qualifier("mainLifetimeManager")
-    private Stoppable lifeTimeManager;
+    public TcpConnectChannel(
+            @Qualifier("mainLifetimeManager") Stoppable lifeTimeManager,
+            AsynchronousChannelGroupFactory groupFactory,
+            @Qualifier("serverAddress")InetSocketAddress address,
+            @Qualifier("clientSessionFactory") SessionFactory sessionFactory
+    ) {
+        this.lifeTimeManager = lifeTimeManager;
+        this.address = address;
+        this.sessionFactory = sessionFactory;
+        this.group = groupFactory.getInstance();
+        this.client = openClient();
+    }
 
-    @Autowired
-    @Qualifier("serverAddress")
-    private InetSocketAddress address;
+    private AsynchronousSocketChannel openClient() {
 
-    @Autowired
-    private ApplicationContext context;
-
-    private AsynchronousChannelGroup group;
-    private AsynchronousSocketChannel client;
+        try {
+            return AsynchronousSocketChannel.open();
+        }
+        catch (final IOException e) {
+            lifeTimeManager.setIsStopping();
+        }
+        return null;
+    }
 
     @Override
     public <A> void connect(A attachment, CompletionHandler<ClientSession, A> completionHandler) {
 
-        client.connect(address, attachment, new CompletionHandler<Void, A>() {
-            @Override
-            public void completed(Void result, A attachment) {
+        Session newSession = sessionFactory.createSession();
+        if (newSession instanceof ClientSession) {
 
-                completionHandler.completed(openSession(), attachment);
-            }
+            ClientSession session = (ClientSession) newSession;
+            client.connect(address, attachment, new CompletionHandler<Void, A>() {
+                @Override
+                public void completed(Void result, A attachment) {
 
-            @Override
-            public void failed(Throwable exc, A attachment) {
+                    session.open(client);
+                    completionHandler.completed(session, attachment);
+                }
 
-                completionHandler.failed(exc, attachment);
-            }
-        });
+                @Override
+                public void failed(Throwable exc, A attachment) {
+
+                    completionHandler.failed(exc, attachment);
+                }
+            });
+        }
+        else {
+            completionHandler.failed(new InvalidClassException("ClientSession"), attachment);
+        }
     }
 
     @Override
     public void destroy() {
 
         stop();
-    }
-
-    private ClientSession openSession() {
-        ClientSession session = context.getBean(ClientSession.class);
-        session.open(client);
-        return session;
-    }
-
-    @PostConstruct
-    public void init() throws IOException {
-        group = groupFactory.getInstance();
-        client = AsynchronousSocketChannel.open(group);
     }
 
     private void stop() {

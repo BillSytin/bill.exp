@@ -14,17 +14,21 @@ import java.util.Scanner;
 @Component
 @Profile({"server"})
 public class CommandLineConsole implements CommandLineRunner {
-    @Autowired
-    @Qualifier("inplaceExecutor")
-    private TaskExecutor executor;
+    private final TaskExecutor executor;
+    private final Runnable worker;
+    private final Stoppable lifeTimeManager;
 
     @Autowired
-    @Qualifier("mainWorker")
-    private Runnable worker;
+    public CommandLineConsole(
+            @Qualifier("mainLifetimeManager") Stoppable lifeTimeManager,
+            @Qualifier("inplaceExecutor") TaskExecutor executor,
+            @Qualifier("mainWorker") Runnable worker
+    ) {
 
-    @Autowired
-    @Qualifier("mainLifetimeManager")
-    private Stoppable lifeTimeManager;
+        this.lifeTimeManager = lifeTimeManager;
+        this.executor = executor;
+        this.worker = worker;
+    }
 
     @Override
     public void run(String... args) throws Exception {

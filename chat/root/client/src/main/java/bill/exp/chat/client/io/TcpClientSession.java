@@ -14,19 +14,10 @@ import java.nio.ByteBuffer;
 @Component
 @Scope("prototype")
 public class TcpClientSession extends BaseAsyncSession implements ClientSession {
-    @Autowired
-    @Qualifier("queueExecutor")
-    private TaskExecutor writeQueueExecutor;
-
-    @Autowired
-    @Qualifier("queueExecutor")
-    private TaskExecutor processingQueueExecutor;
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private MessageProcessingManager processingManager;
+    private final TaskExecutor writeQueueExecutor;
+    private final TaskExecutor processingQueueExecutor;
+    private final SessionManager sessionManager;
+    private final MessageProcessingManager processingManager;
 
     @Override
     protected TaskExecutor getWriteQueueExecutor() {
@@ -48,8 +39,19 @@ public class TcpClientSession extends BaseAsyncSession implements ClientSession 
         return processingManager;
     }
 
-    public TcpClientSession() {
+    @Autowired
+    public TcpClientSession(
+            @Qualifier("queueExecutor") TaskExecutor writeQueueExecutor,
+            @Qualifier("queueExecutor") TaskExecutor processingQueueExecutor,
+            @Qualifier("clientSessionManager") SessionManager sessionManager,
+            MessageProcessingManager processingManager
+    ) {
+
         super(8192);
+        this.writeQueueExecutor = writeQueueExecutor;
+        this.processingQueueExecutor = processingQueueExecutor;
+        this.sessionManager = sessionManager;
+        this.processingManager = processingManager;
     }
 
     @Override

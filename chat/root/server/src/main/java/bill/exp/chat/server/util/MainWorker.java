@@ -12,17 +12,22 @@ import java.io.IOException;
 
 @Component("mainWorker")
 public class MainWorker implements Runnable, Stoppable, DisposableBean {
-    @Autowired
-    @Qualifier("inplaceExecutor")
-    private TaskExecutor executor;
+
+    private final TaskExecutor executor;
+    private final Channel channel;
+    private final Stoppable lifeTimeManager;
 
     @Autowired
-    @Qualifier("tcpAcceptChannel")
-    private Channel channel;
+    public MainWorker(
+            @Qualifier("mainLifetimeManager") Stoppable lifeTimeManager,
+            @Qualifier("inplaceExecutor") TaskExecutor executor,
+            @Qualifier("tcpAcceptChannel") Channel channel
+    ) {
 
-    @Autowired
-    @Qualifier("mainLifetimeManager")
-    private Stoppable lifeTimeManager;
+        this.lifeTimeManager = lifeTimeManager;
+        this.executor = executor;
+        this.channel = channel;
+    }
 
     @Override
     public void run() {

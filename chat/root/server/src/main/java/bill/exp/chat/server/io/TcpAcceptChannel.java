@@ -2,6 +2,8 @@ package bill.exp.chat.server.io;
 
 import bill.exp.chat.core.io.AsyncSession;
 import bill.exp.chat.core.io.Channel;
+import bill.exp.chat.core.io.Session;
+import bill.exp.chat.core.io.SessionFactory;
 import bill.exp.chat.core.tasks.AsynchronousChannelGroupFactory;
 import bill.exp.chat.core.util.Stoppable;
 import org.springframework.beans.factory.DisposableBean;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.net.InetSocketAddress;
 import java.nio.channels.AsynchronousChannelGroup;
 import java.nio.channels.AsynchronousServerSocketChannel;
@@ -21,24 +24,25 @@ import java.util.concurrent.TimeUnit;
 
 @Component("tcpAcceptChannel")
 public class TcpAcceptChannel implements Channel, Stoppable, DisposableBean {
-    @Autowired
-    private AsynchronousChannelGroupFactory groupFactory;
+
+    private final Stoppable lifeTimeManager;
+    private final InetSocketAddress address;
+    private final SessionFactory sessionFactory;
+    private final AsynchronousChannelGroup group;
+    private final AsynchronousServerSocketChannel server;
 
     @Autowired
-    @Qualifier("mainLifetimeManager")
-    private Stoppable lifeTimeManager;
-
-    @Autowired
-    @Qualifier("serverAddress")
-    private InetSocketAddress address;
-
-    @Autowired
-    private ApplicationContext context;
-
-    private AsynchronousChannelGroup group;
-    private AsynchronousServerSocketChannel server;
-
-    public TcpAcceptChannel() {
+    public TcpAcceptChannel(
+            @Qualifier("mainLifetimeManager") Stoppable lifeTimeManager,
+            AsynchronousChannelGroupFactory groupFactory,
+            @Qualifier("serverAddress")InetSocketAddress address,
+            @Qualifier("serverSessionFactory") SessionFactory sessionFactory
+    ) {
+        this.lifeTimeManager = lifeTimeManager;
+        this.address = address;
+        this.sessionFactory = sessionFactory;
+        this.group = groupFactory.getInstance();
+        this.server = bindServer();
     }
 
     @Override
@@ -47,11 +51,17 @@ public class TcpAcceptChannel implements Channel, Stoppable, DisposableBean {
         stop();
     }
 
-    @PostConstruct
-    public void init() throws IOException {
-        group = groupFactory.getInstance();
-        server = AsynchronousServerSocketChannel.open(group);
-        server.bind(address);
+    private AsynchronousServerSocketChannel bindServer() {
+
+        try {
+            AsynchronousServerSocketChannel server = AsynchronousServerSocketChannel.open(group);
+            server.bind(address);
+            return server;
+        }
+        catch (final IOException e) {
+            lifeTimeManager.setIsStopping();
+        }
+        return null;
     }
 
     private void stop() {
@@ -88,24 +98,36 @@ public class TcpAcceptChannel implements Channel, Stoppable, DisposableBean {
         return new CompletionHandler<AsynchronousSocketChannel, AsyncSession>() {
             @Override
             public void completed(AsynchronousSocketChannel result, AsyncSession attachment) {
+
                 acceptNext(this);
                 attachment.open(result);
             }
 
             @Override
             public void failed(Throwable exc, AsyncSession attachment) {
-                attachment.close();
+
+                if (attachment != null) {
+                    attachment.close();
+                }
                 stop();
             }
         };
     }
 
     private void acceptNext(CompletionHandler<AsynchronousSocketChannel, AsyncSession> handler) {
+
         if (lifeTimeManager.getIsStopping() || !server.isOpen()) {
             stop();
         } else {
-            AsyncSession session = context.getBean(ServerSession.class);
-            server.accept(session, handler);
+
+            Session newSession = sessionFactory.createSession();
+            if (newSession instanceof AsyncSession) {
+                AsyncSession session = (AsyncSession) newSession;
+                server.accept(session, handler);
+            }
+            else {
+                handler.failed(new InvalidClassException("AsyncSession"), null);
+            }
         }
     }
 

@@ -12,18 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 public class TcpServerSession extends BaseAsyncSession implements ServerSession {
-    @Autowired
-    @Qualifier("queueExecutor")
-    private TaskExecutor writeQueueExecutor;
-    @Autowired
-    @Qualifier("queueExecutor")
-    private TaskExecutor processingQueueExecutor;
-
-    @Autowired
-    private SessionManager sessionManager;
-
-    @Autowired
-    private MessageProcessingManager processingManager;
+    private final TaskExecutor writeQueueExecutor;
+    private final TaskExecutor processingQueueExecutor;
+    private final SessionManager sessionManager;
+    private final MessageProcessingManager processingManager;
 
     @Override
     protected TaskExecutor getWriteQueueExecutor() {
@@ -45,7 +37,18 @@ public class TcpServerSession extends BaseAsyncSession implements ServerSession 
         return processingManager;
     }
 
-    public TcpServerSession() {
+    @Autowired
+    public TcpServerSession(
+            @Qualifier("queueExecutor") TaskExecutor writeQueueExecutor,
+            @Qualifier("queueExecutor") TaskExecutor processingQueueExecutor,
+            @Qualifier("serverSessionManager") SessionManager sessionManager,
+            MessageProcessingManager processingManager
+    ) {
+
         super(8192);
+        this.writeQueueExecutor = writeQueueExecutor;
+        this.processingQueueExecutor = processingQueueExecutor;
+        this.sessionManager = sessionManager;
+        this.processingManager = processingManager;
     }
 }
