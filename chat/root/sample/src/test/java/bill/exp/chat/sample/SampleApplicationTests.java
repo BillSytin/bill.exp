@@ -48,7 +48,10 @@ public class SampleApplicationTests {
 		client.connect(null, new CompletionHandler<ClientSession, Void>() {
             @Override
             public void completed(ClientSession result, Void attachment) {
-                ByteBuffer encoded = StandardCharsets.UTF_8.encode("Test string");
+                StringBuilder sb = new StringBuilder(16384 + 100);
+                while (sb.length() < 16384 + 50)
+                    sb.append("Test string\n");
+                ByteBuffer encoded = StandardCharsets.UTF_8.encode(sb.toString());
                 encoded.rewind();
                 ByteBuffer output = ByteBuffer.allocate(encoded.remaining() + 1);
                 output.put(encoded);
@@ -64,7 +67,7 @@ public class SampleApplicationTests {
             }
         });
 
-		if (!stopper.waitStopped(1 * 60 * 1000)) {
+		if (!stopper.waitStopped(2 * 60 * 1000)) {
             stopper.setIsStopping();
             stopper.waitStopped(10 * 1000);
         }

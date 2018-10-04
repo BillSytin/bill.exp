@@ -74,6 +74,7 @@ public abstract class BaseAsyncSession implements AsyncSession {
         }
         else {
             currentProcessingState = null;
+            processingState.setIncomingMessage(message);
         }
 
         processingState.getProcessor().process(processingState, processingCompletionHandler);

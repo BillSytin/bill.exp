@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Order(10)
-public class ServerDecodeBufferMessageProcessorFactory extends BaseDecodeBufferMessageProcessor implements ServerMessageProcessorFactory {
+public class ServerDecodeInputMessageProcessorFactory extends BaseDecodeInputMessageProcessor implements ServerMessageProcessorFactory {
 
     @Override
     public MessageProcessor getProcessor() {
