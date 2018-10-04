@@ -11,16 +11,14 @@ import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.channels.AsynchronousChannelGroup;
 
-@Component
-public class PoolAsynchronousChannelGroupFactory implements AsynchronousChannelGroupFactory {
+public class BasePoolAsynchronousChannelGroupFactory implements AsynchronousChannelGroupFactory {
 
     private final Stoppable lifeTimeManager;
     private final AsynchronousChannelGroup group;
 
-    @Autowired
-    public PoolAsynchronousChannelGroupFactory(
-            @Qualifier("mainLifetimeManager") Stoppable lifeTimeManager,
-            @Qualifier("poolExecutor") TaskExecutor poolExecutor
+    public BasePoolAsynchronousChannelGroupFactory(
+            Stoppable lifeTimeManager,
+            TaskExecutor poolExecutor
     ) {
 
         this.lifeTimeManager = lifeTimeManager;

@@ -29,7 +29,7 @@ public class TcpConnectChannel implements ClientChannel, Stoppable, DisposableBe
     @Autowired
     public TcpConnectChannel(
             @Qualifier("mainLifetimeManager") Stoppable lifeTimeManager,
-            AsynchronousChannelGroupFactory groupFactory,
+            @Qualifier("clientPoolGroupFactory") AsynchronousChannelGroupFactory groupFactory,
             @Qualifier("serverAddress")InetSocketAddress address,
             @Qualifier("clientSessionFactory") SessionFactory sessionFactory
     ) {

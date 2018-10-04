@@ -34,7 +34,7 @@ public class TcpAcceptChannel implements Channel, Stoppable, DisposableBean {
     @Autowired
     public TcpAcceptChannel(
             @Qualifier("mainLifetimeManager") Stoppable lifeTimeManager,
-            AsynchronousChannelGroupFactory groupFactory,
+            @Qualifier("serverPoolGroupFactory") AsynchronousChannelGroupFactory groupFactory,
             @Qualifier("serverAddress")InetSocketAddress address,
             @Qualifier("serverSessionFactory") SessionFactory sessionFactory
     ) {
