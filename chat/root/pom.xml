@@ -4,11 +4,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>root</groupId>
+  <groupId>bill.exp.chat</groupId>
   <artifactId>root</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.0.1-SNAPSHOT</version>
 
   <name>root</name>
+  <packaging>pom</packaging>
+
   <url>https://github.com/BillSytin/bill.exp/tree/master/chat</url>
 
   <parent>
@@ -18,19 +20,49 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <version.log4j>2.2</version.log4j>
+    </properties>
+
+  <modules>
+    <module>core</module>
+    <module>server</module>
+    <module>client</module>
+    <module>sample</module>
+  </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>server</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>sample</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -60,24 +92,6 @@
         <plugin>
           <artifactId>maven-install-plugin</artifactId>
           <version>2.5.2</version>
-            <configuration>
-                <groupId>bill.exp.chat</groupId>
-                <artifactId>root</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
-                <packaging>jar</packaging>
-                <file>${basedir}/dependencies/root-0.0.1-SNAPSHOT.jar</file>
-                <generatePom>false</generatePom>
-                <pomFile>${basedir}/dependencies/root-1.0.pom</pomFile>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>install-jar-lib</id>
-                    <goals>
-                        <goal>install-file</goal>
-                    </goals>
-                    <phase>validate</phase>
-                </execution>
-            </executions>
         </plugin>
         <plugin>
           <artifactId>maven-deploy-plugin</artifactId>
