@@ -1,0 +1,6 @@
+rootProject.name = 'chat-app'
+
+include 'core'
+include 'server'
+include 'client'
+include 'sample'
