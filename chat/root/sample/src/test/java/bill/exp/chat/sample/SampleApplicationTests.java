@@ -67,7 +67,7 @@ public class SampleApplicationTests {
             }
         });
 
-		if (!stopper.waitStopped(2 * 60 * 1000)) {
+		if (!stopper.waitStopped(1 * 60 * 1000)) {
             stopper.setIsStopping();
             stopper.waitStopped(10 * 1000);
         }
