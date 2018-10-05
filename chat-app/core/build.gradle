@@ -10,9 +10,10 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 
 jar {
-    baseName = 'gs-multi-module-library'
+    baseName = 'chat-app-core'
     version = '0.0.1-SNAPSHOT'
 }
+//noinspection GroovyUnusedAssignment
 sourceCompatibility = 1.8
 
 repositories { mavenCentral() }

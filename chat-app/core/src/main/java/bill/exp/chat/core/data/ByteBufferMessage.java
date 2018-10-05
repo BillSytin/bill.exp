@@ -11,12 +11,7 @@ public class ByteBufferMessage implements Message {
         this.isIncomplete = isIncomplete;
     }
 
-    public boolean getIsIncomplete() { return isIncomplete; }
+    public boolean isIncomplete() { return isIncomplete; }
 
     public ByteBuffer getBuffer() { return content; }
-
-    @Override
-    public Object getContent() {
-        return this.content;
-    }
 }

@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="chat-app-client" />
         <module name="chat-app-core" />
+        <module name="chat-app-model" />
         <module name="chat-app-sample" />
         <module name="chat-app-server" />
       </profile>
@@ -16,6 +17,7 @@
       <module name="chat-app" target="1.5" />
       <module name="chat-app-client" target="1.8" />
       <module name="chat-app-core" target="1.8" />
+      <module name="chat-app-model" target="1.8" />
       <module name="chat-app-sample" target="1.8" />
       <module name="chat-app-server" target="1.8" />
     </bytecodeTargetLevel>

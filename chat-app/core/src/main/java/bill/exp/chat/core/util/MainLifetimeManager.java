@@ -2,6 +2,7 @@ package bill.exp.chat.core.util;
 
 import org.springframework.stereotype.Component;
 
+@SuppressWarnings("unused")
 @Component("mainLifetimeManager")
 public class MainLifetimeManager implements Stoppable {
 
@@ -16,17 +17,17 @@ public class MainLifetimeManager implements Stoppable {
     }
 
     @Override
-    public boolean getIsStopping() {
+    public boolean isStopping() {
         return isStopping;
     }
 
     @Override
-    public void setIsStopping() {
+    public void setStopping() {
         isStopping = true;
     }
 
     @Override
-    public void setIsStopped() {
+    public void setStopped() {
         if (!isStopped) {
             isStopped = true;
             synchronized(completeEvent) {

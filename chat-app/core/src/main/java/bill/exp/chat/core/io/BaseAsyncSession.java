@@ -1,54 +1,147 @@
 package bill.exp.chat.core.io;
 
 import bill.exp.chat.core.data.*;
-import org.springframework.core.task.TaskExecutor;
+import bill.exp.chat.core.tasks.DefaultQueueCompletion;
+import bill.exp.chat.core.tasks.QueueCompletion;
+import bill.exp.chat.core.util.Stoppable;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
-public abstract class BaseAsyncSession implements AsyncSession {
+@SuppressWarnings("unused")
+public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppable {
+
+    private final Log logger = LogFactory.getLog(getClass());
+    private final long id;
     private AsynchronousSocketChannel channel;
+    private final SessionManager sessionManager;
+    private final MessageProcessingManager processingManager;
     private final ByteBuffer readBuffer;
     private final CompletionHandler<Integer, Session> readCompletionHandler;
     private final CompletionHandler<Integer, Session> writeCompletionHandler;
-    private final MessageProcessingCompletionHandler processingCompletionHandler;
-    private MessageProcessingState currentProcessingState;
+    private final QueueCompletion<Integer, Session> writeQueueCompletion;
+    private final CompletionHandler<MessageProcessingAction, MessageProcessingState> processingCompletionHandler;
+    private final QueueCompletion<MessageProcessingAction, MessageProcessingState> processingQueueCompletion;
+    private SessionMessageProcessingState currentProcessingState;
+    private volatile boolean isClosing;
+    private volatile boolean isClosed;
+    private volatile Future<Boolean> futureClose;
 
-    protected BaseAsyncSession(int bufferSize) {
+    protected BaseAsyncSession(
+            int bufferSize,
+            SessionManager sessionManager,
+            MessageProcessingManager processingManager
+    ) {
 
+        this.sessionManager = sessionManager;
+        this.processingManager = processingManager;
+
+        isClosing = true;
+        isClosed = true;
+        id = sessionManager.generateSessionId();
         readBuffer = ByteBuffer.allocate(bufferSize);
         readCompletionHandler = new ReadCompletionHandler();
+
         writeCompletionHandler = new WriteCompletionHandler();
+        writeQueueCompletion = new DefaultQueueCompletion<>();
+
         processingCompletionHandler = new MessageProcessingCompletionHandler();
+        processingQueueCompletion = new DefaultQueueCompletion<>();
+
         currentProcessingState = null;
+
     }
-
-    protected abstract TaskExecutor getWriteQueueExecutor();
-    protected abstract TaskExecutor getProcessingQueueExecutor();
-
-    protected abstract SessionManager getSessionManager();
-
-    protected abstract MessageProcessingManager getProcessingManager();
 
     private void readNext() {
 
-        channel.read(readBuffer, this, readCompletionHandler);
+        if (!isClosing) {
+
+            channel.read(readBuffer, this, readCompletionHandler);
+        }
+    }
+
+    @Override
+    public String toString() {
+
+        return Long.toString(getId());
+    }
+
+    @Override
+    public long getId() {
+
+        return id;
     }
 
     @Override
     public void open(AsynchronousSocketChannel channel) {
+
         this.channel = channel;
-        getSessionManager().addSession(this);
+        isClosing = false;
+        isClosed = false;
+        sessionManager.addSession(this);
+
+        submitMessage(new SessionEventMessage(getId(), SessionEvent.Open));
 
         readNext();
     }
 
+    @Override
+    public void submit(Message message, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
+
+        if (completionHandler == null) {
+
+            submitMessage(message);
+        }
+        else {
+
+            submitMessage(message, new CompletionHandler<MessageProcessingAction, MessageProcessingState>() {
+
+                @Override
+                public void completed(MessageProcessingAction result, MessageProcessingState attachment) {
+
+                    processingCompletionHandler.completed(result, attachment);
+                    completionHandler.completed(result, attachment);
+                }
+
+                @Override
+                public void failed(Throwable exc, MessageProcessingState attachment) {
+
+                    processingCompletionHandler.failed(exc, attachment);
+                    completionHandler.failed(exc, attachment);
+                }
+            });
+
+        }
+    }
+
+    private void submitMessage(Message message) {
+
+        submitMessage(message, processingCompletionHandler);
+    }
+
+    private synchronized void submitMessage(Message message, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
+
+        processingQueueCompletion.submit(handler -> processMessage(message, handler), completionHandler);
+    }
+
     private synchronized void readCompleted(Integer readCount) {
 
-        if (readCount < 0)
+        if (readCount < 0) {
+
+            if (!isClosing) {
+
+                logger.warn(String.format("Unexpected read count at session: %s, count: %d, closing session%n", this.toString(), readCount));
+            }
+            close();
             return;
+        }
 
         final ByteBuffer original = readBuffer;
         final boolean isIncomplete = !original.hasRemaining();
@@ -61,72 +154,257 @@ public abstract class BaseAsyncSession implements AsyncSession {
         clone.flip();
         original.clear();
 
-        getProcessingQueueExecutor().execute(() -> processReadMessage(new ByteBufferMessage(clone, isIncomplete)));
+        submitMessage(new ByteBufferMessage(clone, isIncomplete));
 
         readNext();
     }
 
-    private void processReadMessage(Message message) {
+    private void processMessage(Message message, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
 
-        MessageProcessingState processingState = currentProcessingState;
+        SessionMessageProcessingState processingState = currentProcessingState;
+
         if (processingState == null) {
-            processingState = new MessageProcessingState(this, message, getProcessingManager().createProcessor());
+
+            processingState = new SessionMessageProcessingState(this, message, processingManager.createProcessingChain());
         }
         else {
+
             currentProcessingState = null;
             processingState.setIncomingMessage(message);
         }
 
-        processingState.getProcessor().process(processingState, processingCompletionHandler);
+        processingState.getProcessingChain().process(processingState, completionHandler);
     }
 
-    private void writeNext(ByteBuffer output) {
+    private void writeNext(ByteBuffer output, CompletionHandler<Integer, Session> completionHandler) {
 
-        channel.write(output, this, writeCompletionHandler);
-    }
+        if (output != null && !isClosed) {
 
-    private synchronized void writeReplyMessage(MessageProcessingState state) {
+            channel.write(output, this, completionHandler);
+        }
+        else {
 
-        ByteBuffer output = state.getOutputBuffer();
-        if (output != null) {
-
-            writeBuffer(output);
+            completionHandler.completed(output != null ? -1 : 0, this);
         }
     }
 
-    protected synchronized void writeBuffer(ByteBuffer output) {
-        getWriteQueueExecutor().execute(() -> writeNext(output));
+    private synchronized void handleOutputMessage(MessageProcessingState state) {
+
+        Message output = state.getOutputMessage();
+        if (output != null) {
+
+            if (output instanceof ByteBufferMessage) {
+
+                writeBuffer(((ByteBufferMessage) output).getBuffer());
+            }
+            else if (output instanceof SessionEventMessage) {
+
+                if (((SessionEventMessage) output).getEvent() == SessionEvent.Close) {
+
+                    close();
+                }
+            }
+        }
+    }
+
+    private static void SleepBeforeClose() {
+
+        try {
+
+            // a chance to complete IO
+            Thread.sleep(100);
+        }
+        catch (final Exception ignored) {
+        }
+    }
+
+    protected void writeBuffer(ByteBuffer output) {
+
+        writeBuffer(output, writeCompletionHandler);
+    }
+
+    protected synchronized void writeBuffer(ByteBuffer output, CompletionHandler<Integer, Session> completionHandler) {
+
+        writeQueueCompletion.submit(handler -> writeNext(output, handler), completionHandler);
     }
 
     private void writeCompleted(Integer writeCount) {
 
+        if (writeCount < 0) {
+
+            if (!isClosing) {
+
+                logger.warn(String.format("Unexpected write count at session: %s, count: %d, closing session%n", this.toString(), writeCount));
+            }
+            close();
+        }
     }
 
     @Override
     public void close() {
 
-        getSessionManager().removeSession(this);
+        closeImpl();
+    }
 
+    private void closeProcessing() {
+
+        final SessionMessageProcessingState processingState = new SessionMessageProcessingState(this,
+                new SessionEventMessage(this.getId(), SessionEvent.Dispose),
+                processingManager.createProcessingChain());
+
+        processingState.getProcessingChain().process(processingState, new CompletionHandler<MessageProcessingAction, MessageProcessingState>() {
+
+            @Override
+            public void completed(MessageProcessingAction result, MessageProcessingState attachment) {
+
+            }
+
+            @Override
+            public void failed(Throwable exc, MessageProcessingState attachment) {
+
+                logger.warn(String.format("Exception on close processing at session: %s%n", attachment.getSession().toString()), exc);
+            }
+        });
+    }
+
+    private synchronized void closeImpl() {
+
+        if (isClosed)
+            return;
+
+        isClosing = true;
+        sessionManager.removeSession(this);
         try {
-            if (channel != null)
-                channel.close();
+
+            closeProcessing();
         }
-        catch (final IOException e) {
+        finally {
+
+            if (channel != null) {
+
+                try {
+                    channel.close();
+                } catch (final IOException e) {
+                    logger.warn(String.format("Exception on close at session: %s%n", this.toString()), e);
+                }
+            }
+            isClosed = true;
         }
+    }
+
+    @Override
+    public boolean isStopping() {
+
+        return isClosing;
+    }
+
+    @Override
+    public void setStopping() {
+
+        if (!isClosing) {
+
+            isClosing = true;
+            futureClose = submitCloseMessage();
+        }
+    }
+
+    @Override
+    public void setStopped() {
+
+    }
+
+    @Override
+    public boolean waitStopped(int timeout) {
+
+        if (isClosed)
+            return true;
+
+        if (!isClosing)
+            return false;
+
+        Future<Boolean> futureClose = this.futureClose;
+        if (futureClose != null) {
+
+            try {
+
+                if (timeout < 0) {
+
+                    if (futureClose.get())
+                        return true;
+                } else {
+
+                    if (futureClose.get(timeout, TimeUnit.MILLISECONDS))
+                        return true;
+                }
+            } catch (final Exception e) {
+
+                logger.warn(String.format("Exception on waiting for close at session: %s%n", this.toString()), e);
+            }
+        }
+
+        return isClosed;
+    }
+
+    private Future<Boolean> submitCloseMessage() {
+
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        if (isClosed) {
+
+            future.complete(true);
+        }
+        else {
+
+            submitMessage(new SessionEventMessage(getId(), SessionEvent.Close), new CompletionHandler<MessageProcessingAction, MessageProcessingState>() {
+
+                @Override
+                public void completed(MessageProcessingAction result, MessageProcessingState attachment) {
+
+                    processingCompletionHandler.completed(result, attachment);
+                    SleepBeforeClose();
+
+                    writeBuffer(null, new CompletionHandler<Integer, Session>() {
+
+                        @Override
+                        public void completed(Integer result, Session attachment) {
+
+                            writeCompletionHandler.completed(result, attachment);
+                            future.complete(isClosed);
+                        }
+
+                        @Override
+                        public void failed(Throwable exc, Session attachment) {
+
+                            writeCompletionHandler.failed(exc, attachment);
+                            future.complete(isClosed);
+                        }
+                    });
+                }
+
+                @Override
+                public void failed(Throwable exc, MessageProcessingState attachment) {
+
+                    processingCompletionHandler.failed(exc, attachment);
+                    future.complete(isClosed);
+                }
+            });
+        }
+
+        return future;
     }
 
     private class MessageProcessingCompletionHandler implements CompletionHandler<MessageProcessingAction, MessageProcessingState> {
 
         @Override
         public void completed(MessageProcessingAction result, MessageProcessingState attachment) {
+
             switch (result) {
-                case RESET:
-                    currentProcessingState = attachment;
+                case Reset:
+                    currentProcessingState = (SessionMessageProcessingState) attachment;
                     break;
-                case NEXT:
+                case Next:
                     break;
-                case REPLY:
-                    writeReplyMessage(attachment);
+                case Done:
+                    handleOutputMessage(attachment);
                     break;
             }
         }
@@ -134,19 +412,45 @@ public abstract class BaseAsyncSession implements AsyncSession {
         @Override
         public void failed(Throwable exc, MessageProcessingState attachment) {
 
+            logger.error(String.format("Exception on processing at session: %s%n", this.toString()), exc);
         }
     }
+
+    private static boolean IsDisconnectException(Throwable exc) {
+
+        if (exc instanceof IOException) {
+
+            final String errorMessage = exc.getMessage();
+            if (errorMessage != null) {
+
+                return errorMessage.startsWith("The specified network name is no longer available") ||
+                        errorMessage.startsWith("An existing connection was forcibly closed by the remote host");
+            }
+        }
+
+        return false;
+    }
+
 
     private final class ReadCompletionHandler implements CompletionHandler<Integer, Session> {
 
         @Override
         public void completed(Integer result, Session attachment) {
+
             ((BaseAsyncSession)attachment).readCompleted(result);
         }
 
         @Override
         public void failed(Throwable exc, Session attachment) {
 
+            if (!((BaseAsyncSession)attachment).isClosing) {
+
+                if (!IsDisconnectException(exc)) {
+
+                    logger.error(String.format("Exception on read at session: %s, closing session%n", attachment.toString()), exc);
+                }
+            }
+            attachment.close();
         }
     }
 
@@ -154,12 +458,28 @@ public abstract class BaseAsyncSession implements AsyncSession {
 
         @Override
         public void completed(Integer result, Session attachment) {
+
             ((BaseAsyncSession)attachment).writeCompleted(result);
         }
 
         @Override
         public void failed(Throwable exc, Session attachment) {
 
+            logger.error(String.format("Exception on write at session: %s, closing session%n", attachment.toString()), exc);
+            attachment.close();
         }
+    }
+
+    private static final class SessionMessageProcessingState extends MessageProcessingState {
+
+        private final MessageProcessingChain processingChain;
+
+        public SessionMessageProcessingState(Session session, Message incomingMessage, MessageProcessingChain processingChain) {
+
+            super(session, incomingMessage);
+            this.processingChain = processingChain;
+        }
+
+        public MessageProcessingChain getProcessingChain() { return processingChain; }
     }
 }

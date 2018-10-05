@@ -8,11 +8,6 @@ public class StringMessage implements Message {
         this.content = content;
     }
 
-    @Override
-    public Object getContent() {
-        return content;
-    }
-
     public final String getString() {
 
         return content;

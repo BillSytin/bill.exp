@@ -1,8 +1,8 @@
 package bill.exp.chat.core.util;
 
 public interface Stoppable {
-    boolean getIsStopping();
-    void setIsStopping();
-    void setIsStopped();
+    boolean isStopping();
+    void setStopping();
+    void setStopped();
     boolean waitStopped(int timeout);
 }

@@ -2,54 +2,64 @@ package bill.exp.chat.core.data;
 
 import java.nio.channels.CompletionHandler;
 
+@SuppressWarnings("unused")
 public abstract class BaseMessageProcessingManager implements MessageProcessingManager {
 
     abstract protected MessageProcessor[] getProcessors();
 
     @Override
-    public MessageProcessor createProcessor() {
-        return new ProcessingIterator(getProcessors());
+    public MessageProcessingChain createProcessingChain() {
+
+        return new ProcessingChain(getProcessors());
     }
 
-    private class ProcessingIterator implements MessageProcessor, CompletionHandler<MessageProcessingAction, MessageProcessingState> {
+    private static class ProcessingChain implements MessageProcessingChain, CompletionHandler<MessageProcessingAction, MessageProcessingState> {
 
         private final MessageProcessor[] processors;
         private int current;
 
-        public ProcessingIterator(MessageProcessor[] processors) {
+        public ProcessingChain(MessageProcessor[] processors) {
+
             this.processors = processors;
             this.current = 0;
         }
 
         private void processNext(MessageProcessingState state) {
+
             if (current < processors.length) {
+
                 processors[current].process(state, this);
             }
             else {
-                state.getFinalCompletionHandler().completed(MessageProcessingAction.DONE, state);
+
+                state.getFinalCompletionHandler().completed(MessageProcessingAction.Done, state);
             }
         }
 
         @Override
         public void process(MessageProcessingState state, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
+
             state.setFinalCompletionHandler(completionHandler);
             processNext(state);
         }
 
         @Override
         public void completed(MessageProcessingAction result, MessageProcessingState attachment) {
-            current++;
+
             switch (result) {
-                case REPLY:
-                    attachment.getFinalCompletionHandler().completed(result, attachment);
-                    processNext(attachment);
-                    break;
-                case RESET:
+                case Reset:
                     current = 0;
                     attachment.getFinalCompletionHandler().completed(result, attachment);
                     break;
-                case NEXT:
-                default:
+                case Done:
+                    current = processors.length;
+                    processNext(attachment);
+                    break;
+                case Async:
+                    attachment.getFinalCompletionHandler().completed(result, attachment);
+                    break;
+                case Next:
+                    current++;
                     processNext(attachment);
                     break;
             }
@@ -57,6 +67,7 @@ public abstract class BaseMessageProcessingManager implements MessageProcessingM
 
         @Override
         public void failed(Throwable exc, MessageProcessingState attachment) {
+
             attachment.getFinalCompletionHandler().failed(exc, attachment);
         }
     }

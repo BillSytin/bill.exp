@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
 
+@SuppressWarnings("unused")
 @Component
 @Profile({"server"})
 public class CommandLineConsole implements CommandLineRunner {
@@ -41,7 +42,7 @@ public class CommandLineConsole implements CommandLineRunner {
         executor.execute(worker);
 
         final Scanner scanner = new Scanner(System.in);
-        while (!lifeTimeManager.getIsStopping()) {
+        while (!lifeTimeManager.isStopping()) {
 
             final String input = scanner.nextLine().trim();
 
@@ -51,7 +52,7 @@ public class CommandLineConsole implements CommandLineRunner {
         }
 
         System.out.println("Exiting application...");
-        lifeTimeManager.setIsStopping();
+        lifeTimeManager.setStopping();
 
         if (worker instanceof DisposableBean)
             ((DisposableBean) worker).destroy();

@@ -10,6 +10,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+@SuppressWarnings({"unused", "EmptyMethod"})
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles({"test"})
@@ -29,7 +30,8 @@ public class ServerApplicationTests {
 
 	@Test
 	public void serverStartsAndStops() {
-		lifeTimeManager.setIsStopping();
+
+		lifeTimeManager.setStopping();
 		executor.execute(worker);
 	}
 

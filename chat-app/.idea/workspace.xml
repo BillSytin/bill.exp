@@ -1,61 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9a3e4ef6-5f42-4dd1-ab66-8a0f1e4eadab" name="Default Changelist" comment="empty structure">
-      <change beforePath="$PROJECT_DIR$/client/src/main/java/hello/app/DemoApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/src/test/java/hello/app/DemoApplicationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/hello/service/MyService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/main/java/hello/service/ServiceProperties.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/test/java/hello/service/MyServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sample/src/main/java/hello/app/DemoApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sample/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/sample/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sample/src/test/java/hello/app/DemoApplicationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/hello/app/DemoApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/test/java/hello/app/DemoApplicationTest.java" beforeDir="false" />
-    </list>
+    <list default="true" id="9a3e4ef6-5f42-4dd1-ab66-8a0f1e4eadab" name="Default Changelist" comment="wsp" />
     <ignored path="$PROJECT_DIR$/sample/target/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/client/target/" />
     <ignored path="$PROJECT_DIR$/core/target/" />
     <ignored path="$PROJECT_DIR$/server/target/" />
+    <ignored path="$PROJECT_DIR$/model/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/chat_app$SampleApplicationTests_clientServerInteracts.ic" NAME="SampleApplicationTests.clientServerInteracts Coverage Results" MODIFIED="1539357253303" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>bill.exp.chat.sample.*</FILTER>
+    </SUITE>
+  </component>
+  <component name="CoverageViewManager">
+    <option name="myFlattenPackages" value="true" />
+    <option name="myElementSize" value="324" />
+  </component>
   <component name="FUSProjectUsageTrigger">
     <session id="1070354053">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
-          <entry key="project.open.time.0" value="1" />
+          <entry key="project.closed" value="17" />
+          <entry key="project.open.time.0" value="3" />
+          <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.2" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.6" value="2" />
+          <entry key="project.open.time.7" value="5" />
+          <entry key="project.open.time.8" value="2" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="6" />
-          <entry key="xml" value="1" />
+          <entry key="bat" value="1" />
+          <entry key="class" value="54" />
+          <entry key="gradle" value="13" />
+          <entry key="gradlew" value="1" />
+          <entry key="iml" value="1" />
+          <entry key="java" value="902" />
+          <entry key="properties" value="16" />
+          <entry key="xml" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="6" />
-          <entry key="XML" value="1" />
+          <entry key="CLASS" value="54" />
+          <entry key="Groovy" value="13" />
+          <entry key="IDEA_MODULE" value="1" />
+          <entry key="JAVA" value="902" />
+          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="Properties" value="16" />
+          <entry key="XML" value="22" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="txt" value="16" />
+          <entry key="dummy" value="222" />
+          <entry key="gradle" value="108" />
+          <entry key="java" value="31618" />
+          <entry key="properties" value="576" />
+          <entry key="txt" value="368" />
+          <entry key="xml" value="82" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="16" />
+          <entry key="Groovy" value="108" />
+          <entry key="JAVA" value="31618" />
+          <entry key="PLAIN_TEXT" value="590" />
+          <entry key="Properties" value="576" />
+          <entry key="XML" value="82" />
         </counts>
       </usages-collector>
     </session>
@@ -63,46 +86,160 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider editor-type-id="MavenHelperPluginDependencyAnalyzer" />
+        <entry file="file://$PROJECT_DIR$/sample/src/test/java/bill/exp/chat/sample/SampleApplicationTests.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
+            <state relative-caret-position="1938">
+              <caret line="130" selection-start-line="130" selection-end-line="130" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/test/java/bill/exp/chat/core/CoreApplicationTests.java">
+        <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/cmd/ChatServerAuthorizationCommandProcessor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+            <state relative-caret-position="-1037">
+              <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/src/test/java/bill/exp/chat/server/ServerApplicationTests.java">
+        <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/cmd/ChatServerMessagesCommandProcessor.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
-              <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+              <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sample/src/test/java/bill/exp/chat/sample/SampleApplicationTests.java">
+        <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/DefaultChatServerMessageNotificationsService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="35" column="33" selection-start-line="35" selection-start-column="33" selection-end-line="35" selection-end-column="33" />
+            <state relative-caret-position="690">
+              <caret line="87" column="20" selection-start-line="87" selection-start-column="20" selection-end-line="87" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="JUnit4 Test Class" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>instance</find>
+      <find>exception on re</find>
+      <find>setisc</find>
+      <find>slee</find>
+      <find>sleep</find>
+      <find>SleepBeforeClose</find>
+      <find>clientConfig</find>
+      <find>CLIENT_SLEEP_TIME</find>
+      <find>handler_tp</find>
+      <find>setThreadNamePrefix</find>
+      <find>ThreadPoolTaskExecutor</find>
+      <find>sub</find>
+      <find>controller</find>
+      <find>StringUtils.</find>
+      <find>Assert.</find>
+      <find>assertEquals</find>
+      <find>true</find>
+      <find>closeim</find>
+      <find>&quot;serverSessionManager</find>
+      <find>processMessage</find>
+      <find>SessionMessageProcessingState</find>
+      <find>logger.w</find>
+      <find>chatServerMessages</find>
+      <find>getmessa</find>
+      <find>getIs</find>
+      <find>set</find>
+      <find>WritableSession</find>
+      <find>w</find>
+      <find>su</find>
+      <find>ORDER =</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>Response</replace>
+      <replace>Server</replace>
+      <replace>Service</replace>
+      <replace>model</replace>
+      <replace>Session</replace>
+    </replaceStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/ByteBufferMessage.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/users/SimpleChatServerUser.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/users/DefaultChatServerUsersRepository.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/users/ChatServerUsersRepository.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/cmd/ChatServerAuthorizationCommandProcessor.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/cmd/ChatServerHelpCommandProcessor.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/cmd/BaseChatServerCommandProcessor.java" />
+        <option value="$PROJECT_DIR$/model/src/main/java/bill/exp/chat/model/ChatUser.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/ChatServerMessagesRepository.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/ChatServerMessageRecord.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/cmd/ChatServerMessagesCommandProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/io/AsyncSession.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/users/ChatServerUser.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/io/WritableSession.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/io/ClientSession.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/io/TcpClientSession.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/io/TcpAcceptChannel.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/io/ServerSession.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/io/TcpConnectChannel.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/io/Session.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/io/BaseAsyncSession.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/ChatServerMessagesRepositoryConfig.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/DefaultChatServerMessagesRepository.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/ChatServerMessageNotificationsService.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/DefaultChatServerMessageNotificationsService.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/RequestIntentMessage.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/api/RequestHandlingContext.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/api/DefaultRequestHandlingContext.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/MessageProcessingAction.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/MessageProcessorCategory.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/BaseEncodeOutputMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/MessageProcessorBaseOrder.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/BaseJoinBuffersMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/BaseDecodeInputMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/BaseRequestMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerDecodeInputMessageProcessorFactory.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientDecodeInputMessageProcessorFactory.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerMessageProcessorFactory.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerMessageProcessingManager.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerJoinBuffersMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerDecodeInputMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerEncodeOutputMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/data/ChatServerRequestMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientMessageProcessorFactory.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientEncodeOutputMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientJoinBuffersMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientDecodeInputMessageProcessor.java" />
+        <option value="$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientMessageProcessingManager.java" />
+        <option value="$PROJECT_DIR$/client/src/main/java/bill/exp/chat/client/data/ChatClientRequestMessageProcessor.java" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
   </component>
   <component name="MavenProjectNavigator">
     <treeState>
@@ -118,20 +255,12 @@
         </path>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="chat-app-client" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="chat-app-model" type="9519ce18:MavenProjectsStructure$ProjectNode" />
         </path>
         <path>
           <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="chat-app-client" type="9519ce18:MavenProjectsStructure$ProjectNode" />
-          <item name="Dependencies" type="f4be9f2a:MavenProjectsStructure$DependenciesNode" />
-        </path>
-        <path>
-          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="chat-app-core" type="9519ce18:MavenProjectsStructure$ProjectNode" />
-        </path>
-        <path>
-          <item name="" type="16c1761:MavenProjectsStructure$RootNode" />
-          <item name="chat-app-server" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="chat-app-model" type="9519ce18:MavenProjectsStructure$ProjectNode" />
+          <item name="Lifecycle" type="58874e2:MavenProjectsStructure$LifecycleNode" />
         </path>
       </expand>
       <select />
@@ -143,13 +272,152 @@
     <option name="width" value="1400" />
     <option name="height" value="1000" />
   </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State />
+          <State>
+            <id>Abstraction issuesJava</id>
+          </State>
+          <State>
+            <id>Class structureJava</id>
+          </State>
+          <State>
+            <id>Cloning issuesJava</id>
+          </State>
+          <State>
+            <id>Code style issuesJava</id>
+          </State>
+          <State>
+            <id>Concurrency annotation issuesJava</id>
+          </State>
+          <State>
+            <id>Control flow issuesGroovy</id>
+          </State>
+          <State>
+            <id>Declaration redundancyJava</id>
+          </State>
+          <State>
+            <id>EncapsulationJava</id>
+          </State>
+          <State>
+            <id>Error handlingJava</id>
+          </State>
+          <State>
+            <id>GPathGroovy</id>
+          </State>
+          <State>
+            <id>Groovy</id>
+          </State>
+          <State>
+            <id>Inheritance issuesJava</id>
+          </State>
+          <State>
+            <id>InitializationJava</id>
+          </State>
+          <State>
+            <id>Internationalization</id>
+          </State>
+          <State>
+            <id>J2ME issuesJava</id>
+          </State>
+          <State>
+            <id>Java</id>
+          </State>
+          <State>
+            <id>Java 5Java language level migration aidsJava</id>
+          </State>
+          <State>
+            <id>Java 8Java language level migration aidsJava</id>
+          </State>
+          <State>
+            <id>Java 9Java language level migration aidsJava</id>
+          </State>
+          <State>
+            <id>Java language level migration aidsJava</id>
+          </State>
+          <State>
+            <id>JavaBeans issuesJava</id>
+          </State>
+          <State>
+            <id>Kotlin</id>
+          </State>
+          <State>
+            <id>Method metricsGroovy</id>
+          </State>
+          <State>
+            <id>Naming conventionsJava</id>
+          </State>
+          <State>
+            <id>Numeric issuesJava</id>
+          </State>
+          <State>
+            <id>PerformanceJava</id>
+          </State>
+          <State>
+            <id>Potentially confusing code constructsGroovy</id>
+          </State>
+          <State>
+            <id>Probable bugsGroovy</id>
+          </State>
+          <State>
+            <id>Probable bugsJava</id>
+          </State>
+          <State>
+            <id>Probable bugsKotlin</id>
+          </State>
+          <State>
+            <id>Reflective accessJava</id>
+          </State>
+          <State>
+            <id>SecurityJava</id>
+          </State>
+          <State>
+            <id>Serialization issuesJava</id>
+          </State>
+          <State>
+            <id>Style issuesKotlin</id>
+          </State>
+          <State>
+            <id>StyleGroovy</id>
+          </State>
+          <State>
+            <id>TestNGJava</id>
+          </State>
+          <State>
+            <id>Threading issuesGroovy</id>
+          </State>
+          <State>
+            <id>Threading issuesJava</id>
+          </State>
+          <State>
+            <id>Verbose or redundant code constructsJava</id>
+          </State>
+          <State>
+            <id>VisibilityJava</id>
+          </State>
+          <State>
+            <id>XPath</id>
+          </State>
+          <State>
+            <id>toString() issuesJava</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>WeakerAccess</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -161,41 +429,6 @@
             <path>
               <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="chat-app" type="462c0819:PsiDirectoryNode" />
-              <item name="sample" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
-              <item name="sample" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
-              <item name="sample" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
-              <item name="sample" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
-              <item name="sample" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="sample" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -203,6 +436,68 @@
               <item name="chat-app" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="cmd" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="msg" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chat-app" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="chat-app" type="b2602c69:ProjectViewProjectNode" />
@@ -232,10 +527,32 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../Spring-MessageSource-Example/SpringExample/pom.xml" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.3448276" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="bill.exp.chat.server.cmd" />
+      <recent name="bill.exp.chat.core.data" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\!rtb\bill\exp\chat-app\server\src\main\resources" />
+      <recent name="C:\!rtb\bill\exp\chat-app\core\src\main\java\bill\exp\chat\core\server" />
+      <recent name="C:\!rtb\bill\exp\chat-app\core\src\main\java\bill\exp\chat\core\client" />
+      <recent name="C:\!rtb\bill\exp\chat-app\core\src\main\java\bill\exp\chat\core\client\io" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -266,22 +583,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MyServiceTest.contextLoads" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="chat-app-core" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="hello.service.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="hello.service" />
-      <option name="MAIN_CLASS_NAME" value="hello.service.MyServiceTest" />
-      <option name="METHOD_NAME" value="contextLoads" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="SampleApplicationTests.clientServerInteracts" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="chat-app-sample" />
       <extension name="coverage">
@@ -293,6 +594,22 @@
       <option name="PACKAGE_NAME" value="bill.exp.chat.sample" />
       <option name="MAIN_CLASS_NAME" value="bill.exp.chat.sample.SampleApplicationTests" />
       <option name="METHOD_NAME" value="clientServerInteracts" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SampleApplicationTests.contextLoads" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="chat-app-sample" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="bill.exp.chat.sample.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="bill.exp.chat.sample" />
+      <option name="MAIN_CLASS_NAME" value="bill.exp.chat.sample.SampleApplicationTests" />
+      <option name="METHOD_NAME" value="contextLoads" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -331,19 +648,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="JUnit.MyServiceTest.contextLoads" />
-      <item itemvalue="JUnit.CoreApplicationTests.contextLoads" />
       <item itemvalue="JUnit.ServerApplicationTests.contextLoads" />
-      <item itemvalue="JUnit.ServerApplicationTests.serverStartsAndStops" />
       <item itemvalue="JUnit.SampleApplicationTests.clientServerInteracts" />
+      <item itemvalue="JUnit.CoreApplicationTests.contextLoads" />
+      <item itemvalue="JUnit.ServerApplicationTests.serverStartsAndStops" />
+      <item itemvalue="JUnit.SampleApplicationTests.contextLoads" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.SampleApplicationTests.clientServerInteracts" />
+        <item itemvalue="JUnit.SampleApplicationTests.contextLoads" />
         <item itemvalue="JUnit.ServerApplicationTests.serverStartsAndStops" />
         <item itemvalue="JUnit.ServerApplicationTests.contextLoads" />
         <item itemvalue="JUnit.CoreApplicationTests.contextLoads" />
-        <item itemvalue="JUnit.MyServiceTest.contextLoads" />
       </list>
     </recent_temporary>
   </component>
@@ -365,117 +682,931 @@
       <option name="project" value="LOCAL" />
       <updated>1538662012237</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="move structure">
+      <created>1538713277046</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1538713277046</updated>
+    </task>
+    <task id="LOCAL-00003" summary="move structure">
+      <created>1538713427162</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1538713427162</updated>
+    </task>
+    <task id="LOCAL-00004" summary="configs">
+      <created>1538715469758</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1538715469758</updated>
+    </task>
+    <task id="LOCAL-00005" summary="completion">
+      <created>1538808410665</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1538808410665</updated>
+    </task>
+    <task id="LOCAL-00006" summary="logging">
+      <created>1538831120121</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1538831120121</updated>
+    </task>
+    <task id="LOCAL-00007" summary="output">
+      <created>1538894301182</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1538894301182</updated>
+    </task>
+    <task id="LOCAL-00008" summary="handler">
+      <created>1538902173332</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1538902173332</updated>
+    </task>
+    <task id="LOCAL-00009" summary="model">
+      <created>1538909924413</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1538909924413</updated>
+    </task>
+    <task id="LOCAL-00010" summary="model">
+      <created>1538913153508</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1538913153508</updated>
+    </task>
+    <task id="LOCAL-00011" summary="model">
+      <created>1538969166038</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1538969166038</updated>
+    </task>
+    <task id="LOCAL-00012" summary="warnings">
+      <created>1538984837875</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1538984837875</updated>
+    </task>
+    <task id="LOCAL-00013" summary="warnings">
+      <created>1538993867652</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1538993867652</updated>
+    </task>
+    <task id="LOCAL-00014" summary="test almost real">
+      <created>1539007315366</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1539007315366</updated>
+    </task>
+    <task id="LOCAL-00015" summary="fix test">
+      <created>1539010835506</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1539010835506</updated>
+    </task>
+    <task id="LOCAL-00016" summary="async handler">
+      <created>1539068847409</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1539068847409</updated>
+    </task>
+    <task id="LOCAL-00017" summary="pool for server handler">
+      <created>1539072169628</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1539072169628</updated>
+    </task>
+    <task id="LOCAL-00018" summary="close sessions">
+      <created>1539073207945</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1539073207945</updated>
+    </task>
+    <task id="LOCAL-00019" summary="object factory">
+      <created>1539082078985</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1539082078985</updated>
+    </task>
+    <task id="LOCAL-00020" summary="session event">
+      <created>1539183196489</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1539183196489</updated>
+    </task>
+    <task id="LOCAL-00021" summary="session event">
+      <created>1539270537006</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1539270537006</updated>
+    </task>
+    <task id="LOCAL-00022" summary="session event &amp; response intent">
+      <created>1539330591142</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1539330591142</updated>
+    </task>
+    <task id="LOCAL-00023" summary="session event &amp; response intent">
+      <created>1539331727782</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1539331727782</updated>
+    </task>
+    <task id="LOCAL-00024" summary="debug">
+      <created>1539339383707</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1539339383707</updated>
+    </task>
+    <task id="LOCAL-00025" summary="debug">
+      <created>1539350339975</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1539350339975</updated>
+    </task>
+    <task id="LOCAL-00026" summary="debug">
+      <created>1539357919873</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1539357919873</updated>
+    </task>
+    <task id="LOCAL-00027" summary="pool">
+      <created>1539418285631</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1539418285631</updated>
+    </task>
+    <task id="LOCAL-00028" summary="response intent">
+      <created>1539441175206</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1539441175206</updated>
+    </task>
+    <task id="LOCAL-00029" summary="test for join buffers">
+      <created>1539500352826</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1539500352826</updated>
+    </task>
+    <task id="LOCAL-00030" summary="command">
+      <created>1539532785531</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1539532785532</updated>
+    </task>
+    <task id="LOCAL-00031" summary="minor">
+      <created>1539574056857</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1539574056857</updated>
+    </task>
+    <task id="LOCAL-00032" summary="users">
+      <created>1539614220505</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1539614220505</updated>
+    </task>
+    <task id="LOCAL-00033" summary="users">
+      <created>1539670490633</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1539670490633</updated>
+    </task>
+    <task id="LOCAL-00034" summary="help">
+      <created>1539749830563</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1539749830563</updated>
+    </task>
+    <task id="LOCAL-00035" summary="help">
+      <created>1539749930993</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1539749930993</updated>
+    </task>
+    <task id="LOCAL-00036" summary="help fix">
+      <created>1539755237437</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1539755237437</updated>
+    </task>
+    <task id="LOCAL-00037" summary="SessionEvent.Dispose">
+      <created>1539778389120</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1539778389121</updated>
+    </task>
+    <task id="LOCAL-00038" summary="logout">
+      <created>1539784675815</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1539784675815</updated>
+    </task>
+    <task id="LOCAL-00039" summary="auth">
+      <created>1539785031347</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1539785031347</updated>
+    </task>
+    <task id="LOCAL-00040" summary="messages repo">
+      <created>1539835303469</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1539835303469</updated>
+    </task>
+    <task id="LOCAL-00041" summary="next">
+      <created>1539841238798</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1539841238798</updated>
+    </task>
+    <task id="LOCAL-00042" summary="renaming">
+      <created>1539930593726</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1539930593726</updated>
+    </task>
+    <task id="LOCAL-00043" summary="renaming">
+      <created>1539938992297</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1539938992297</updated>
+    </task>
+    <task id="LOCAL-00044" summary="renaming">
+      <created>1539943357459</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1539943357459</updated>
+    </task>
+    <task id="LOCAL-00045" summary="renaming">
+      <created>1539947036935</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1539947036935</updated>
+    </task>
+    <task id="LOCAL-00046" summary="remove factory">
+      <created>1539947952972</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1539947952972</updated>
+    </task>
+    <task id="LOCAL-00047" summary="wsp">
+      <created>1539949103324</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1539949103324</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="MyServiceTest_contextLoads - 2018.10.04 at 19h 08m 15s.xml">
-      <configuration name="MyServiceTest.contextLoads" configurationId="JUnit" />
+    <history-entry file="SampleApplicationTests_clientServerInteracts - 2018.10.17 at 17h 05m 45s.xml">
+      <configuration name="SampleApplicationTests.clientServerInteracts" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="CoreApplicationTests_contextLoads - 2018.10.04 at 19h 17m 58s.xml">
+    <history-entry file="SampleApplicationTests_clientServerInteracts - 2018.10.17 at 17h 11m 40s.xml">
+      <configuration name="SampleApplicationTests.clientServerInteracts" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SampleApplicationTests_clientServerInteracts - 2018.10.17 at 17h 12m 20s.xml">
+      <configuration name="SampleApplicationTests.clientServerInteracts" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="CoreApplicationTests_contextLoads - 2018.10.19 at 16h 11m 05s.xml">
       <configuration name="CoreApplicationTests.contextLoads" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ServerApplicationTests_contextLoads - 2018.10.04 at 19h 18m 44s.xml">
+    <history-entry file="CoreApplicationTests_contextLoads - 2018.10.19 at 16h 12m 36s.xml">
+      <configuration name="CoreApplicationTests.contextLoads" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ServerApplicationTests_contextLoads - 2018.10.19 at 16h 12m 54s.xml">
       <configuration name="ServerApplicationTests.contextLoads" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ServerApplicationTests_serverStartsAndStops - 2018.10.04 at 19h 18m 56s.xml">
+    <history-entry file="ServerApplicationTests_serverStartsAndStops - 2018.10.19 at 16h 13m 02s.xml">
       <configuration name="ServerApplicationTests.serverStartsAndStops" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SampleApplicationTests_clientServerInteracts - 2018.10.04 at 19h 20m 27s.xml">
+    <history-entry file="SampleApplicationTests_contextLoads - 2018.10.19 at 16h 13m 26s.xml">
+      <configuration name="SampleApplicationTests.contextLoads" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SampleApplicationTests_clientServerInteracts - 2018.10.19 at 16h 18m 34s.xml">
+      <configuration name="SampleApplicationTests.clientServerInteracts" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="SampleApplicationTests_clientServerInteracts - 2018.10.19 at 16h 30m 08s.xml">
       <configuration name="SampleApplicationTests.clientServerInteracts" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28020832" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.55810237" weight="0.32936078" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32936078" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.60052085" weight="0.32910052" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.44189766" side_tool="true" visible="true" weight="0.32936078" />
-      <window_info anchor="bottom" id="Messages" order="10" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32936078" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.39947918" side_tool="true" weight="0.32910052" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.496875" weight="0.32910052" />
+      <window_info anchor="bottom" id="Inspection Results" order="11" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
-      <window_info active="true" anchor="right" id="Maven Projects" order="5" visible="true" weight="0.32995737" />
+      <window_info active="true" anchor="right" id="Maven Projects" order="5" visible="true" weight="0.27395833" />
+      <window_info anchor="right" id="Coverage" order="6" side_tool="true" weight="0.32995737" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="empty structure" />
-    <option name="LAST_COMMIT_MESSAGE" value="empty structure" />
+    <MESSAGE value="test almost real" />
+    <MESSAGE value="fix test" />
+    <MESSAGE value="async handler" />
+    <MESSAGE value="pool for server handler" />
+    <MESSAGE value="close sessions" />
+    <MESSAGE value="object factory" />
+    <MESSAGE value="session event" />
+    <MESSAGE value="session event &amp; response intent" />
+    <MESSAGE value="debug" />
+    <MESSAGE value="pool" />
+    <MESSAGE value="response intent" />
+    <MESSAGE value="test for join buffers" />
+    <MESSAGE value="command" />
+    <MESSAGE value="minor" />
+    <MESSAGE value="users" />
+    <MESSAGE value="help" />
+    <MESSAGE value="help fix" />
+    <MESSAGE value="SessionEvent.Dispose" />
+    <MESSAGE value="logout" />
+    <MESSAGE value="auth" />
+    <MESSAGE value="messages repo" />
+    <MESSAGE value="next" />
+    <MESSAGE value="renaming" />
+    <MESSAGE value="remove factory" />
+    <MESSAGE value="wsp" />
+    <option name="LAST_COMMIT_MESSAGE" value="wsp" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/core/src/test/java/bill/exp/chat/core/data/BaseJoinBuffersMessageProcessorTest.java</url>
+          <line>29</line>
+          <properties />
+          <option name="timeStamp" value="75" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/core/src/test/java/bill/exp/chat/core/data/BaseJoinBuffersMessageProcessorTest.java</url>
+          <line>78</line>
+          <properties />
+          <option name="timeStamp" value="78" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/server/src/test/java/bill/exp/chat/server/cmd/ChatServerCommandProcessingManagerTest.java</url>
+          <line>25</line>
+          <properties />
+          <option name="timeStamp" value="79" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>4 * 100 * TEST_TIME_SEC * 1000 / CLIENT_SLEEP_TIME / (USE_LARGE_MESSAGE ? 10 : 1)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>exc.getMessage()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>&quot;The specified network name is no longer available.&quot;.equals(exc.getMessage())</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>exc.getMessage().equals(&quot;An existing connection was forcibly closed by the remote host&quot;)</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>IOException</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>exc.getMessage() == &quot;An existing connection was forcibly closed by the remote host&quot;</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>exc instanceof IOException</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>intent</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>model</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/core/src/main/java/hello/service/MyService.java">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/io/ClientSession.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        <state relative-caret-position="85">
+          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/test/java/hello/service/MyServiceTest.java">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/io/TcpClientSession.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="27" column="1" selection-start-line="27" selection-start-column="1" selection-end-line="27" selection-end-column="1" />
+        <state relative-caret-position="119">
+          <caret line="13" column="45" selection-start-line="13" selection-start-column="45" selection-end-line="13" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/test/java/hello/app/DemoApplicationTest.java">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/io/Session.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="17" column="18" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="18" />
+        <state relative-caret-position="204">
+          <caret line="12" column="117" lean-forward="true" selection-start-line="12" selection-start-column="31" selection-end-line="12" selection-end-column="117" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/io/BaseAsyncSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="294">
+          <caret line="104" selection-start-line="104" selection-end-line="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/io/ServerSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/io/TcpServerSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="19" column="54" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/ChatServerMessagesRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="8" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/api/ChatServerResponseIntent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="6" column="58" selection-start-line="6" selection-start-column="58" selection-end-line="6" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/src/main/java/bill/exp/chat/model/ChatServerEnvelope.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/src/main/java/bill/exp/chat/model/ChatBaseEnvelope.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/ChatServerMessagesRepositoryConfig.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" selection-start-line="24" selection-end-line="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/tasks/ChatServerPoolHandlerExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="7" column="37" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/util/concurrent/atomic/AtomicLong.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-59">
+          <caret line="88" column="11" selection-start-line="88" selection-start-column="11" selection-end-line="88" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/util/Timer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="298">
+          <caret line="189" column="16" selection-start-line="189" selection-start-column="16" selection-end-line="189" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/util/TimerTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="85" column="14" selection-start-line="85" selection-start-column="14" selection-end-line="85" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/test/java/bill/exp/chat/core/data/BaseJoinBuffersMessageProcessorTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/ChatServerMessageNotificationsService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="22" lean-forward="true" selection-start-line="4" selection-start-column="22" selection-end-line="4" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/DefaultChatServerMessagesRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="27" column="29" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/api/ResponseIntent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="24" lean-forward="true" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/ResponseIntentMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" lean-forward="true" selection-start-line="7" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/RequestIntentMessage.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
-      <provider editor-type-id="MavenHelperPluginDependencyAnalyzer" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/test/java/bill/exp/chat/core/CoreApplicationTests.java">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/api/RequestHandlingContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/api/DefaultRequestHandlingContext.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/BaseRequestMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/MessageProcessingAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/BaseEncodeOutputMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="9" column="105" selection-start-line="9" selection-start-column="105" selection-end-line="9" selection-end-column="105" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/BaseJoinBuffersMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="8" column="33" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/BaseDecodeInputMessageProcessor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/test/java/bill/exp/chat/server/ServerApplicationTests.java">
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/MessageProcessorBaseOrder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="32" selection-start-line="8" selection-start-column="32" selection-end-line="8" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/data/MessageProcessorCategory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/api/DefaultChatServerService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="43" lean-forward="true" selection-start-line="43" selection-end-line="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/api/ChatServerRequestHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerMessageProcessingManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerJoinBuffersMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerDecodeInputMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/server/data/ServerEncodeOutputMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/data/ChatServerRequestMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="27" selection-start-line="27" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientEncodeOutputMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientJoinBuffersMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientDecodeInputMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/main/java/bill/exp/chat/core/client/data/ClientMessageProcessingManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/main/java/bill/exp/chat/client/data/ChatClientRequestMessageProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/test/java/bill/exp/chat/core/CoreApplicationTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/test/java/bill/exp/chat/server/ServerApplicationTests.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="56">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sample/src/test/java/bill/exp/chat/sample/TestClientServer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="53" column="28" selection-start-line="53" selection-start-column="28" selection-end-line="53" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sample/src/test/java/bill/exp/chat/sample/SampleApplicationTests.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="35" column="33" selection-start-line="35" selection-start-column="33" selection-end-line="35" selection-end-column="33" />
+        <state relative-caret-position="1938">
+          <caret line="130" selection-start-line="130" selection-end-line="130" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/cmd/ChatServerAuthorizationCommandProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1037">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/cmd/ChatServerMessagesCommandProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/main/java/bill/exp/chat/server/msg/DefaultChatServerMessageNotificationsService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="690">
+          <caret line="87" column="20" selection-start-line="87" selection-start-column="20" selection-end-line="87" selection-end-column="20" />
         </state>
       </provider>
     </entry>
   </component>
   <component name="masterDetails">
     <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>chat-app-client</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.3448276" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectJDKs.UI">
         <settings>
           <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: ch.qos.logback:logback-classic:1.2.3</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

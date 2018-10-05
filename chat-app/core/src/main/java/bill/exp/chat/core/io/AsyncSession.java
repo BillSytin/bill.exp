@@ -2,7 +2,7 @@ package bill.exp.chat.core.io;
 
 import java.nio.channels.AsynchronousSocketChannel;
 
-public interface AsyncSession extends Session {
+public interface AsyncSession {
+
     void open(AsynchronousSocketChannel channel);
-    void close();
 }

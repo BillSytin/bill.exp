@@ -4,12 +4,16 @@ import java.nio.ByteBuffer;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.StandardCharsets;
 
+@SuppressWarnings("unused")
 public class BaseEncodeOutputMessageProcessor implements MessageProcessor {
+
+    public static final int Order = MessageProcessorCategory.OutputConvert + MessageProcessorBaseOrder.First + 1;
+
     @Override
     public void process(MessageProcessingState state, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
 
-        if (state.getProcessingMessage() instanceof StringMessage) {
-            final String outputString = ((StringMessage) state.getProcessingMessage()).getString();
+        if (state.getOutputMessage() instanceof StringMessage) {
+            final String outputString = ((StringMessage) state.getOutputMessage()).getString();
             final ByteBuffer encodeBuffer = StandardCharsets.UTF_8.encode(outputString);
 
             ByteBuffer outputBuffer;
@@ -29,12 +33,9 @@ public class BaseEncodeOutputMessageProcessor implements MessageProcessor {
             outputBuffer.put((byte) 0);
             outputBuffer.flip();
 
-            state.setOutputBuffer(outputBuffer);
+            state.setOutputMessage(new ByteBufferMessage(outputBuffer, false));
+        }
 
-            completionHandler.completed(MessageProcessingAction.REPLY, state);
-        }
-        else {
-            completionHandler.completed(MessageProcessingAction.NEXT, state);
-        }
+        completionHandler.completed(MessageProcessingAction.Next, state);
     }
 }
