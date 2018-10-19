@@ -16,12 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
 @SuppressWarnings({"unused", "EmptyMethod", "ConstantConditions", "PointlessArithmeticExpression"})
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("performance")
 public class SampleApplicationTests {
 
     private final Log logger = LogFactory.getLog(getClass());
@@ -32,7 +34,7 @@ public class SampleApplicationTests {
     }
 
     @Autowired
-    TestClientServer clientServer;
+    TestPerformanceClientServer clientServer;
 
     @Autowired
     ChatServerService server;
@@ -75,11 +77,11 @@ public class SampleApplicationTests {
 	}
 
 	@Test
-	public void clientServerInteracts() {
+	public void performanceTest() {
 
 		executor.execute(worker);
 
-		for (int i = 0; i < TestClientServer.CLIENT_COUNT; i++) {
+		for (int i = 0; i < TestPerformanceClientServer.CLIENT_COUNT; i++) {
 		    try {
 		        Thread.sleep(10 + clientServer.getRandomSleepTime() / 10);
             }
@@ -90,7 +92,7 @@ public class SampleApplicationTests {
         }
 
 		boolean isCompleted = clientServer.waitCompleted();
-		stopAfterTimeout(isCompleted ? 1 : TestClientServer.TEST_TIME_SEC);
+		stopAfterTimeout(isCompleted ? 1 : TestPerformanceClientServer.TEST_TIME_SEC);
 
 		clientServer.checkResults();
     }

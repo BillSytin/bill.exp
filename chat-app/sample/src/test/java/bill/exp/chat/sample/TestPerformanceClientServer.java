@@ -13,7 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
@@ -21,10 +21,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Component
-@Configuration("test")
 @SuppressWarnings({"unused", "EmptyMethod", "ConstantConditions", "PointlessArithmeticExpression"})
-class TestClientServer {
+@Component
+@Profile("performance")
+class TestPerformanceClientServer {
 
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -51,11 +51,11 @@ class TestClientServer {
     private final AtomicInteger interactCount = new AtomicInteger();
     private final CompletableFuture<Boolean> interactCompleted = new CompletableFuture<>();
 
-    public final static int CLIENT_COUNT = 10;
-    private final static boolean USE_LARGE_MESSAGE = CLIENT_COUNT < 100;
-    private final static int CLIENT_SLEEP_TIME = 30;
-    public final static int TEST_TIME_SEC = 300;
-    private final static int TEST_INTERACT_COUNT = 3 * 100 * TEST_TIME_SEC * 1000 / (CLIENT_SLEEP_TIME + 10) / (USE_LARGE_MESSAGE ? 10 : 1);
+    public final static int CLIENT_COUNT = 1;
+    private final static boolean USE_LARGE_MESSAGE = CLIENT_COUNT < 1;
+    private final static int CLIENT_SLEEP_TIME = 10;
+    public final static int TEST_TIME_SEC = 30;
+    private final static int TEST_INTERACT_COUNT = 20;//3 * 100 * TEST_TIME_SEC * 1000 / (CLIENT_SLEEP_TIME + 10) / (USE_LARGE_MESSAGE ? 10 : 1);
 
     private final TcpClientConfig clientConfig;
 
@@ -66,7 +66,7 @@ class TestClientServer {
     private final Random random;
 
     @Autowired
-    public TestClientServer(TcpClientConfig clientConfig) {
+    public TestPerformanceClientServer(TcpClientConfig clientConfig) {
 
         this.clientConfig = clientConfig;
 
@@ -120,11 +120,13 @@ class TestClientServer {
 
     private static ChatClientEnvelope generateOpenSessionResponse(String messageText) {
 
-        final ChatClientEnvelope output = new ChatClientEnvelope();
         final ChatMessage message = new ChatMessage();
-        message.setText(messageText);
-        message.setType("test");
-        message.setTitle("caption");
+        message.setRoute(ChatStandardRoute.Help.toString());
+        message.setAction(ChatStandardAction.Default.toString());
+        message.setStatus(ChatStandardStatus.Success.toString());
+        message.setContent(messageText);
+
+        final ChatClientEnvelope output = new ChatClientEnvelope();
         output.setMessages(new ChatMessageList());
         output.getMessages().add(message);
 
@@ -176,10 +178,11 @@ class TestClientServer {
     private class ServerService implements ChatServerService {
 
         @Override
-        public ChatServerResponseIntent process(Session session, ChatServerRequestIntent intent, ChatClientEnvelope model) {
+        public ChatServerResponseIntent process(Session session, ChatServerRequestIntent intent, ChatClientEnvelope[] models) {
 
-            ChatBaseAction action = ChatBaseAction.Process;
+            ChatAction action = ChatAction.Process;
             ChatServerEnvelope output = null;
+            final ChatClientEnvelope model = models != null && models.length > 0 ? models[models.length - 1] : new ChatClientEnvelope();
             switch (intent.getAction()) {
 
                 case OpenSession:
@@ -189,14 +192,15 @@ class TestClientServer {
                 case CloseSession:
                     serverOutputCloseCount.getAndIncrement();
                     output = new ChatServerEnvelope();
-                    output.setAction(ChatBaseAction.CloseSession);
+                    output.setAction(ChatAction.CloseSession);
                     break;
 
                 case Process:
-                    if (model.getAction() == ChatBaseAction.CloseSession) {
+
+                    if (model.getAction() == ChatAction.CloseSession) {
 
                         serverInputCloseCount.getAndIncrement();
-                        action = ChatBaseAction.CloseSession;
+                        action = ChatAction.CloseSession;
                     }
                     else {
 
@@ -214,13 +218,13 @@ class TestClientServer {
                     break;
             }
 
-            return new ChatServerResponseIntent(action, output);
+            return new ChatServerResponseIntent(action, output != null ? new ChatServerEnvelope[] { output } : null);
         }
 
         @Override
         public boolean isAsyncIntent(ChatServerRequestIntent intent) {
 
-            return intent.getAction() == ChatBaseAction.Process;
+            return intent.getAction() == ChatAction.Process;
         }
 
         @Override
@@ -237,10 +241,11 @@ class TestClientServer {
     private class ClientService implements ChatClientService {
 
         @Override
-        public ChatClientResponseIntent process(Session session, ChatClientRequestIntent intent, ChatServerEnvelope model) {
+        public ChatClientResponseIntent process(Session session, ChatClientRequestIntent intent, ChatServerEnvelope[] models) {
 
-            ChatBaseAction action = ChatBaseAction.Process;
+            ChatAction action = ChatAction.Process;
             ChatClientEnvelope output = null;
+            final ChatServerEnvelope model = models != null && models.length > 0 ? models[models.length - 1] : new ChatServerEnvelope();
             switch (intent.getAction()) {
 
                 case OpenSession:
@@ -252,14 +257,14 @@ class TestClientServer {
                 case CloseSession:
                     clientOutputCloseCount.getAndIncrement();
                     output = new ChatClientEnvelope();
-                    output.setAction(ChatBaseAction.CloseSession);
+                    output.setAction(ChatAction.CloseSession);
                     break;
 
                 case Process:
-                    if (model.getAction() == ChatBaseAction.CloseSession) {
+                    if (model.getAction() == ChatAction.CloseSession) {
 
                         clientInputCloseCount.getAndIncrement();
-                        action = ChatBaseAction.CloseSession;
+                        action = ChatAction.CloseSession;
                     }
                     else {
 
@@ -285,7 +290,7 @@ class TestClientServer {
                     break;
             }
 
-            return new ChatClientResponseIntent(action, output);
+            return new ChatClientResponseIntent(action, output != null ? new ChatClientEnvelope[] { output } : null);
         }
 
         @Override

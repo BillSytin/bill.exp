@@ -2,13 +2,13 @@ package bill.exp.chat.core.data;
 
 public class StringMessage implements Message {
 
-    private final String content;
+    private final String[] content;
 
-    public StringMessage(String content) {
+    public StringMessage(String[] content) {
         this.content = content;
     }
 
-    public final String getString() {
+    public String[] getStrings() {
 
         return content;
     }

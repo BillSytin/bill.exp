@@ -1,8 +1,7 @@
 package bill.exp.chat.server.cmd;
 
 import bill.exp.chat.core.io.Session;
-import bill.exp.chat.model.ChatBaseAction;
-import bill.exp.chat.model.ChatMessage;
+import bill.exp.chat.model.*;
 import bill.exp.chat.server.users.*;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
     @Override
     protected String getCommandId() {
 
-        return "auth";
+        return ChatStandardRoute.Auth.toString();
     }
 
     @Override
@@ -73,7 +72,7 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
     @Override
     protected void preprocess(ChatServerCommandProcessingContext context) {
 
-        if (context.getIntentAction() == ChatBaseAction.CloseSession) {
+        if (context.getIntentAction() == ChatAction.CloseSession) {
 
             logout();
         }
@@ -95,7 +94,7 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
 
             if (!isAuthenticated) {
 
-                context.getOutput().getMessages().add(ChatMessage.createErrorMessage("Invalid auth token", getCommandId()));
+                context.getOutput().getMessages().add(ChatMessage.createErrorMessage("Invalid auth token", ChatStandardAction.Login.toString()));
                 context.setCompleted();
             }
         }
@@ -104,9 +103,9 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
     @Override
     protected void process(ChatServerCommandProcessingContext context) {
 
-        if (detectProcessingCommmand(context, "login")) {
+        if (detectProcessingAction(context, ChatStandardAction.Login.toString())) {
 
-            final String userName = context.getProcessingMessage().getText();
+            final String userName = context.getProcessingMessage().getContent();
             final SimpleChatServerUser user = new SimpleChatServerUser(userName, false);
 
             ChatServerUserToken userToken = null;
@@ -116,8 +115,12 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
 
             } catch (final IllegalArgumentException e) {
 
-                final ChatMessage errorMessage = ChatMessage.createErrorMessage(String.format("User '%s' already exists", userName), "login");
-                context.getOutput().getMessages().add(errorMessage);
+                final ChatMessage resultMessage = new ChatMessage();
+                resultMessage.setRoute(ChatStandardRoute.Auth.toString());
+                resultMessage.setAction(ChatStandardAction.Login.toString());
+                resultMessage.setStatus(ChatStandardStatus.Failed.toString());
+                resultMessage.setContent(String.format("User '%s' already exists", userName));
+                context.getOutput().getMessages().add(resultMessage);
                 context.setCompleted();
 
             } catch (final Exception e) {
@@ -132,14 +135,27 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
                 login(userToken);
                 user.setAuthenticated(true);
                 context.setUser(user);
-                context.getOutput().setAuthToken(userToken.toString());
+
+                final ChatMessage resultMessage = new ChatMessage();
+                resultMessage.setRoute(ChatStandardRoute.Auth.toString());
+                resultMessage.setAction(ChatStandardAction.Login.toString());
+                resultMessage.setStatus(ChatStandardStatus.Success.toString());
+                resultMessage.setAuthor(user.toModel());
+                resultMessage.setContent(userToken.toString());
+                context.getOutput().getMessages().add(resultMessage);
             }
         }
 
-        if (detectProcessingCommmand(context, "logout")) {
+        if (detectProcessingAction(context, ChatStandardAction.Logout.toString())) {
 
             logout();
             context.setUser(null);
+
+            final ChatMessage resultMessage = new ChatMessage();
+            resultMessage.setRoute(ChatStandardRoute.Auth.toString());
+            resultMessage.setAction(ChatStandardAction.Logout.toString());
+            resultMessage.setStatus(ChatStandardStatus.Success.toString());
+            context.getOutput().getMessages().add(resultMessage);
         }
     }
 }

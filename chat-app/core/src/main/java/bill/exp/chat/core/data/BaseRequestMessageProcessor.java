@@ -26,6 +26,10 @@ public class BaseRequestMessageProcessor implements MessageProcessor {
         this.completionHandler = new RequestCompletionHandler();
     }
 
+    public RequestHandler getRequestHandler() {
+        return requestHandler;
+    }
+    
     @Override
     public void process(MessageProcessingState state, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
 
@@ -42,8 +46,8 @@ public class BaseRequestMessageProcessor implements MessageProcessor {
                 Request request = null;
                 if (state.getProcessingMessage() instanceof StringMessage) {
 
-                    final String requestString = ((StringMessage) state.getProcessingMessage()).getString();
-                    request = new SimpleRequest("process", requestString);
+                    final String[] requestStrings = ((StringMessage) state.getProcessingMessage()).getStrings();
+                    request = new SimpleRequest(requestStrings);
                 } else if (state.getIncomingMessage() instanceof SessionEventMessage) {
 
                     final SessionEvent sessionEvent = ((SessionEventMessage) state.getIncomingMessage()).getEvent();
@@ -85,9 +89,9 @@ public class BaseRequestMessageProcessor implements MessageProcessor {
             }
             else {
 
-                if (state.getProcessingMessage() instanceof ResponseIntentMessage) {
+                if (state.getIncomingMessage() instanceof ResponseIntentMessage) {
 
-                    final ResponseIntent responseIntent = ((ResponseIntentMessage) state.getProcessingMessage()).getIntent();
+                    final ResponseIntent responseIntent = ((ResponseIntentMessage) state.getIncomingMessage()).getIntent();
                     processResponseIntent(responseIntent, state);
                 }
             }
@@ -113,7 +117,7 @@ public class BaseRequestMessageProcessor implements MessageProcessor {
                             ((SessionEventResponse) response).getEvent()));
                 } else {
 
-                    state.setOutputMessage(new StringMessage(response.toString()));
+                    state.setOutputMessage(new StringMessage(response.getContent()));
                 }
             }
         }

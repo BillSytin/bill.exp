@@ -3,6 +3,7 @@ package bill.exp.chat.core.data;
 import java.nio.ByteBuffer;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 @SuppressWarnings("unused")
 public class BaseDecodeInputMessageProcessor implements MessageProcessor {
@@ -14,10 +15,27 @@ public class BaseDecodeInputMessageProcessor implements MessageProcessor {
 
         if (state.getProcessingMessage() instanceof ByteBufferMessage) {
             if (!((ByteBufferMessage) state.getProcessingMessage()).isIncomplete()) {
-                final ByteBuffer input = ((ByteBufferMessage) state.getProcessingMessage()).getBuffer();
-                input.rewind();
-                final String output = StandardCharsets.UTF_8.decode(input).toString();
-                state.setProcessingMessage(new StringMessage(output));
+
+                final ByteBuffer[] inputBuffers = ((ByteBufferMessage) state.getProcessingMessage()).getBuffers();
+                final ArrayList<String> outputStrings = new ArrayList<>(inputBuffers.length);
+                for (final ByteBuffer input : inputBuffers) {
+
+                    int curPos = 0;
+                    final int inputLength = input.limit();
+                    for (int i = 0; i <= inputLength; i++) {
+
+                        if (i == inputLength || input.get(i) == 0) {
+
+                            input.limit(i);
+                            input.position(curPos);
+                            outputStrings.add(StandardCharsets.UTF_8.decode(input).toString());
+                            input.limit(inputLength);
+                            curPos = i + 1;
+                        }
+                    }
+                }
+
+                state.setProcessingMessage(new StringMessage(outputStrings.toArray(new String[0])));
             }
         }
 

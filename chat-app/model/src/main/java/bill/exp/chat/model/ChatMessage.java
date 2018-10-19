@@ -3,38 +3,44 @@ package bill.exp.chat.model;
 @SuppressWarnings("unused")
 public class ChatMessage {
 
-    private String type;
-    private String title;
-    private String text;
+    private String route;
+    private String action;
+    private String status;
+    private String content;
     private Long stamp;
+    private ChatUser author;
 
     public ChatMessage() {
 
     }
 
-    public String getType() {
-        return type;
+    @Override
+    public String toString() {
+
+        return String.format("%s %s: %s %s", getRoute(), getAction(), getStatus(), getContent());
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public String getRoute() { return route; }
+
+    public void setRoute(String route) {
+        this.route = route;
     }
 
-    public String getTitle() {
-        return title;
+    public String getAction() { return action; }
+
+    public void setAction(String action) {
+        this.action = action;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String getStatus() { return status; }
+
+    public void setStatus(String status) { this.status = status; }
+
+    public String getContent() {
+        return content;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
+    public void setContent(String content) { this.content = content; }
 
     public Long getStamp() {
         return stamp;
@@ -44,19 +50,29 @@ public class ChatMessage {
         this.stamp = stamp;
     }
 
-    public static ChatMessage createErrorMessage(String text, String title) {
+    public ChatUser getAuthor() {
+        return author;
+    }
 
-        ChatMessage result = new ChatMessage();
-        result.setText(text);
-        result.setTitle(title);
-        result.setType("error");
+    public void setAuthor(ChatUser author) {
+        this.author = author;
+    }
+
+    public static ChatMessage createErrorMessage(String content, String action) {
+
+        final ChatMessage result = new ChatMessage();
+        result.setContent(content);
+        result.setAction(action);
+        result.setRoute(ChatStandardRoute.Error.toString());
 
         return result;
     }
 
     public static ChatMessage createErrorMessage(Exception e) {
 
-        return createErrorMessage(e.getMessage(), e.getClass().getSimpleName());
+        final ChatMessage result = createErrorMessage(e.getMessage(), ChatStandardAction.Default.toString());
+        result.setStatus(e.getClass().getSimpleName());
+        return result;
     }
 
 }

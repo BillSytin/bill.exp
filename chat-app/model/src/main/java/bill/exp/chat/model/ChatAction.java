@@ -1,6 +1,6 @@
 package bill.exp.chat.model;
 
-public enum ChatBaseAction {
+public enum ChatAction {
     Unknown,
     OpenSession,
     CloseSession,

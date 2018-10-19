@@ -7,6 +7,6 @@ import bill.exp.chat.model.ChatServerEnvelope;
 public interface ChatClientModelConverter {
 
     ChatClientRequestIntent convertRequestToIntent(Request request);
-    ChatServerEnvelope convertIntentToModel(ChatClientRequestIntent intent);
+    ChatServerEnvelope[] convertIntentToModels(ChatClientRequestIntent intent);
     Response convertIntentToResponse(ChatClientResponseIntent intent);
 }

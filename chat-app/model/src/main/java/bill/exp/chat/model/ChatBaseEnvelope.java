@@ -7,7 +7,7 @@ public class ChatBaseEnvelope {
 
     private Date timestamp;
     private ChatMessageList messages;
-    private ChatBaseAction action;
+    private ChatAction action;
     private String authToken;
 
     public ChatBaseEnvelope() {
@@ -36,12 +36,12 @@ public class ChatBaseEnvelope {
         this.messages = messages;
     }
 
-    public ChatBaseAction getAction() {
+    public ChatAction getAction() {
 
         return action;
     }
 
-    public void setAction(ChatBaseAction action) {
+    public void setAction(ChatAction action) {
 
         this.action = action;
     }

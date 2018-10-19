@@ -15,7 +15,8 @@ public class BaseJoinBuffersMessageProcessor implements MessageProcessor {
 
         if (state.getIncomingMessage() instanceof ByteBufferMessage) {
 
-            final ByteBuffer incoming = ((ByteBufferMessage) state.getIncomingMessage()).getBuffer();
+            final ByteBuffer[] incomingBuffers = ((ByteBufferMessage) state.getIncomingMessage()).getBuffers();
+            final ByteBuffer incoming = incomingBuffers[incomingBuffers.length - 1];
             final int endPosition = incoming.limit() - 1;
             if (endPosition >= 0) {
 
@@ -29,22 +30,29 @@ public class BaseJoinBuffersMessageProcessor implements MessageProcessor {
                 }
             }
 
-            ByteBuffer resulting;
+            ByteBuffer[] resulting;
             if (state.getProcessingMessage() instanceof ByteBufferMessage) {
 
-                final ByteBuffer processing = ((ByteBufferMessage) state.getProcessingMessage()).getBuffer();
+                final ByteBuffer[] processingBuffers = ((ByteBufferMessage) state.getProcessingMessage()).getBuffers();
+                final ByteBuffer processing = processingBuffers[processingBuffers.length - 1];
 
                 incoming.rewind();
                 processing.rewind();
 
-                resulting = ByteBuffer
+                resulting = new ByteBuffer[processingBuffers.length];
+                if ((resulting.length - 1) > 0) {
+
+                    System.arraycopy(processingBuffers, 0, resulting, 0, resulting.length - 1);
+                }
+
+                resulting[resulting.length - 1] = ByteBuffer
                         .allocate(processing.remaining() + incoming.remaining())
                         .put(processing)
                         .put(incoming);
 
             } else {
 
-                resulting = incoming;
+                resulting = incomingBuffers;
             }
             state.setProcessingMessage(new ByteBufferMessage(resulting, !isComplete));
         }

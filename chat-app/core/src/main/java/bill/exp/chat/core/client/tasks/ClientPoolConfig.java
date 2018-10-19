@@ -11,13 +11,13 @@ import javax.validation.constraints.Min;
 @ConfigurationProperties(prefix = "client-pool")
 public class ClientPoolConfig {
 
-    @Min(2)
+    @Min(3)
     @Max(50)
     private int poolSize;
 
     public ClientPoolConfig() {
 
-        poolSize = 2;
+        poolSize = 3;
     }
 
     public int getPoolSize() {

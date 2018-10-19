@@ -137,11 +137,11 @@ public class TcpConnectChannel implements ClientChannel, Stoppable, DisposableBe
                     group.awaitTermination(10, TimeUnit.SECONDS);
                 }
                 catch (final InterruptedException e) {
-                    logger.info(String.format("Error client group wait termination: %s%n", this.toString()), e);
+                    logger.warn(String.format("Error client group wait termination: %s%n", this.toString()), e);
                 }
             }
             catch (final IOException e) {
-                logger.info(String.format("Error client group shutdown: %s%n", this.toString()), e);
+                logger.warn(String.format("Error client group shutdown: %s%n", this.toString()), e);
             }
         }
 

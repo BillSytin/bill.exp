@@ -1,16 +1,27 @@
 package bill.exp.chat.core.data;
 
 import java.nio.channels.CompletionHandler;
+import java.util.Arrays;
 
 @SuppressWarnings("unused")
-public abstract class BaseMessageProcessingManager implements MessageProcessingManager {
+public class BaseMessageProcessingManager implements MessageProcessingManager {
 
-    abstract protected MessageProcessor[] getProcessors();
+    private final MessageProcessor[] processors;
+
+    public BaseMessageProcessingManager(MessageProcessor[] processors) {
+        this.processors = processors;
+    }
 
     @Override
     public MessageProcessingChain createProcessingChain() {
 
-        return new ProcessingChain(getProcessors());
+        return new ProcessingChain(processors);
+    }
+
+    @Override
+    public Iterable<MessageProcessor> getProcessors() {
+
+        return Arrays.asList(processors);
     }
 
     private static class ProcessingChain implements MessageProcessingChain, CompletionHandler<MessageProcessingAction, MessageProcessingState> {

@@ -25,14 +25,8 @@ public class SessionEventRequest implements Request {
     }
 
     @Override
-    public String getContent() {
+    public String[] getContent() {
 
         return null;
-    }
-
-    @Override
-    public String getAction() {
-
-        return event.toString();
     }
 }

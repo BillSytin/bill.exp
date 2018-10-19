@@ -29,18 +29,19 @@ public class ChatServerCommandProcessingManagerTest {
         input.setMessages(new ChatMessageList());
 
         final ChatMessage message = new ChatMessage();
-        message.setType("help");
-        message.setText("help");
+        message.setRoute("");
+        message.setAction("");
+        message.setContent("-" + ChatStandardAction.Help.toString());
         input.getMessages().add(message);
 
-        final ChatServerCommandProcessingContext context = new ChatServerCommandProcessingContext(session, ChatBaseAction.Process, input);
+        final ChatServerCommandProcessingContext context = new ChatServerCommandProcessingContext(session, ChatAction.Process, input);
         processingManager.process(context);
 
         final ChatServerEnvelope output = context.getOutput();
         Assert.assertFalse("Help output messages should be not empty", output.getMessages().isEmpty());
         for (ChatMessage helpMessage : output.getMessages()) {
 
-            Assert.assertEquals("Help message type should be 'help'", helpMessage.getType(), "help");
+            Assert.assertEquals("Help message type should be 'help'", ChatStandardRoute.Help.toString(), helpMessage.getRoute());
         }
 
         processingManager.process(context);

@@ -4,10 +4,7 @@ import bill.exp.chat.core.api.ResponseIntent;
 import bill.exp.chat.core.data.Message;
 import bill.exp.chat.core.data.ResponseIntentMessage;
 import bill.exp.chat.core.io.SessionManager;
-import bill.exp.chat.model.ChatBaseAction;
-import bill.exp.chat.model.ChatMessage;
-import bill.exp.chat.model.ChatMessageList;
-import bill.exp.chat.model.ChatServerEnvelope;
+import bill.exp.chat.model.*;
 import bill.exp.chat.server.api.ChatServerResponseIntent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -78,14 +75,16 @@ public class DefaultChatServerMessageNotificationsService implements ChatServerM
     private void notifySessions(long stamp) {
 
         final ChatMessage notifyMessage = new ChatMessage();
-        notifyMessage.setText(Long.toString(stamp));
-        notifyMessage.setType("notify");
-        notifyMessage.setTitle("newmessages");
+        notifyMessage.setContent(Long.toString(stamp));
+        notifyMessage.setRoute(ChatStandardRoute.Message.toString());
+        notifyMessage.setAction(ChatStandardAction.Notify.toString());
 
         final ChatServerEnvelope content = new ChatServerEnvelope();
         content.setMessages(new ChatMessageList());
         content.getMessages().add(notifyMessage);
-        final ResponseIntent responseIntent = new ChatServerResponseIntent(ChatBaseAction.Process, content);
+        final ResponseIntent responseIntent = new ChatServerResponseIntent(
+                ChatAction.Process,
+                new ChatServerEnvelope[] { content });
         final Message intentMessage = new ResponseIntentMessage(responseIntent);
 
         sessionManager.foreachSession(session -> session.submit(intentMessage));

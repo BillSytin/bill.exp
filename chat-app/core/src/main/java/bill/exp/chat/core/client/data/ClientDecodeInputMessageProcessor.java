@@ -1,7 +1,6 @@
 package bill.exp.chat.core.client.data;
 
 import bill.exp.chat.core.data.BaseDecodeInputMessageProcessor;
-import bill.exp.chat.core.data.MessageProcessor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 

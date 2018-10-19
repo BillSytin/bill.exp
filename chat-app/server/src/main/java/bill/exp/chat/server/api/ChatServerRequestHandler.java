@@ -2,7 +2,7 @@ package bill.exp.chat.server.api;
 
 import bill.exp.chat.core.api.*;
 import bill.exp.chat.core.io.Session;
-import bill.exp.chat.model.ChatBaseAction;
+import bill.exp.chat.model.ChatAction;
 import bill.exp.chat.model.ChatClientEnvelope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -42,10 +42,10 @@ public class ChatServerRequestHandler implements RequestHandler {
 
         final ChatServerRequestIntent intent = (ChatServerRequestIntent) (context.getRequestIntent());
 
-        if (intent != null && intent.getAction() != ChatBaseAction.Unknown) {
+        if (intent != null && intent.getAction() != ChatAction.Unknown) {
 
-            final ChatClientEnvelope model = converter.convertIntentToModel(intent);
-            final ChatServerResponseIntent responseIntent = service.process(context.getSession(), intent, model);
+            final ChatClientEnvelope[] models = converter.convertIntentToModels(intent);
+            final ChatServerResponseIntent responseIntent = service.process(context.getSession(), intent, models);
             if (responseIntent != null) {
 
                 context.setResponseIntent(responseIntent);

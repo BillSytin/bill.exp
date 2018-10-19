@@ -6,15 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 
 @SuppressWarnings("unused")
 @TestConfiguration
-class TestConfig {
+@Profile("performance")
+class TestPerformanceConfig {
 
     @Autowired
-    private TestClientServer clientServer;
+    private TestPerformanceClientServer clientServer;
 
-    public TestConfig() {
+    public TestPerformanceConfig() {
 
     }
 

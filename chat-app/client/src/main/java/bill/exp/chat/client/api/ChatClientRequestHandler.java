@@ -2,15 +2,17 @@ package bill.exp.chat.client.api;
 
 import bill.exp.chat.core.api.*;
 import bill.exp.chat.core.io.Session;
-import bill.exp.chat.model.ChatBaseAction;
+import bill.exp.chat.model.ChatAction;
 import bill.exp.chat.model.ChatServerEnvelope;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.nio.channels.CompletionHandler;
 
 @SuppressWarnings("unused")
 @Component("chatClientRequestHandler")
+@Scope("prototype")
 public class ChatClientRequestHandler implements RequestHandler {
 
     private final ChatClientService service;
@@ -23,6 +25,14 @@ public class ChatClientRequestHandler implements RequestHandler {
         this.converter = converter;
     }
 
+    public ChatClientService getService() {
+        return service;
+    }
+
+    public ChatClientModelConverter getConverter() {
+        return converter;
+    }
+    
     @Override
     public RequestIntent detectRequestIntent(Request request) {
 
@@ -40,10 +50,10 @@ public class ChatClientRequestHandler implements RequestHandler {
 
         final ChatClientRequestIntent intent = (ChatClientRequestIntent)(context.getRequestIntent());
 
-        if (intent != null && intent.getAction() != ChatBaseAction.Unknown) {
+        if (intent != null && intent.getAction() != ChatAction.Unknown) {
 
-            final ChatServerEnvelope model = converter.convertIntentToModel(intent);
-            final ChatClientResponseIntent responseIntent = service.process(context.getSession(), intent, model);
+            final ChatServerEnvelope[] models = converter.convertIntentToModels(intent);
+            final ChatClientResponseIntent responseIntent = service.process(context.getSession(), intent, models);
             if (responseIntent != null) {
 
                 context.setResponseIntent(responseIntent);

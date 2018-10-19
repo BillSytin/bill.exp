@@ -22,6 +22,7 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
     private final long id;
     private AsynchronousSocketChannel channel;
     private final SessionManager sessionManager;
+
     private final MessageProcessingManager processingManager;
     private final ByteBuffer readBuffer;
     private final CompletionHandler<Integer, Session> readCompletionHandler;
@@ -57,6 +58,11 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
 
         currentProcessingState = null;
 
+    }
+
+    @Override
+    public MessageProcessingManager getProcessingManager() {
+        return processingManager;
     }
 
     private void readNext() {
@@ -195,7 +201,7 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
 
             if (output instanceof ByteBufferMessage) {
 
-                writeBuffer(((ByteBufferMessage) output).getBuffer());
+                writeBuffers(((ByteBufferMessage) output).getBuffers());
             }
             else if (output instanceof SessionEventMessage) {
 
@@ -218,14 +224,17 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
         }
     }
 
-    protected void writeBuffer(ByteBuffer output) {
+    private void writeBuffers(ByteBuffer[] output) {
 
-        writeBuffer(output, writeCompletionHandler);
+        writeBuffers(output, writeCompletionHandler);
     }
 
-    protected synchronized void writeBuffer(ByteBuffer output, CompletionHandler<Integer, Session> completionHandler) {
+    private synchronized void writeBuffers(ByteBuffer[] outputs, CompletionHandler<Integer, Session> completionHandler) {
 
-        writeQueueCompletion.submit(handler -> writeNext(output, handler), completionHandler);
+        for (final ByteBuffer output : outputs) {
+
+            writeQueueCompletion.submit(handler -> writeNext(output, handler), completionHandler);
+        }
     }
 
     private void writeCompleted(Integer writeCount) {
@@ -362,7 +371,7 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
                     processingCompletionHandler.completed(result, attachment);
                     SleepBeforeClose();
 
-                    writeBuffer(null, new CompletionHandler<Integer, Session>() {
+                    writeBuffers(new ByteBuffer[] { null }, new CompletionHandler<Integer, Session>() {
 
                         @Override
                         public void completed(Integer result, Session attachment) {

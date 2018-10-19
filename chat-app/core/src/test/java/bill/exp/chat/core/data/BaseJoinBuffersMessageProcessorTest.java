@@ -76,7 +76,8 @@ public class BaseJoinBuffersMessageProcessorTest {
         Assert.assertTrue(state.getProcessingMessage() instanceof ByteBufferMessage);
         Assert.assertFalse(((ByteBufferMessage)state.getProcessingMessage()).isIncomplete());
 
-        final ByteBuffer resultBuffer = ((ByteBufferMessage)state.getProcessingMessage()).getBuffer();
-        Assert.assertEquals(resultBuffer.limit(), totalSize);
+        final ByteBuffer[] resultBuffers = ((ByteBufferMessage)state.getProcessingMessage()).getBuffers();
+        Assert.assertEquals(1, resultBuffers.length);
+        Assert.assertEquals(totalSize, resultBuffers[0].limit());
     }
 }

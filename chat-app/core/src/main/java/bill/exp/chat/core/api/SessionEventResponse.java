@@ -23,4 +23,10 @@ public class SessionEventResponse implements Response {
 
         return event;
     }
+
+    @Override
+    public String[] getContent() {
+
+        return null;
+    }
 }

@@ -3,6 +3,5 @@ package bill.exp.chat.core.api;
 @SuppressWarnings("unused")
 public interface Request {
 
-    String getAction();
-    String getContent();
+    String[] getContent();
 }

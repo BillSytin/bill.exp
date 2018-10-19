@@ -2,6 +2,8 @@ package bill.exp.chat.server.cmd;
 
 import bill.exp.chat.core.io.Session;
 import bill.exp.chat.model.ChatMessage;
+import bill.exp.chat.model.ChatStandardAction;
+import bill.exp.chat.model.ChatStandardRoute;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -34,43 +36,65 @@ public abstract class BaseChatServerCommandProcessor implements ChatServerComman
 
     protected abstract String getCommandId();
 
-    protected String getHelpText() {
+    protected Locale getContextLocale(ChatServerCommandProcessingContext context) {
 
-        return StringUtils.hasLength(getCommandId()) ? getMessagesResource().getMessage(getCommandId(), null, Locale.US) : null;
+        return Locale.US;
     }
 
-    protected boolean detectProcessingCommmand(ChatServerCommandProcessingContext context) {
+    protected String getMessageResource(String id, ChatServerCommandProcessingContext context) {
 
-        return detectProcessingCommmand(context, getCommandId());
+        return StringUtils.hasLength(id) ? getMessagesResource().getMessage(id, null, getContextLocale(context)) : null;
     }
 
-    protected boolean detectProcessingCommmand(ChatServerCommandProcessingContext context, String commandId) {
+    protected String getHelpText(ChatServerCommandProcessingContext context) {
 
-        return StringUtils.hasLength(commandId) &&
-                context.getProcessingMessage() != null &&
-                commandId.equals(parseMessageType(context.getProcessingMessage(), commandId));
+        return getMessageResource(getCommandId(), context);
     }
 
-    protected static String parseMessageType(ChatMessage message, String supposedCommandId) {
+    protected boolean detectProcessingAction(ChatServerCommandProcessingContext context, String action) {
 
-        if (message != null && StringUtils.isEmpty(message.getType())) {
+        final ChatMessage message = context.getProcessingMessage();
+        if (message == null)
+            return false;
 
-            if (StringUtils.hasLength(supposedCommandId) && StringUtils.hasLength(message.getText())) {
+        final String commandRoute = getCommandId();
+        if (StringUtils.isEmpty(commandRoute))
+            return false;
 
-                if (message.getText().equals("-" + supposedCommandId)) {
+        if (StringUtils.hasLength(message.getRoute()) && !message.getRoute().equals(commandRoute)) {
 
-                    message.setType(supposedCommandId);
-                    message.setText(null);
-                }
-                else if (message.getText().startsWith("-" + supposedCommandId + " ")) {
+            return false;
+        }
 
-                    message.setType(supposedCommandId);
-                    message.setText(message.getText().substring(supposedCommandId.length() + 2));
-                }
+        if (StringUtils.isEmpty(action)) {
+
+            return StringUtils.hasLength(message.getRoute()) && StringUtils.isEmpty(message.getAction());
+        }
+
+        if (StringUtils.hasLength(message.getAction())) {
+
+            return message.getAction().equals(action);
+        }
+
+        if (StringUtils.hasLength(message.getContent())) {
+
+            if (message.getContent().equals("-" + action)) {
+
+                message.setRoute(commandRoute);
+                message.setAction(action);
+                message.setContent(null);
+                return true;
+            }
+            else if (message.getContent().startsWith("-" + action + " ")) {
+
+                message.setRoute(commandRoute);
+                message.setAction(action);
+                message.setContent(message.getContent().substring(action.length() + 2));
+                return true;
             }
         }
 
-        return message != null ? message.getType() : null;
+        return false;
     }
 
     @Override
@@ -88,13 +112,14 @@ public abstract class BaseChatServerCommandProcessor implements ChatServerComman
 
             case Help:
 
-                String helpText = getHelpText();
+                String helpText = getHelpText(context);
                 if (StringUtils.hasLength(helpText)) {
 
                     final ChatMessage message = new ChatMessage();
-                    message.setType("help");
-                    message.setTitle(getCommandId());
-                    message.setText(helpText);
+                    message.setRoute(ChatStandardRoute.Help.toString());
+                    message.setAction(ChatStandardAction.Help.toString());
+                    message.setStatus(getCommandId());
+                    message.setContent(helpText);
                     context.getOutput().getMessages().add(message);
                 }
                 break;

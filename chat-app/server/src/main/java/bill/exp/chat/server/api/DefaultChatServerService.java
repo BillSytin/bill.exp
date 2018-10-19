@@ -1,8 +1,9 @@
 package bill.exp.chat.server.api;
 
 import bill.exp.chat.core.io.Session;
-import bill.exp.chat.model.ChatBaseAction;
+import bill.exp.chat.model.ChatAction;
 import bill.exp.chat.model.ChatClientEnvelope;
+import bill.exp.chat.model.ChatServerEnvelope;
 import bill.exp.chat.server.cmd.ChatServerCommandProcessingContext;
 import bill.exp.chat.server.cmd.ChatServerCommandProcessingManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,35 +24,45 @@ public class DefaultChatServerService implements ChatServerService {
     }
 
     @Override
-    public ChatServerResponseIntent process(Session session, ChatServerRequestIntent intent, ChatClientEnvelope model) {
+    public ChatServerResponseIntent process(Session session, ChatServerRequestIntent intent, ChatClientEnvelope[] model) {
 
-        ChatBaseAction action = ChatBaseAction.Process;
+        ChatAction action = ChatAction.Process;
         switch (intent.getAction()) {
 
             case Process:
-                if (model != null && model.getAction() == ChatBaseAction.CloseSession) {
+                if (model != null && model.length > 0 && model[model.length - 1].getAction() == ChatAction.CloseSession) {
 
-                    action = ChatBaseAction.CloseSession;
+                    action = ChatAction.CloseSession;
                 }
                 break;
         }
 
-        final ChatServerCommandProcessingContext context = new ChatServerCommandProcessingContext(session, intent.getAction(), model);
-        commandProcessingManager.process(context);
+        final ChatServerEnvelope[] outputs = new ChatServerEnvelope[model != null ? model.length : 1];
 
-        return new ChatServerResponseIntent(action, context.getOutput());
+        for (int i = 0; i < outputs.length; i++) {
+
+            final ChatServerCommandProcessingContext context = new ChatServerCommandProcessingContext(
+                    session,
+                    intent.getAction(),
+                    model != null ? model[i] : null);
+
+            commandProcessingManager.process(context);
+            outputs[i] = context.getOutput();
+        }
+
+        return new ChatServerResponseIntent(action, outputs);
     }
 
     @Override
     public boolean isAsyncIntent(ChatServerRequestIntent intent) {
 
-        return intent.getAction() == ChatBaseAction.Process;
+        return intent.getAction() == ChatAction.Process;
     }
 
     @Override
     public void dispose(Session session) {
 
-        final ChatServerCommandProcessingContext context = new ChatServerCommandProcessingContext(session, ChatBaseAction.Unknown, null);
+        final ChatServerCommandProcessingContext context = new ChatServerCommandProcessingContext(session, ChatAction.Unknown, null);
         commandProcessingManager.dispose(context);
     }
 }

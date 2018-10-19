@@ -86,7 +86,7 @@ public class TcpAcceptChannel implements Channel, Stoppable, DisposableBean {
                 server.close();
             }
             catch (final IOException e) {
-                logger.info(String.format("Error server close: %s%n", this.toString()), e);
+                logger.warn(String.format("Error server close: %s%n", this.toString()), e);
             }
         }
 
@@ -99,11 +99,11 @@ public class TcpAcceptChannel implements Channel, Stoppable, DisposableBean {
                     group.awaitTermination(10, TimeUnit.SECONDS);
                 }
                 catch (final InterruptedException e) {
-                    logger.info(String.format("Error server group wait termination: %s%n", this.toString()), e);
+                    logger.warn(String.format("Error server group wait termination: %s%n", this.toString()), e);
                 }
             }
             catch (final IOException e) {
-                logger.info(String.format("Error server group shutdown: %s%n", this.toString()), e);
+                logger.warn(String.format("Error server group shutdown: %s%n", this.toString()), e);
             }
         }
 

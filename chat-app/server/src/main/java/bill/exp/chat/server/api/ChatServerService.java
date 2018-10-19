@@ -6,7 +6,7 @@ import bill.exp.chat.model.ChatClientEnvelope;
 @SuppressWarnings({"unused", "SameReturnValue"})
 public interface ChatServerService {
 
-    ChatServerResponseIntent process(Session session, ChatServerRequestIntent intent, ChatClientEnvelope model);
+    ChatServerResponseIntent process(Session session, ChatServerRequestIntent intent, ChatClientEnvelope[] model);
     boolean isAsyncIntent(ChatServerRequestIntent intent);
     void dispose(Session session);
 }

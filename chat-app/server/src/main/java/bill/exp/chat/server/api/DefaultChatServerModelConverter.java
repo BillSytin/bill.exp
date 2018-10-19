@@ -2,12 +2,14 @@ package bill.exp.chat.server.api;
 
 import bill.exp.chat.core.api.*;
 import bill.exp.chat.core.data.SessionEvent;
-import bill.exp.chat.model.ChatBaseAction;
+import bill.exp.chat.model.ChatAction;
 import bill.exp.chat.model.ChatClientEnvelope;
+import bill.exp.chat.model.ChatServerEnvelope;
 import bill.exp.chat.model.ModelConvert;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
@@ -25,26 +27,26 @@ public class DefaultChatServerModelConverter implements ChatServerModelConverter
     @Override
     public ChatServerRequestIntent convertRequestToIntent(Request request) {
 
-        ChatBaseAction action = ChatBaseAction.Unknown;
-        String content = null;
+        ChatAction action = ChatAction.Unknown;
+        String[] content = null;
 
         if (request instanceof SessionEventRequest) {
 
             switch (((SessionEventRequest) request).getEvent()) {
                 case Open:
-                    action = ChatBaseAction.OpenSession;
+                    action = ChatAction.OpenSession;
                     break;
                 case Close:
-                    action = ChatBaseAction.CloseSession;
+                    action = ChatAction.CloseSession;
                     break;
             }
         }
         else {
 
             content = request.getContent();
-            if (content != null && content.length() > 0) {
+            if (content != null && content.length > 0) {
 
-                action = ChatBaseAction.Process;
+                action = ChatAction.Process;
             }
         }
 
@@ -52,24 +54,38 @@ public class DefaultChatServerModelConverter implements ChatServerModelConverter
     }
 
     @Override
-    public ChatClientEnvelope convertIntentToModel(ChatServerRequestIntent intent) {
+    public ChatClientEnvelope[] convertIntentToModels(ChatServerRequestIntent intent) {
 
-        ChatClientEnvelope model = null;
+        ChatClientEnvelope[] model = null;
 
-        final String content = intent.getContent();
-        if (content != null && content.length() > 0) {
+        final String[] content = intent.getContent();
+        if (content != null && content.length > 0) {
 
-            try {
-
-                model = ModelConvert.deserialize(content, ChatClientEnvelope.class);
-            } catch (final Exception e) {
-
-                getLogger().error("Unexpected api deserialization error%n", e);
+            int iter = 0;
+            for (final String s : content) {
+                if (StringUtils.hasLength(s))
+                    iter++;
             }
-        }
-        else {
 
-            model = new ChatClientEnvelope();
+            if (iter > 0) {
+
+                model = new ChatClientEnvelope[iter];
+                iter = 0;
+                for (final String s : content) {
+
+                    if (StringUtils.hasLength(s)) {
+
+                        try {
+
+                            model[iter] = ModelConvert.deserialize(s, ChatClientEnvelope.class);
+                        } catch (final Exception e) {
+
+                            getLogger().error("Unexpected api deserialization error%n", e);
+                        }
+                        iter++;
+                    }
+                }
+            }
         }
 
         return model;
@@ -78,24 +94,27 @@ public class DefaultChatServerModelConverter implements ChatServerModelConverter
     @Override
     public Response convertIntentToResponse(ChatServerResponseIntent intent) {
 
-        if (intent.getContent() != null) {
+        final ChatServerEnvelope[] content = intent.getContent();
+        if (content != null && content.length > 0) {
 
-            String responseString = null;
-            try {
+            final String[] responseStrings = new String[content.length];
+            for (int i = 0; i < content.length; i++) {
 
-                responseString = ModelConvert.serialize(intent.getContent());
+                try {
 
-            } catch (final IOException e) {
+                    responseStrings[i] = ModelConvert.serialize(content[i]);
 
-                getLogger().error("Unexpected api serialization error%n", e);
+                } catch (final IOException e) {
+
+                    getLogger().error("Unexpected api serialization error%n", e);
+                }
             }
 
-            if (responseString != null)
-                return new SimpleResponse(responseString);
+            return new SimpleResponse(responseStrings);
         }
         else {
 
-            if (intent.getAction() == ChatBaseAction.CloseSession) {
+            if (intent.getAction() == ChatAction.CloseSession) {
 
                 return new SessionEventResponse(0, SessionEvent.Close);
             }

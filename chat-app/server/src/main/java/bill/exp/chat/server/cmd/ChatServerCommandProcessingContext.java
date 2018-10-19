@@ -8,7 +8,7 @@ import bill.exp.chat.server.users.ChatServerUser;
 public class ChatServerCommandProcessingContext {
 
     private final Session session;
-    private final ChatBaseAction intentAction;
+    private final ChatAction intentAction;
     private final ChatClientEnvelope input;
     private final ChatServerEnvelope output;
     private ChatMessage processingMessage;
@@ -16,7 +16,7 @@ public class ChatServerCommandProcessingContext {
     private boolean isCompleted;
     private ChatServerCommandProcessingManager processingManager;
 
-    public ChatServerCommandProcessingContext(Session session, ChatBaseAction intentAction, ChatClientEnvelope input) {
+    public ChatServerCommandProcessingContext(Session session, ChatAction intentAction, ChatClientEnvelope input) {
 
         this.session = session;
         this.intentAction = intentAction;
@@ -60,7 +60,7 @@ public class ChatServerCommandProcessingContext {
         this.user = user;
     }
 
-    public ChatBaseAction getIntentAction() {
+    public ChatAction getIntentAction() {
 
         return intentAction;
     }

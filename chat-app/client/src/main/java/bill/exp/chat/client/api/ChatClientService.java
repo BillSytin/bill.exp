@@ -3,10 +3,10 @@ package bill.exp.chat.client.api;
 import bill.exp.chat.core.io.Session;
 import bill.exp.chat.model.ChatServerEnvelope;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "SameReturnValue"})
 public interface ChatClientService {
 
     @SuppressWarnings({"RedundantThrows", "SameReturnValue"})
-    ChatClientResponseIntent process(Session session, ChatClientRequestIntent intent, ChatServerEnvelope model);
+    ChatClientResponseIntent process(Session session, ChatClientRequestIntent intent, ChatServerEnvelope[] models);
     boolean isAsyncIntent(ChatClientRequestIntent intent);
 }
