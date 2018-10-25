@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("unused")
 @Service
 @Scope("prototype")
-public class DefaultChatClientService implements ChatClientService, Stoppable {
+public class DefaultChatClientService implements ChatClientService, ConsoleChatClientService, Stoppable {
 
     private final Log logger = LogFactory.getLog(getClass());
     private final ChatClientConsole console;
@@ -49,6 +49,7 @@ public class DefaultChatClientService implements ChatClientService, Stoppable {
         this.session = null;
     }
 
+    @Override
     public ChatClientConsole getConsole() {
 
         return console;

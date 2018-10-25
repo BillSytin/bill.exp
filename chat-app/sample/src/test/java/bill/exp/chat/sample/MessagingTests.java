@@ -1,18 +1,17 @@
 package bill.exp.chat.sample;
 
-import bill.exp.chat.client.api.ChatClientRequestHandler;
-import bill.exp.chat.client.api.ChatClientService;
-import bill.exp.chat.client.api.DefaultChatClientService;
+import bill.exp.chat.client.api.*;
 import bill.exp.chat.client.console.ChatClientConsole;
 import bill.exp.chat.core.api.RequestHandler;
+import bill.exp.chat.core.api.ResponseIntent;
 import bill.exp.chat.core.client.io.ClientChannel;
 import bill.exp.chat.core.client.io.ClientSession;
 import bill.exp.chat.core.client.io.TcpClientConfig;
-import bill.exp.chat.core.data.BaseRequestMessageProcessor;
-import bill.exp.chat.core.data.MessageProcessor;
+import bill.exp.chat.core.data.*;
 import bill.exp.chat.core.io.Session;
 import bill.exp.chat.core.io.SessionManager;
 import bill.exp.chat.core.util.Stoppable;
+import bill.exp.chat.model.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;
@@ -81,13 +80,16 @@ public class MessagingTests {
     @Test
     public void loginTest() throws Exception {
 
+        final int TestClientCount = 1000;
+
         getLogger().info("Starting...");
         executor.execute(worker);
 
         getLogger().info("Connecting...");
         final ArrayList<Future<ClientSession>> clientFutures = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < TestClientCount; i++) {
 
+            Thread.sleep(50);
             clientFutures.add(clientChannel.connect());
         }
 
@@ -101,35 +103,89 @@ public class MessagingTests {
         getLogger().info("Messaging...");
 
         final ArrayList<ChatClientConsole> consoles = new ArrayList<>(sessions.size());
+        final ArrayList<ChatClientService> services = new ArrayList<>(sessions.size());
         for (final ClientSession session : sessions) {
 
+            ChatClientConsole console = null;
+            ChatClientService service = null;
             for (final MessageProcessor processor : session.getProcessingManager().getProcessors()) {
 
-                if (processor instanceof BaseRequestMessageProcessor) {
+                if (processor instanceof RequestMessageProcessor) {
 
-                    final RequestHandler requestHandler = ((BaseRequestMessageProcessor) processor).getRequestHandler();
+                    final RequestHandler requestHandler = ((RequestMessageProcessor) processor).getRequestHandler();
                     if (requestHandler instanceof ChatClientRequestHandler) {
 
-                        final ChatClientService service = ((ChatClientRequestHandler) requestHandler).getService();
-                        if (service instanceof DefaultChatClientService) {
+                        service = ((ChatClientRequestHandler) requestHandler).getService();
+                        if (service instanceof ConsoleChatClientService) {
 
-                            consoles.add(((DefaultChatClientService) service).getConsole());
+                            console = (((ConsoleChatClientService) service).getConsole());
                         }
                     }
                     break;
                 }
             }
+
+            services.add(service);
+            consoles.add(console);
         }
 
-        for (final ChatClientConsole console : consoles) {
+        ArrayList<Integer> incomplete = new ArrayList<>(consoles.size());
+        for (int i = 0; i < consoles.size(); i++) {
 
-            if (console instanceof TestMessagingConsole) {
+            incomplete.add(i);
+        }
 
-                ((TestMessagingConsole) console).getDoneInputFuture().get(10, TimeUnit.MINUTES);
+        for (int k = 0; k < 2; k++) {
+
+            final ArrayList<Integer> timeouts = new ArrayList<>();
+
+            for (final Integer index : incomplete) {
+
+                final ChatClientConsole console = consoles.get(index);
+                if (console instanceof TestMessagingConsole) {
+
+                    try {
+
+                        ((TestMessagingConsole) console).getDoneInputFuture().get(1, TimeUnit.SECONDS);
+                    } catch (final Exception e) {
+
+                        timeouts.add(index);
+                    }
+                }
+            }
+            incomplete = timeouts;
+
+            if (timeouts.isEmpty())
+                break;
+
+            Thread.sleep(timeouts.size() * 1000);
+        }
+
+        if (!incomplete.isEmpty()) {
+
+            for (final Integer index : incomplete) {
+
+                final Session session = sessions.get(index);
+                final ChatClientService service = services.get(index);
+                final ChatClientConsole console = consoles.get(index);
+
+                final ChatMessage message = new ChatMessage();
+                message.setRoute(ChatStandardRoute.Auth.toString());
+                message.setAction(ChatStandardAction.Logout.toString());
+                final ChatClientEnvelope content = new ChatClientEnvelope();
+                content.setAuthToken(null);
+                content.setMessages(new ChatMessageList());
+                content.getMessages().add(message);
+                final ResponseIntent responseIntent = new ChatClientResponseIntent(
+                        ChatAction.Process,
+                        new ChatClientEnvelope[] { content });
+                final Message intentMessage = new ResponseIntentMessage(responseIntent);
+
+                session.submit(intentMessage);
+                service.process(session, new ChatClientRequestIntent(ChatAction.Process, new String[0]), null);
+                console.printOutput(new ChatMessage());
             }
         }
-
-        //Thread.sleep(100000);
 
         getLogger().info("Stopping...");
         gracefulStopSessions(clientSessionManager);

@@ -14,6 +14,7 @@ public class BaseDecodeInputMessageProcessor implements MessageProcessor {
     public void process(MessageProcessingState state, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
 
         if (state.getProcessingMessage() instanceof ByteBufferMessage) {
+
             if (!((ByteBufferMessage) state.getProcessingMessage()).isIncomplete()) {
 
                 final ByteBuffer[] inputBuffers = ((ByteBufferMessage) state.getProcessingMessage()).getBuffers();
@@ -37,6 +38,10 @@ public class BaseDecodeInputMessageProcessor implements MessageProcessor {
 
                 state.setProcessingMessage(new StringMessage(outputStrings.toArray(new String[0])));
             }
+        }
+        else if (state.getIncomingMessage() instanceof StringMessage) {
+
+            state.setProcessingMessage(state.getIncomingMessage());
         }
 
         completionHandler.completed(MessageProcessingAction.Next, state);

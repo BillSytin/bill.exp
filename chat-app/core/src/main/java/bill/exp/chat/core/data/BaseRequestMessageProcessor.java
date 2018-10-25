@@ -1,18 +1,21 @@
 package bill.exp.chat.core.data;
 
 import bill.exp.chat.core.api.*;
+import bill.exp.chat.core.tasks.DefaultQueueCompletion;
+import bill.exp.chat.core.tasks.QueueCompletion;
 import org.springframework.core.task.TaskExecutor;
 
 import java.nio.channels.CompletionHandler;
 
 @SuppressWarnings("unused")
-public class BaseRequestMessageProcessor implements MessageProcessor {
+public class BaseRequestMessageProcessor implements RequestMessageProcessor {
 
     public static final int Order = MessageProcessorCategory.Process + MessageProcessorBaseOrder.First + 1;
 
     private final RequestHandler requestHandler;
     private final TaskExecutor requestTaskExecutor;
-    private final RequestCompletionHandler completionHandler;
+    private final CompletionHandler<RequestHandlingContext, Object> completionHandler;
+    private final QueueCompletion<RequestHandlingContext, Object> executeQueueCompletion;
 
     public BaseRequestMessageProcessor(RequestHandler handler) {
 
@@ -24,12 +27,19 @@ public class BaseRequestMessageProcessor implements MessageProcessor {
         this.requestHandler = handler;
         this.requestTaskExecutor = requestTaskExecutor;
         this.completionHandler = new RequestCompletionHandler();
+        this.executeQueueCompletion = requestTaskExecutor == null ? null : new DefaultQueueCompletion<>();
     }
 
+    @Override
     public RequestHandler getRequestHandler() {
         return requestHandler;
     }
-    
+
+    private void runNext(RequestHandlingContext context, RequestHandlingAttachment attachment, CompletionHandler<RequestHandlingContext, Object> completionHandler) {
+
+        requestHandler.handle(context, attachment, completionHandler);
+    }
+
     @Override
     public void process(MessageProcessingState state, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
 
@@ -76,15 +86,15 @@ public class BaseRequestMessageProcessor implements MessageProcessor {
                     completionHandler.completed(MessageProcessingAction.Async, state);
                 }
 
-                RequestHandlingContext context = new DefaultRequestHandlingContext(state.getSession(), requestIntent);
-                RequestHandlingAttachment attachment = new RequestHandlingAttachment(state, completionHandler);
+                final RequestHandlingContext context = new DefaultRequestHandlingContext(state.getSession(), requestIntent);
+                final RequestHandlingAttachment attachment = new RequestHandlingAttachment(state, completionHandler);
 
                 if (this.requestTaskExecutor == null) {
 
-                    requestHandler.handle(context, attachment, this.completionHandler);
+                    runNext(context, attachment, this.completionHandler);
                 } else {
 
-                    requestTaskExecutor.execute(() -> requestHandler.handle(context, attachment, this.completionHandler));
+                    executeQueueCompletion.submit(handler -> this.requestTaskExecutor.execute(() -> runNext(context, attachment, handler)), this.completionHandler);
                 }
             }
             else {
