@@ -30,7 +30,6 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
     private final QueueCompletion<Integer, Session> writeQueueCompletion;
     private final CompletionHandler<MessageProcessingAction, MessageProcessingState> processingCompletionHandler;
     private final QueueCompletion<MessageProcessingAction, MessageProcessingState> processingQueueCompletion;
-    private SessionMessageProcessingState currentProcessingState;
     private volatile boolean isClosing;
     private volatile boolean isClosed;
     private volatile Future<Boolean> futureClose;
@@ -55,9 +54,6 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
 
         processingCompletionHandler = new MessageProcessingCompletionHandler();
         processingQueueCompletion = new DefaultQueueCompletion<>();
-
-        currentProcessingState = null;
-
     }
 
     @Override
@@ -150,7 +146,6 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
         }
 
         final ByteBuffer original = readBuffer;
-        final boolean isIncomplete = !original.hasRemaining();
 
         original.flip();
         final ByteBuffer clone = ByteBuffer.allocate(original.limit());
@@ -160,26 +155,16 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
         clone.flip();
         original.clear();
 
-        submitMessage(new ByteBufferMessage(clone, isIncomplete));
+        submitMessage(new ByteBufferMessage(clone));
 
         readNext();
     }
 
     private void processMessage(Message message, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
 
-        SessionMessageProcessingState processingState = currentProcessingState;
-
-        if (processingState == null) {
-
-            processingState = new SessionMessageProcessingState(this, message, processingManager.createProcessingChain());
-        }
-        else {
-
-            currentProcessingState = null;
-            processingState.setIncomingMessage(message);
-        }
-
-        processingState.getProcessingChain().process(processingState, completionHandler);
+        final MessageProcessingChain processingChain = processingManager.createProcessingChain();
+        final MessageProcessingState processingState = new MessageProcessingState(this, completionHandler, message);
+        processingChain.process(processingState);
     }
 
     private void writeNext(ByteBuffer output, CompletionHandler<Integer, Session> completionHandler) {
@@ -257,12 +242,7 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
 
     private void closeProcessing() {
 
-        final SessionMessageProcessingState processingState = new SessionMessageProcessingState(this,
-                new SessionEventMessage(this.getId(), SessionEvent.Dispose),
-                processingManager.createProcessingChain());
-
-        processingState.getProcessingChain().process(processingState, new CompletionHandler<MessageProcessingAction, MessageProcessingState>() {
-
+        final CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler = new CompletionHandler<MessageProcessingAction, MessageProcessingState>() {
             @Override
             public void completed(MessageProcessingAction result, MessageProcessingState attachment) {
 
@@ -273,7 +253,13 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
 
                 logger.warn(String.format("Exception on close processing at session: %s%n", attachment.getSession().toString()), exc);
             }
-        });
+        };
+
+        final MessageProcessingState processingState = new MessageProcessingState(this,
+                completionHandler,
+                new SessionEventMessage(this.getId(), SessionEvent.Dispose));
+        final MessageProcessingChain processingChain = processingManager.createProcessingChain();
+        processingChain.process(processingState);
     }
 
     private synchronized void closeImpl() {
@@ -407,11 +393,6 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
         public void completed(MessageProcessingAction result, MessageProcessingState attachment) {
 
             switch (result) {
-                case Reset:
-                    currentProcessingState = (SessionMessageProcessingState) attachment;
-                    break;
-                case Next:
-                    break;
                 case Done:
                     handleOutputMessage(attachment);
                     break;
@@ -477,18 +458,5 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
             logger.error(String.format("Exception on write at session: %s, closing session%n", attachment.toString()), exc);
             attachment.close();
         }
-    }
-
-    private static final class SessionMessageProcessingState extends MessageProcessingState {
-
-        private final MessageProcessingChain processingChain;
-
-        public SessionMessageProcessingState(Session session, Message incomingMessage, MessageProcessingChain processingChain) {
-
-            super(session, incomingMessage);
-            this.processingChain = processingChain;
-        }
-
-        public MessageProcessingChain getProcessingChain() { return processingChain; }
     }
 }

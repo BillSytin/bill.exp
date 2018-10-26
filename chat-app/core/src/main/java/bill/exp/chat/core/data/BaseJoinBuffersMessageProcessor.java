@@ -1,29 +1,50 @@
 package bill.exp.chat.core.data;
 
+import org.springframework.context.annotation.Scope;
+
 import java.nio.ByteBuffer;
 import java.nio.channels.CompletionHandler;
 
 @SuppressWarnings("unused")
+@Scope("prototype")
 public class BaseJoinBuffersMessageProcessor implements MessageProcessor {
 
     public static final int Order = MessageProcessorCategory.InputBuffer + MessageProcessorBaseOrder.First + 1;
+    private ByteBuffer[] pendingBuffers;
 
+    private ByteBuffer[] detachPendingBuffers() {
+
+        ByteBuffer[] result = pendingBuffers;
+        if (result != null) {
+
+            pendingBuffers = null;
+        }
+        return result;
+    }
+
+    private void setPendingBuffers(ByteBuffer[] pendingBuffers) {
+
+        this.pendingBuffers = pendingBuffers;
+    }
+
+    @SuppressWarnings("ManualArrayCopy")
     @Override
     public void process(MessageProcessingState state, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
 
         boolean isComplete = true;
 
-        if (state.getIncomingMessage() instanceof ByteBufferMessage) {
+        if (state.getInputMessage() instanceof ByteBufferMessage) {
 
-            final ByteBuffer[] incomingBuffers = ((ByteBufferMessage) state.getIncomingMessage()).getBuffers();
-            final ByteBuffer incoming = incomingBuffers[incomingBuffers.length - 1];
-            final int endPosition = incoming.limit() - 1;
+            final ByteBuffer[] processingBuffers = detachPendingBuffers();
+            final ByteBuffer[] incomingBuffers = ((ByteBufferMessage) state.getInputMessage()).getBuffers();
+            final ByteBuffer incomingLast = incomingBuffers[incomingBuffers.length - 1];
+            final int endPosition = incomingLast.limit() - 1;
             if (endPosition >= 0) {
 
-                if (incoming.get(endPosition) == 0) {
+                if (incomingLast.get(endPosition) == 0) {
 
-                    incoming.position(endPosition);
-                    incoming.flip();
+                    incomingLast.position(endPosition);
+                    incomingLast.flip();
                 } else {
 
                     isComplete = false;
@@ -31,30 +52,43 @@ public class BaseJoinBuffersMessageProcessor implements MessageProcessor {
             }
 
             ByteBuffer[] resulting;
-            if (state.getProcessingMessage() instanceof ByteBufferMessage) {
+            if (processingBuffers != null) {
 
-                final ByteBuffer[] processingBuffers = ((ByteBufferMessage) state.getProcessingMessage()).getBuffers();
-                final ByteBuffer processing = processingBuffers[processingBuffers.length - 1];
+                final int insertPos = processingBuffers.length - 1;
+                final ByteBuffer processingLast = processingBuffers[insertPos];
+                final ByteBuffer incomingFirst = incomingBuffers[0];
 
-                incoming.rewind();
-                processing.rewind();
+                incomingFirst.rewind();
+                processingLast.rewind();
 
-                resulting = new ByteBuffer[processingBuffers.length];
-                if ((resulting.length - 1) > 0) {
+                resulting = new ByteBuffer[insertPos + incomingBuffers.length];
+                for (int i = 0; i < insertPos; i++)
+                    resulting[i] = processingBuffers[i];
 
-                    System.arraycopy(processingBuffers, 0, resulting, 0, resulting.length - 1);
+                final ByteBuffer resultingMiddle = ByteBuffer
+                        .allocate(processingLast.remaining() + incomingFirst.remaining())
+                        .put(processingLast)
+                        .put(incomingFirst);
+                resultingMiddle.rewind();
+                resulting[insertPos] = resultingMiddle;
+
+                for (int i = 1; i < incomingBuffers.length; i++) {
+                    resulting[i + insertPos] = incomingBuffers[i];
                 }
-
-                resulting[resulting.length - 1] = ByteBuffer
-                        .allocate(processing.remaining() + incoming.remaining())
-                        .put(processing)
-                        .put(incoming);
-
             } else {
 
                 resulting = incomingBuffers;
             }
-            state.setProcessingMessage(new ByteBufferMessage(resulting, !isComplete));
+
+            if (isComplete) {
+
+                state.setInputMessage(new ByteBufferMessage(resulting));
+            }
+            else {
+
+                setPendingBuffers(resulting);
+                state.setInputMessage(null);
+            }
         }
 
         completionHandler.completed(isComplete ? MessageProcessingAction.Next : MessageProcessingAction.Reset, state);

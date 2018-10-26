@@ -47,26 +47,26 @@ public class BaseRequestMessageProcessor implements RequestMessageProcessor {
         if (requestHandler != null) {
 
             RequestIntent requestIntent = null;
-            if (state.getProcessingMessage() instanceof RequestIntentMessage) {
+            if (state.getInputMessage() instanceof RequestIntentMessage) {
 
-                requestIntent = ((RequestIntentMessage) state.getProcessingMessage()).getIntent();
+                requestIntent = ((RequestIntentMessage) state.getInputMessage()).getIntent();
             }
             else {
 
                 Request request = null;
-                if (state.getProcessingMessage() instanceof StringMessage) {
+                if (state.getInputMessage() instanceof StringMessage) {
 
-                    final String[] requestStrings = ((StringMessage) state.getProcessingMessage()).getStrings();
+                    final String[] requestStrings = ((StringMessage) state.getInputMessage()).getStrings();
                     request = new SimpleRequest(requestStrings);
-                } else if (state.getIncomingMessage() instanceof SessionEventMessage) {
+                } else if (state.getInputMessage() instanceof SessionEventMessage) {
 
-                    final SessionEvent sessionEvent = ((SessionEventMessage) state.getIncomingMessage()).getEvent();
+                    final SessionEvent sessionEvent = ((SessionEventMessage) state.getInputMessage()).getEvent();
                     if (sessionEvent == SessionEvent.Dispose) {
 
                         requestHandler.dispose(state.getSession());
                     } else {
 
-                        final long sessionId = ((SessionEventMessage) state.getIncomingMessage()).getId();
+                        final long sessionId = ((SessionEventMessage) state.getInputMessage()).getId();
                         request = new SessionEventRequest(sessionId, sessionEvent);
                     }
                 }
@@ -99,9 +99,9 @@ public class BaseRequestMessageProcessor implements RequestMessageProcessor {
             }
             else {
 
-                if (state.getIncomingMessage() instanceof ResponseIntentMessage) {
+                if (state.getInputMessage() instanceof ResponseIntentMessage) {
 
-                    final ResponseIntent responseIntent = ((ResponseIntentMessage) state.getIncomingMessage()).getIntent();
+                    final ResponseIntent responseIntent = ((ResponseIntentMessage) state.getInputMessage()).getIntent();
                     processResponseIntent(responseIntent, state);
                 }
             }

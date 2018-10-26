@@ -51,11 +51,11 @@ class TestPerformanceClientServer {
     private final AtomicInteger interactCount = new AtomicInteger();
     private final CompletableFuture<Boolean> interactCompleted = new CompletableFuture<>();
 
-    public final static int CLIENT_COUNT = 1;
-    private final static boolean USE_LARGE_MESSAGE = CLIENT_COUNT < 1;
+    public final static int CLIENT_COUNT = 10;
+    private final static boolean USE_LARGE_MESSAGE = CLIENT_COUNT <= 10;
     private final static int CLIENT_SLEEP_TIME = 10;
     public final static int TEST_TIME_SEC = 30;
-    private final static int TEST_INTERACT_COUNT = 20;//3 * 100 * TEST_TIME_SEC * 1000 / (CLIENT_SLEEP_TIME + 10) / (USE_LARGE_MESSAGE ? 10 : 1);
+    private final static int TEST_INTERACT_COUNT = 5000;//3 * 100 * TEST_TIME_SEC * 1000 / (CLIENT_SLEEP_TIME + 10) / (USE_LARGE_MESSAGE ? 10 : 1);
 
     private final TcpClientConfig clientConfig;
 
@@ -163,7 +163,7 @@ class TestPerformanceClientServer {
 
         int count = interactCount.getAndIncrement();
 
-        if ((count % 100000) == 0)
+        if ((count % (TEST_INTERACT_COUNT / 10)) == 0)
             getLogger().info(String.format("%d of %d%n", count, TEST_INTERACT_COUNT));
 
         if (count < TEST_INTERACT_COUNT)

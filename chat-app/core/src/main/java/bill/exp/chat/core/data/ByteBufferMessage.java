@@ -4,19 +4,15 @@ import java.nio.ByteBuffer;
 
 public class ByteBufferMessage implements Message {
     private final ByteBuffer[] content;
-    private final boolean isIncomplete;
 
-    public ByteBufferMessage(ByteBuffer content, boolean isIncomplete) {
+    public ByteBufferMessage(ByteBuffer content) {
 
-        this(new ByteBuffer[] { content }, isIncomplete);
+        this(new ByteBuffer[] { content });
     }
 
-    public ByteBufferMessage(ByteBuffer[] content, boolean isIncomplete) {
+    public ByteBufferMessage(ByteBuffer[] content) {
         this.content = content;
-        this.isIncomplete = isIncomplete;
     }
-
-    public boolean isIncomplete() { return isIncomplete; }
 
     public ByteBuffer[] getBuffers() { return content; }
 }

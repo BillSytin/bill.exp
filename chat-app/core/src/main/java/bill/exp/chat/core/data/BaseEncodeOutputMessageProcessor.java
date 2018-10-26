@@ -42,7 +42,7 @@ public class BaseEncodeOutputMessageProcessor implements MessageProcessor {
                 outputBuffers[i] = outputBuffer;
             }
 
-            state.setOutputMessage(new ByteBufferMessage(outputBuffers, false));
+            state.setOutputMessage(new ByteBufferMessage(outputBuffers));
         }
 
         completionHandler.completed(MessageProcessingAction.Next, state);

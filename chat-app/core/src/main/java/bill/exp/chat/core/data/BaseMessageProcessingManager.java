@@ -48,9 +48,8 @@ public class BaseMessageProcessingManager implements MessageProcessingManager {
         }
 
         @Override
-        public void process(MessageProcessingState state, CompletionHandler<MessageProcessingAction, MessageProcessingState> completionHandler) {
+        public void process(MessageProcessingState state) {
 
-            state.setFinalCompletionHandler(completionHandler);
             processNext(state);
         }
 

@@ -32,7 +32,7 @@ public class BaseJoinBuffersMessageProcessorTest {
         final BaseJoinBuffersMessageProcessor processor = new BaseJoinBuffersMessageProcessor();
 
         final int bufferSize = serverConfig.getReadBufferSize();
-        final MessageProcessingState state = new MessageProcessingState(session, null);
+        final MessageProcessingState state = new MessageProcessingState(session,null,null);
 
         final int BuffersCount = 3;
         int totalSize = 0;
@@ -45,6 +45,10 @@ public class BaseJoinBuffersMessageProcessorTest {
             }
 
             final boolean isLast = bi == 0;
+            final ByteBuffer[] buffers = new ByteBuffer[2];
+            buffers[0] = StandardCharsets.UTF_8.encode(sb.toString());
+            totalSize += buffers[0].limit();
+
             final ByteBuffer buffer = StandardCharsets.UTF_8.encode(sb.toString());
             final int endPosition = buffer.limit();
             totalSize += endPosition;
@@ -54,9 +58,10 @@ public class BaseJoinBuffersMessageProcessorTest {
                 buffer.position(endPosition);
                 buffer.put((byte) 0);
             }
+            buffers[1] = buffer;
 
             completionAction = MessageProcessingAction.Done;
-            state.setIncomingMessage(new ByteBufferMessage(buffer, false));
+            state.setInputMessage(new ByteBufferMessage(buffers));
             processor.process(state, new CompletionHandler<MessageProcessingAction, MessageProcessingState>() {
                 @Override
                 public void completed(MessageProcessingAction result, MessageProcessingState attachment) {
@@ -73,11 +78,16 @@ public class BaseJoinBuffersMessageProcessorTest {
             Assert.assertEquals(completionAction, isLast ? MessageProcessingAction.Next : MessageProcessingAction.Reset);
         }
 
-        Assert.assertTrue(state.getProcessingMessage() instanceof ByteBufferMessage);
-        Assert.assertFalse(((ByteBufferMessage)state.getProcessingMessage()).isIncomplete());
+        Assert.assertTrue(state.getInputMessage() instanceof ByteBufferMessage);
 
-        final ByteBuffer[] resultBuffers = ((ByteBufferMessage)state.getProcessingMessage()).getBuffers();
-        Assert.assertEquals(1, resultBuffers.length);
-        Assert.assertEquals(totalSize, resultBuffers[0].limit());
+        final ByteBuffer[] resultBuffers = ((ByteBufferMessage)state.getInputMessage()).getBuffers();
+        Assert.assertEquals(BuffersCount + 1, resultBuffers.length);
+
+        int resultSize = 0;
+        for (final ByteBuffer resultBuffer : resultBuffers) {
+
+            resultSize += resultBuffer.limit();
+        }
+        Assert.assertEquals(totalSize, resultSize);
     }
 }

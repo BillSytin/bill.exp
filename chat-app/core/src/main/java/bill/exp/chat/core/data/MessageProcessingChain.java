@@ -1,4 +1,5 @@
 package bill.exp.chat.core.data;
 
-public interface MessageProcessingChain extends MessageProcessor {
+public interface MessageProcessingChain {
+    void process(MessageProcessingState state);
 }

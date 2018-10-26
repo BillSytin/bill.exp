@@ -80,7 +80,7 @@ public class MessagingTests {
     @Test
     public void loginTest() throws Exception {
 
-        final int TestClientCount = 1000;
+        final int TestClientCount = 100;
 
         getLogger().info("Starting...");
         executor.execute(worker);
@@ -135,7 +135,7 @@ public class MessagingTests {
             incomplete.add(i);
         }
 
-        for (int k = 0; k < 2; k++) {
+        for (int k = 0; k < 3; k++) {
 
             final ArrayList<Integer> timeouts = new ArrayList<>();
 
@@ -155,6 +155,7 @@ public class MessagingTests {
             }
             incomplete = timeouts;
 
+            getLogger().info(String.format("Incomplete %d", timeouts.size()));
             if (timeouts.isEmpty())
                 break;
 

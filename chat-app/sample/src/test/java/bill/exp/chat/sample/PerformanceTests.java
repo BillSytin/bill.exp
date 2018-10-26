@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("performance")
-public class SampleApplicationTests {
+public class PerformanceTests {
 
     private final Log logger = LogFactory.getLog(getClass());
 

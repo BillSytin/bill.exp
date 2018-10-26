@@ -39,7 +39,7 @@ public class BaseSessionManager implements SessionManager, Stoppable {
     @Override
     public void foreachSession(Consumer<Session> action) {
 
-        for (Session session : sessionHashMap.values()) {
+        for (final Session session : sessionHashMap.values()) {
 
             action.accept(session);
         }
