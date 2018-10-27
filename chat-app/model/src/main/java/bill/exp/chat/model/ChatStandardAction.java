@@ -10,6 +10,7 @@ public enum ChatStandardAction {
     Logout("logout"),
     Welcome("welcome"),
     Help("help"),
+    Fetch("fetch"),
     Notify("notify");
 
     private final String value;

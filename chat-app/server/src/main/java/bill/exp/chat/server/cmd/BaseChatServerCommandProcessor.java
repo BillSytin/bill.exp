@@ -51,6 +51,14 @@ public abstract class BaseChatServerCommandProcessor implements ChatServerComman
         return getMessageResource(getCommandId(), context);
     }
 
+    protected boolean detectDefaultAction(ChatServerCommandProcessingContext context) {
+
+        return context.getProcessingMessage() != null &&
+                StringUtils.isEmpty(context.getProcessingMessage().getRoute()) &&
+                StringUtils.isEmpty(context.getProcessingMessage().getAction()) &&
+                StringUtils.hasLength(context.getProcessingMessage().getContent());
+    }
+
     protected boolean detectProcessingAction(ChatServerCommandProcessingContext context, String action) {
 
         final ChatMessage message = context.getProcessingMessage();

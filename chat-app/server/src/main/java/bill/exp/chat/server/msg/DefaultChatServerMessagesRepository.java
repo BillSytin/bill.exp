@@ -44,17 +44,36 @@ public class DefaultChatServerMessagesRepository implements ChatServerMessagesRe
     }
 
     @Override
-    public Iterator<ChatServerMessageRecord> getAllSince(long stamp) {
+    public Iterable<ChatServerMessageRecord> getAllSince(long stamp) {
 
-        return new RecordsIterator(records, stamp == 0 ? getCurrentStamp() : stamp);
+        return new RecordsIterable(records, stamp == 0 ? getCurrentStamp() : stamp);
+    }
+
+    private static class RecordsIterable implements Iterable<ChatServerMessageRecord> {
+
+        private final ChatServerMessageRecord[] records;
+        private final long stamp;
+
+        public RecordsIterable(ChatServerMessageRecord[] records, long stamp) {
+
+            this.records = records;
+            this.stamp = stamp;
+
+        }
+
+        @Override
+        public Iterator<ChatServerMessageRecord> iterator() {
+
+            return new RecordsIterator(records, stamp);
+        }
     }
 
     private static class RecordsIterator implements Iterator<ChatServerMessageRecord> {
 
         private final ChatServerMessageRecord[] records;
+        private long stamp;
         private final int start;
         private final int length;
-        private long stamp;
         private int index;
         private ChatServerMessageRecord record;
 

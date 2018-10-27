@@ -28,24 +28,28 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
     private final Log logger = LogFactory.getLog(getClass());
     private final ChatClientConsole console;
+    private final Stoppable lifetimeManager;
     private final ObjectFactory<TaskExecutor> taskExecutorObjectFactory;
-    private long messagesStamp;
+
+    private long fetchedMessagesStamp;
+    private long pendingMessagesStamp;
     private Session session;
     private String authToken;
     private CompletableFuture<String> authRequestFuture;
     private volatile boolean isReading;
-    private volatile boolean isStopping;
-    private volatile boolean isStopped;
 
     @Autowired
     public DefaultChatClientService(
             ChatClientConsole console,
+            @Qualifier("chatClientLifetimeManager") Stoppable lifetimeManager,
             @Qualifier("clientPoolExecutor") ObjectFactory<TaskExecutor> taskExecutorObjectFactory
     ) {
 
         this.taskExecutorObjectFactory = taskExecutorObjectFactory;
+        this.lifetimeManager = lifetimeManager;
         this.console = console;
-        this.messagesStamp = 0;
+        this.fetchedMessagesStamp = 0;
+        this.pendingMessagesStamp = 0;
         this.session = null;
     }
 
@@ -84,6 +88,28 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
         this.authRequestFuture = authRequestFuture;
     }
+
+    private synchronized long getPendingMessagesStamp() {
+
+        return pendingMessagesStamp;
+    }
+
+    private synchronized boolean updatePendingMessagesStamp(long messagesStamp) {
+
+        if (this.pendingMessagesStamp >= messagesStamp)
+            return false;
+        this.pendingMessagesStamp = messagesStamp;
+        return true;
+    }
+
+    public long getFetchedMessagesStamp() {
+        return fetchedMessagesStamp;
+    }
+
+    public void setFetchedMessagesStamp(long fetchedMessagesStamp) {
+        this.fetchedMessagesStamp = fetchedMessagesStamp;
+    }
+
 
     private Log getLogger() {
 
@@ -184,9 +210,13 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
     private void updateMessages(long stamp) {
 
-        if (stamp > messagesStamp && getSession() != null) {
+        if (getSession() != null && updatePendingMessagesStamp(stamp)) {
 
-            messagesStamp = stamp;
+            final ChatMessage message = new ChatMessage();
+            message.setRoute(ChatStandardRoute.Message.toString());
+            message.setAction(ChatStandardAction.Fetch.toString());
+            message.setContent(Long.toString(getFetchedMessagesStamp()));
+            sendMessage(message);
         }
     }
 
@@ -335,13 +365,13 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
     @Override
     public boolean isStopping() {
 
-        return isStopping;
+        return lifetimeManager.isStopping();
     }
 
     @Override
     public void setStopping() {
 
-        isStopping = true;
+        lifetimeManager.setStopping();
         if (console instanceof Stoppable) {
 
             ((Stoppable) console).setStopping();
@@ -351,7 +381,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
     @Override
     public void setStopped() {
 
-        isStopped = true;
+        lifetimeManager.setStopped();
         if (console instanceof Stoppable) {
 
             ((Stoppable) console).setStopped();
@@ -361,6 +391,6 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
     @Override
     public boolean waitStopped(int timeout) {
 
-        return isStopped;
+        return lifetimeManager.waitStopped(timeout);
     }
 }

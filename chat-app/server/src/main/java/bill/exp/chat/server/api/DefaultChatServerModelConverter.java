@@ -56,39 +56,42 @@ public class DefaultChatServerModelConverter implements ChatServerModelConverter
     @Override
     public ChatClientEnvelope[] convertIntentToModels(ChatServerRequestIntent intent) {
 
-        ChatClientEnvelope[] model = null;
+        ChatClientEnvelope[] models = intent.getModels();
 
-        final String[] content = intent.getContent();
-        if (content != null && content.length > 0) {
+        if (models == null) {
 
-            int iter = 0;
-            for (final String s : content) {
-                if (StringUtils.hasLength(s))
-                    iter++;
-            }
+            final String[] content = intent.getContent();
+            if (content != null && content.length > 0) {
 
-            if (iter > 0) {
-
-                model = new ChatClientEnvelope[iter];
-                iter = 0;
+                int iter = 0;
                 for (final String s : content) {
-
-                    if (StringUtils.hasLength(s)) {
-
-                        try {
-
-                            model[iter] = ModelConvert.deserialize(s, ChatClientEnvelope.class);
-                        } catch (final Exception e) {
-
-                            getLogger().error("Unexpected api deserialization error%n", e);
-                        }
+                    if (StringUtils.hasLength(s))
                         iter++;
+                }
+
+                if (iter > 0) {
+
+                    models = new ChatClientEnvelope[iter];
+                    iter = 0;
+                    for (final String s : content) {
+
+                        if (StringUtils.hasLength(s)) {
+
+                            try {
+
+                                models[iter] = ModelConvert.deserialize(s, ChatClientEnvelope.class);
+                            } catch (final Exception e) {
+
+                                getLogger().error("Unexpected api deserialization error%n", e);
+                            }
+                            iter++;
+                        }
                     }
                 }
             }
         }
 
-        return model;
+        return models;
     }
 
     @Override

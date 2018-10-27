@@ -10,7 +10,6 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 @SuppressWarnings("unused")
 @Component
@@ -39,18 +38,56 @@ public class ChatServerMessagesCommandProcessor extends BaseChatServerCommandPro
     @Override
     protected void process(ChatServerCommandProcessingContext context) {
 
-        if (detectProcessingAction(context, ChatStandardAction.None.toString()) ||
-                (context.getProcessingMessage() != null &&
-                        StringUtils.isEmpty(context.getProcessingMessage().getRoute()) &&
-                        StringUtils.isEmpty(context.getProcessingMessage().getAction()) &&
-                        StringUtils.hasLength(context.getProcessingMessage().getContent())
-                )
-        ) {
+        if (detectProcessingAction(context, ChatStandardAction.Notify.toString())) {
 
             if (context.getUser() != null && context.getUser().isAuthenticated()) {
 
+                final ChatMessage message = new ChatMessage();
+                message.setRoute(getCommandId());
+                message.setAction(ChatStandardAction.Notify.toString());
+                message.setContent(context.getProcessingMessage().getContent());
+                context.getOutput().getMessages().add(message);
+            }
+        }
+
+        if (detectProcessingAction(context, ChatStandardAction.Fetch.toString())) {
+
+            if (context.getUser() != null && context.getUser().isAuthenticated()) {
+
+                long stamp;
+                try {
+                    stamp = Long.parseLong(context.getProcessingMessage().getContent());
+                }
+                catch (final NumberFormatException e) {
+                    stamp = -1;
+                }
+
+                if (stamp > 0) {
+
+                    final long thisSessionId = context.getSession().getId();
+                    for (final ChatServerMessageRecord record : getMessagesRepository().getAllSince(stamp)) {
+
+                        if (record.getSessionId() != thisSessionId) {
+
+                            final ChatMessage message = new ChatMessage();
+                            message.setRoute(getCommandId());
+                            message.setAction(ChatStandardAction.Fetch.toString());
+                            message.setStatus(Long.toString(record.getStamp()));
+                            message.setAuthor(record.getUser());
+                            message.setContent(record.getMessage().getContent());
+                            context.getOutput().getMessages().add(message);
+                        }
+                    }
+                }
+            }
+        }
+        else if (detectProcessingAction(context, ChatStandardAction.None.toString()) || detectDefaultAction(context)) {
+
+            if (context.getUser() != null && context.getUser().isAuthenticated()) {
+
+                final long thisSessionId = context.getSession().getId();
                 final ChatServerMessageRecord record = new ChatServerMessageRecord();
-                record.setSessionId(context.getSession().getId());
+                record.setSessionId(thisSessionId);
                 record.setMessage(context.getProcessingMessage());
                 record.setUser(context.getUser().toModel());
                 getMessagesRepository().put(record);

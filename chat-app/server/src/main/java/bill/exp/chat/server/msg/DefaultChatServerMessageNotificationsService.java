@@ -1,11 +1,11 @@
 package bill.exp.chat.server.msg;
 
-import bill.exp.chat.core.api.ResponseIntent;
+import bill.exp.chat.core.api.RequestIntent;
 import bill.exp.chat.core.data.Message;
-import bill.exp.chat.core.data.ResponseIntentMessage;
+import bill.exp.chat.core.data.RequestIntentMessage;
 import bill.exp.chat.core.io.SessionManager;
 import bill.exp.chat.model.*;
-import bill.exp.chat.server.api.ChatServerResponseIntent;
+import bill.exp.chat.server.api.ChatServerRequestIntent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
@@ -79,13 +79,13 @@ public class DefaultChatServerMessageNotificationsService implements ChatServerM
         notifyMessage.setRoute(ChatStandardRoute.Message.toString());
         notifyMessage.setAction(ChatStandardAction.Notify.toString());
 
-        final ChatServerEnvelope content = new ChatServerEnvelope();
+        final ChatClientEnvelope content = new ChatClientEnvelope();
         content.setMessages(new ChatMessageList());
         content.getMessages().add(notifyMessage);
-        final ResponseIntent responseIntent = new ChatServerResponseIntent(
+        final RequestIntent requestIntent = new ChatServerRequestIntent(
                 ChatAction.Process,
-                new ChatServerEnvelope[] { content });
-        final Message intentMessage = new ResponseIntentMessage(responseIntent);
+                new ChatClientEnvelope[] { content });
+        final Message intentMessage = new RequestIntentMessage(requestIntent);
 
         sessionManager.foreachSession(session -> session.submit(intentMessage));
     }
