@@ -298,5 +298,10 @@ class TestPerformanceClientServer {
 
             return false;
         }
+
+        @Override
+        public void dispose(Session session) {
+
+        }
     }
 }

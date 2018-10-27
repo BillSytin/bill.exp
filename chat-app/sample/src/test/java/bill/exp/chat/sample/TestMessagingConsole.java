@@ -68,6 +68,11 @@ public class TestMessagingConsole implements ChatClientConsole {
     }
 
     @Override
+    public void create() {
+
+    }
+
+    @Override
     public void printOutput(ChatMessage message) {
 
         printOutputSync(message);

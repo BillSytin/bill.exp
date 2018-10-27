@@ -74,5 +74,6 @@ public class DefaultChatClientRequestHandler implements ChatClientRequestHandler
     @Override
     public void dispose(Session session) {
 
+        service.dispose(session);
     }
 }

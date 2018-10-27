@@ -214,9 +214,9 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
         }
         else if (ChatStandardRoute.Session.toString().equals(message.getRoute())) {
 
-            console.printOutput(message);
             if (ChatStandardAction.Open.toString().equals(message.getAction())) {
 
+                console.create();
                 final ChatMessage welcomeMessage = new ChatMessage();
                 welcomeMessage.setRoute(ChatStandardRoute.Help.toString());
                 welcomeMessage.setAction(ChatStandardAction.Welcome.toString());
@@ -227,6 +227,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
                 setStopping();
             }
+            console.printOutput(message);
         }
         else if (ChatStandardRoute.Help.toString().equals(message.getRoute())) {
 
@@ -326,6 +327,12 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
     }
 
     @Override
+    public void dispose(Session session) {
+
+        setStopped();
+    }
+
+    @Override
     public boolean isStopping() {
 
         return isStopping;
@@ -345,6 +352,10 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
     public void setStopped() {
 
         isStopped = true;
+        if (console instanceof Stoppable) {
+
+            ((Stoppable) console).setStopped();
+        }
     }
 
     @Override
