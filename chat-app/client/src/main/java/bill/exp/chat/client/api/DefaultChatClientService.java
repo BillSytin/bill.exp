@@ -154,6 +154,12 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
         }
     }
 
+    private static boolean isHelpMessage(ChatMessage message) {
+
+        return ChatStandardRoute.Help.toString().equals(message.getRoute()) ||
+                (StringUtils.isEmpty(message.getRoute()) && ("-" + ChatStandardAction.Help.toString()).equals(message.getContent()));
+    }
+
     private void sendMessage(ChatMessage message) {
 
         if (message == null) {
@@ -173,7 +179,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
             return;
         }
 
-        if (StringUtils.isEmpty(getAuthToken()) && !ChatStandardRoute.Help.toString().equals(message.getRoute()) ) {
+        if (StringUtils.isEmpty(getAuthToken()) && !isHelpMessage(message)) {
 
             final Future<String> authRequestFuture = this.getAuthRequestFuture();
             if (authRequestFuture != null) {
