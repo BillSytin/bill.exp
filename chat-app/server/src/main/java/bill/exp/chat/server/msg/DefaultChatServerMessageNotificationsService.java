@@ -4,8 +4,10 @@ import bill.exp.chat.core.api.RequestIntent;
 import bill.exp.chat.core.data.Message;
 import bill.exp.chat.core.data.RequestIntentMessage;
 import bill.exp.chat.core.io.SessionManager;
+import bill.exp.chat.core.util.Stoppable;
 import bill.exp.chat.model.*;
 import bill.exp.chat.server.api.ChatServerRequestIntent;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
@@ -17,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("unused")
 @Service
-public class DefaultChatServerMessageNotificationsService implements ChatServerMessageNotificationsService {
+public class DefaultChatServerMessageNotificationsService implements ChatServerMessageNotificationsService, Stoppable, DisposableBean {
 
     private static final int MessageStampNullValue = -1;
     private final int notificationTimeout;
@@ -88,5 +90,34 @@ public class DefaultChatServerMessageNotificationsService implements ChatServerM
         final Message intentMessage = new RequestIntentMessage(requestIntent);
 
         sessionManager.foreachSession(session -> session.submit(intentMessage));
+    }
+
+    @Override
+    public void destroy() {
+
+        timer.cancel();
+    }
+
+    @Override
+    public boolean isStopping() {
+
+        return false;
+    }
+
+    @Override
+    public void setStopping() {
+
+        timer.cancel();
+    }
+
+    @Override
+    public void setStopped() {
+
+    }
+
+    @Override
+    public boolean waitStopped(int timeout) {
+
+        return true;
     }
 }

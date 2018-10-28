@@ -1,5 +1,6 @@
 package bill.exp.chat.server.msg;
 
+import bill.exp.chat.core.util.Stoppable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -7,7 +8,7 @@ import java.util.Iterator;
 
 @SuppressWarnings("unused")
 @Repository
-public class DefaultChatServerMessagesRepository implements ChatServerMessagesRepository {
+public class DefaultChatServerMessagesRepository implements ChatServerMessagesRepository, Stoppable {
 
     private final ChatServerMessageNotificationsService notificationsService;
     private final ChatServerMessageRecord[] records;
@@ -47,6 +48,30 @@ public class DefaultChatServerMessagesRepository implements ChatServerMessagesRe
     public Iterable<ChatServerMessageRecord> getAllSince(long stamp) {
 
         return new RecordsIterable(records, stamp == 0 ? getCurrentStamp() : stamp);
+    }
+
+    @Override
+    public boolean isStopping() {
+
+        return false;
+    }
+
+    @Override
+    public void setStopping() {
+
+        if (notificationsService instanceof Stoppable)
+            ((Stoppable) notificationsService).setStopping();
+    }
+
+    @Override
+    public void setStopped() {
+
+    }
+
+    @Override
+    public boolean waitStopped(int timeout) {
+
+        return true;
     }
 
     private static class RecordsIterable implements Iterable<ChatServerMessageRecord> {
