@@ -80,7 +80,7 @@ public class MessagingTests {
     @Test
     public void integrationTest() throws Exception {
 
-        final int TestClientCount = 10;
+        final int TestClientCount = 3;
 
         getLogger().info("Starting...");
         executor.execute(worker);

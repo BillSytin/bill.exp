@@ -128,7 +128,8 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
             while (!isStopping()) {
 
-                final ChatMessage inputMesssage = console.readInput();
+                final boolean loginPrompt = StringUtils.isEmpty(getAuthToken());
+                final ChatMessage inputMesssage = console.readInput(loginPrompt);
                 if (inputMesssage == null)
                     break;
 
@@ -312,6 +313,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
             }
             else if (ChatStandardAction.Logout.toString().equals(message.getAction())) {
 
+                authToken = null;
                 setAuthToken(null);
             }
             console.printOutput(message);

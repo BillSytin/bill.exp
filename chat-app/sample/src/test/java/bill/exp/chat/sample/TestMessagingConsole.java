@@ -100,7 +100,7 @@ public class TestMessagingConsole implements ChatClientConsole {
     }
 
     @Override
-    public ChatMessage readInput() {
+    public ChatMessage readInput(boolean loginPrompt) {
 
         try {
             Thread.sleep(100);
@@ -110,6 +110,12 @@ public class TestMessagingConsole implements ChatClientConsole {
 
         final int index = currentInputIndex.getAndIncrement();
         if (index < inputs.length) {
+
+            if (loginPrompt && index != 0) {
+
+                getLogger().error("Unexpected login prompt");
+                return null;
+            }
 
             final ChatMessage message = new ChatMessage();
             message.setContent(inputs[index]);

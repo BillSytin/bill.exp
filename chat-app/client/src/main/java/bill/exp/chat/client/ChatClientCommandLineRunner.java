@@ -4,6 +4,7 @@ import bill.exp.chat.client.console.ChatClientConsole;
 import bill.exp.chat.core.client.io.ClientChannel;
 import bill.exp.chat.core.util.Stoppable;
 import bill.exp.chat.model.ChatMessage;
+import bill.exp.chat.model.ChatStandardRoute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -35,6 +36,7 @@ public class ChatClientCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         final ChatMessage message = new ChatMessage();
+        message.setRoute(ChatStandardRoute.Help.toString());
         message.setContent(String.format("Connecting to %s...", clientChannel.toString()));
         console.printOutput(message);
 
@@ -44,9 +46,6 @@ public class ChatClientCommandLineRunner implements CommandLineRunner {
             ((Stoppable) console).waitStopped(-1);
             ((Stoppable) console).setStopping();
         }
-
-        message.setContent("Session finished. Press enter to exit...");
-        console.printOutput(message);
 
         lifeTimeManager.setStopping();
         if (clientChannel instanceof Stoppable) {

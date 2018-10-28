@@ -1,9 +1,7 @@
 package bill.exp.chat.client.console;
 
 import bill.exp.chat.core.util.Stoppable;
-import bill.exp.chat.model.ChatMessage;
-import bill.exp.chat.model.ChatStandardRoute;
-import bill.exp.chat.model.ChatUser;
+import bill.exp.chat.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -19,7 +17,9 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
     private final Stoppable lifetimeManager;
     private final PrintStream out;
     private final Scanner in;
-    private final String colorRedPrefix;
+    private final String colorErrorPrefix;
+    private final String colorHelpPrefix;
+    private final String colorDefaultPrefix;
 
     @Autowired
     public DefaultChatClientConsole(
@@ -28,7 +28,9 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
         this.lifetimeManager = lifetimeManager;
         out = System.out;
         in = new Scanner(System.in);
-        colorRedPrefix = (char)27 + "[33m";
+        colorErrorPrefix = (char)27 + "[33m";
+        colorHelpPrefix = (char)27 + "[31m";
+        colorDefaultPrefix = (char)27 + "[0m";
     }
 
     private void print(String output) {
@@ -43,7 +45,12 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
 
     private void printError(ChatMessage message) {
 
-        print(colorRedPrefix + formatMessageText(message));
+        print(colorErrorPrefix + formatMessageText(message) + colorDefaultPrefix);
+    }
+
+    private void printHelp(ChatMessage message) {
+
+        print(colorHelpPrefix + formatMessageText(message) + colorDefaultPrefix);
     }
 
     private void printUser(ChatUser user) {
@@ -58,7 +65,7 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
 
     private static String formatMessageText(ChatMessage message) {
 
-        return String.format("%s%s", message.getRoute(), message.getContent());
+        return message.getContent();
     }
 
     @Override
@@ -73,15 +80,42 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
 
             printError(message);
         }
-        else {
+        else if (ChatStandardRoute.Message.toString().equals(message.getRoute())) {
 
-            printUser(message.getAuthor());
-            printText(message);
+            if (ChatStandardAction.Fetch.toString().equals(message.getAction())) {
+                printUser(message.getAuthor());
+                printText(message);
+            }
+        }
+        else if (ChatStandardRoute.Auth.toString().equals(message.getRoute())) {
+
+            if (ChatStandardAction.Login.toString().equals(message.getAction())) {
+
+                if (ChatStandardStatus.Success.toString().equals(message.getStatus())) {
+                    print("You are successfully logged in.");
+                }
+                else {
+                    printError(message);
+                }
+            }
+            else if (ChatStandardAction.Logout.toString().equals(message.getAction())) {
+
+                print("Bye.");
+                print("Press enter to exit the chat.");
+                setStopping();
+            }
+        }
+        else if (ChatStandardRoute.Help.toString().equals(message.getRoute())) {
+
+            printHelp(message);
         }
     }
 
     @Override
-    public ChatMessage readInput() {
+    public ChatMessage readInput(boolean loginPrompt) {
+
+        if (loginPrompt)
+            print("Please enter your name to log in");
 
         final ChatMessage result = new ChatMessage();
         result.setContent(in.nextLine());

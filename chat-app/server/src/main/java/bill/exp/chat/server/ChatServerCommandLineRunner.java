@@ -38,7 +38,7 @@ public class ChatServerCommandLineRunner implements CommandLineRunner {
     public void run(String... args) {
 
         System.out.println("Starting chat server");
-        System.out.println("\t- Enter 'q' and press enter to quit the application");
+        System.out.println("\t- Type 'q' and press enter to quit the application");
         System.out.println();
 
         executor.execute(worker);
@@ -64,5 +64,6 @@ public class ChatServerCommandLineRunner implements CommandLineRunner {
             ((Stoppable) notificationsService).setStopping();
 
         lifeTimeManager.waitStopped(10000);
+        System.exit(0);
     }
 }

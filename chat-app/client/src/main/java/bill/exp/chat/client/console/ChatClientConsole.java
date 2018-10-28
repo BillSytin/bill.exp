@@ -8,5 +8,5 @@ public interface ChatClientConsole {
     @SuppressWarnings("EmptyMethod")
     void create();
     void printOutput(ChatMessage message);
-    ChatMessage readInput();
+    ChatMessage readInput(boolean loginPrompt);
 }

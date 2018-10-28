@@ -11,6 +11,8 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 @Component("tcpAcceptChannel")
+@Profile("server")
+@Scope("prototype")
 public class TcpAcceptChannel implements Channel, Stoppable, DisposableBean {
 
     protected final Log logger = LogFactory.getLog(getClass());

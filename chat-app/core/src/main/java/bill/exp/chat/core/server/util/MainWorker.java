@@ -4,11 +4,13 @@ import bill.exp.chat.core.io.Channel;
 import bill.exp.chat.core.util.Stoppable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 
 @SuppressWarnings("unused")
 @Component("mainWorker")
+@Profile("server")
 public class MainWorker implements Runnable, Stoppable {
 
     private final TaskExecutor executor;
