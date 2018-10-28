@@ -91,7 +91,7 @@ public class DefaultChatServerMessagesRepository implements ChatServerMessagesRe
         private void moveNext() {
 
             record = null;
-            if (index < length) {
+            while (index < length) {
 
                 final ChatServerMessageRecord current = records[(start + index) % length];
                 index++;
@@ -103,6 +103,7 @@ public class DefaultChatServerMessagesRepository implements ChatServerMessagesRe
                         stamp = currentStamp;
                         record = current;
                     }
+                    break;
                 }
             }
         }

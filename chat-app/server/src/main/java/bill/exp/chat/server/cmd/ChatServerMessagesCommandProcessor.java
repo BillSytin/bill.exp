@@ -40,7 +40,7 @@ public class ChatServerMessagesCommandProcessor extends BaseChatServerCommandPro
 
         if (detectProcessingAction(context, ChatStandardAction.Notify.toString())) {
 
-            if (context.getUser() != null && context.getUser().isAuthenticated()) {
+            if (context.getUser() != null && context.getUser().isLoggedIn()) {
 
                 final ChatMessage message = new ChatMessage();
                 message.setRoute(getCommandId());
@@ -49,8 +49,7 @@ public class ChatServerMessagesCommandProcessor extends BaseChatServerCommandPro
                 context.getOutput().getMessages().add(message);
             }
         }
-
-        if (detectProcessingAction(context, ChatStandardAction.Fetch.toString())) {
+        else if (detectProcessingAction(context, ChatStandardAction.Fetch.toString())) {
 
             if (context.getUser() != null && context.getUser().isAuthenticated()) {
 
@@ -62,7 +61,7 @@ public class ChatServerMessagesCommandProcessor extends BaseChatServerCommandPro
                     stamp = -1;
                 }
 
-                if (stamp > 0) {
+                if (stamp >= 0) {
 
                     final long thisSessionId = context.getSession().getId();
                     for (final ChatServerMessageRecord record : getMessagesRepository().getAllSince(stamp)) {

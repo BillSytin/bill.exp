@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("unused")
@@ -32,10 +33,12 @@ public class TestMessagingConsole implements ChatClientConsole {
             "bye",
             "-logout"
     };
+    private final CompletableFuture<Void> doneFetchFuture;
 
     private final int userId;
     private final AtomicInteger currentInputIndex;
     private final AtomicInteger inputDone;
+    private final AtomicInteger fetchCount;
 
     private Log getLogger() {
 
@@ -45,8 +48,10 @@ public class TestMessagingConsole implements ChatClientConsole {
     public TestMessagingConsole() {
 
         doneInputFuture = new CompletableFuture<>();
+        doneFetchFuture = new CompletableFuture<>();
         currentInputIndex = new AtomicInteger(0);
         inputDone = new AtomicInteger(0);
+        fetchCount = new AtomicInteger(0);
         userId = userSequence.getAndIncrement();
     }
 
@@ -61,7 +66,7 @@ public class TestMessagingConsole implements ChatClientConsole {
 
     private void incrementInputDone() {
 
-        if (inputDone.incrementAndGet() == 2) {
+        if (inputDone.incrementAndGet() == 3) {
 
             doneInputFuture.complete(null);
         }
@@ -82,10 +87,26 @@ public class TestMessagingConsole implements ChatClientConsole {
 
             incrementInputDone();
         }
+
+        if (ChatStandardRoute.Message.toString().equals(message.getRoute()) &&
+                ChatStandardAction.Fetch.toString().equals(message.getAction())) {
+
+            if (fetchCount.incrementAndGet() == 1) {
+
+                incrementInputDone();
+                doneFetchFuture.complete(null);
+            }
+        }
     }
 
     @Override
     public ChatMessage readInput() {
+
+        try {
+            Thread.sleep(100);
+        }
+        catch (final InterruptedException ignored) {
+        }
 
         final int index = currentInputIndex.getAndIncrement();
         if (index < inputs.length) {
@@ -96,18 +117,22 @@ public class TestMessagingConsole implements ChatClientConsole {
 
                 message.setContent(message.getContent() + userId);
             }
+            if (index == inputs.length - 1) {
+
+                try {
+                    doneFetchFuture.get(10, TimeUnit.MINUTES);
+                }
+                catch (final Exception e) {
+
+                    getLogger().error("Fetch is not done", e);
+                }
+            }
             return message;
         }
 
         if (index == inputs.length) {
 
             incrementInputDone();
-        }
-
-        try {
-            Thread.sleep(100);
-        }
-        catch (final InterruptedException ignored) {
         }
 
         return null;

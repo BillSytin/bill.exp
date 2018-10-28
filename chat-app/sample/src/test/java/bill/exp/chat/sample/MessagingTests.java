@@ -78,9 +78,9 @@ public class MessagingTests {
     }
 
     @Test
-    public void loginTest() throws Exception {
+    public void integrationTest() throws Exception {
 
-        final int TestClientCount = 100;
+        final int TestClientCount = 10;
 
         getLogger().info("Starting...");
         executor.execute(worker);
@@ -146,7 +146,7 @@ public class MessagingTests {
 
                     try {
 
-                        ((TestMessagingConsole) console).getDoneInputFuture().get(1, TimeUnit.SECONDS);
+                        ((TestMessagingConsole) console).getDoneInputFuture().get(10, TimeUnit.SECONDS);
                     } catch (final Exception e) {
 
                         timeouts.add(index);

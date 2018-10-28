@@ -49,7 +49,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
         this.lifetimeManager = lifetimeManager;
         this.console = console;
         this.fetchedMessagesStamp = 0;
-        this.pendingMessagesStamp = 0;
+        this.pendingMessagesStamp = -1;
         this.session = null;
     }
 
@@ -98,6 +98,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
         if (this.pendingMessagesStamp >= messagesStamp)
             return false;
+
         this.pendingMessagesStamp = messagesStamp;
         return true;
     }
@@ -106,8 +107,13 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
         return fetchedMessagesStamp;
     }
 
-    public void setFetchedMessagesStamp(long fetchedMessagesStamp) {
+    private synchronized boolean updateFetchedMessagesStamp(long fetchedMessagesStamp) {
+
+        if (this.fetchedMessagesStamp >= fetchedMessagesStamp)
+            return false;
+
         this.fetchedMessagesStamp = fetchedMessagesStamp;
+        return true;
     }
 
 
@@ -210,7 +216,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
     private void updateMessages(long stamp) {
 
-        if (getSession() != null && updatePendingMessagesStamp(stamp)) {
+        if (getSession() != null && StringUtils.hasLength(getAuthToken()) && updatePendingMessagesStamp(stamp)) {
 
             final ChatMessage message = new ChatMessage();
             message.setRoute(ChatStandardRoute.Message.toString());
@@ -239,6 +245,26 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
                 if (stamp != 0) {
 
                     updateMessages(stamp);
+                }
+            }
+            else if (ChatStandardAction.Fetch.toString().equals(message.getAction())) {
+
+                long stamp = 0;
+                try {
+
+                    stamp = Long.parseLong(message.getStatus());
+                }
+                catch (final NumberFormatException e) {
+
+                    getLogger().error(String.format("Invalid stamp %s%n", message.getStatus()), e);
+                }
+
+                if (stamp > 0) {
+
+                    if (updateFetchedMessagesStamp(stamp)) {
+
+                        console.printOutput(message);
+                    }
                 }
             }
         }
@@ -280,7 +306,13 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
                     authToken = message.getContent();
                     message.setContent(null);
                     setAuthToken(authToken);
+
+                    updateMessages(getFetchedMessagesStamp());
                 }
+            }
+            else if (ChatStandardAction.Logout.toString().equals(message.getAction())) {
+
+                setAuthToken(null);
             }
             console.printOutput(message);
 

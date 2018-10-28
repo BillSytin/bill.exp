@@ -44,14 +44,14 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
 
     private synchronized ChatServerUserToken releaseCurrentToken() {
 
-        ChatServerUserToken userToken = currentUserToken;
+        final ChatServerUserToken userToken = currentUserToken;
         currentUserToken = null;
         return userToken;
     }
 
     private void logout() {
 
-        ChatServerUserToken userToken = releaseCurrentToken();
+        final ChatServerUserToken userToken = releaseCurrentToken();
         if (userToken != null) {
 
             getUsers().logout(userToken);
@@ -67,6 +67,27 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
     private synchronized boolean verifyToken(ChatServerUserToken inputToken) {
 
         return inputToken.equals(currentUserToken);
+    }
+
+    private synchronized ChatServerUserToken getCurrentUserToken() {
+
+        return currentUserToken;
+    }
+
+    private ChatServerUser getCurrentUser() {
+
+        final ChatServerUserToken userToken = getCurrentUserToken();
+        if (userToken != null) {
+
+            final ChatServerUser user = getUsers().getUserByToken(userToken);
+            if (user != null && user.isAuthenticated()) {
+
+                return new SimpleChatServerUser(user.getName(), false, true);
+
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -98,6 +119,11 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
                 context.setCompleted();
             }
         }
+        else {
+
+
+            context.setUser(getCurrentUser());
+        }
     }
 
     @Override
@@ -106,7 +132,7 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
         if (detectProcessingAction(context, ChatStandardAction.Login.toString())) {
 
             final String userName = context.getProcessingMessage().getContent();
-            final SimpleChatServerUser user = new SimpleChatServerUser(userName, false);
+            final SimpleChatServerUser user = new SimpleChatServerUser(userName, false, false);
 
             ChatServerUserToken userToken = null;
             try {
