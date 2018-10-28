@@ -123,7 +123,7 @@ public class DefaultChatServerMessagesRepository implements ChatServerMessagesRe
                 if (current != null) {
 
                     final long currentStamp = current.getStamp();
-                    if (currentStamp > stamp) {
+                    if (currentStamp >= stamp) {
 
                         stamp = currentStamp;
                         record = current;

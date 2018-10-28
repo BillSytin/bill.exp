@@ -40,7 +40,7 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
 
     private static String formatUser(ChatUser user) {
 
-        return user != null && StringUtils.hasLength(user.getName()) ? user.getName() : "<Unknown>";
+        return user != null && StringUtils.hasLength(user.getName()) ? String.format("@%s:", user.getName()) : "<@Unknown>:";
     }
 
     private void printError(ChatMessage message) {
@@ -53,14 +53,9 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
         print(colorHelpPrefix + formatMessageText(message) + colorDefaultPrefix);
     }
 
-    private void printUser(ChatUser user) {
+    private void printMessage(ChatMessage message) {
 
-        print(formatUser(user));
-    }
-
-    private void printText(ChatMessage message) {
-
-        print(formatMessageText(message));
+        print(String.format("%s\t%s", formatUser(message.getAuthor()), formatMessageText(message)));
     }
 
     private static String formatMessageText(ChatMessage message) {
@@ -83,8 +78,8 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
         else if (ChatStandardRoute.Message.toString().equals(message.getRoute())) {
 
             if (ChatStandardAction.Fetch.toString().equals(message.getAction())) {
-                printUser(message.getAuthor());
-                printText(message);
+
+                printMessage(message);
             }
         }
         else if (ChatStandardRoute.Auth.toString().equals(message.getRoute())) {
