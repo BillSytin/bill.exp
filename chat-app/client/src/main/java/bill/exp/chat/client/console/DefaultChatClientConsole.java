@@ -104,7 +104,7 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
 
                 if (message.isStandardStatus(ChatStandardStatus.Success)) {
 
-                    print(messageSource.getMessage("login.success", null, getLocale()));
+                    print(messageSource.getMessage("login.success", new Object[] { message.getAuthor().getName() }, getLocale()));
                 }
                 else {
 

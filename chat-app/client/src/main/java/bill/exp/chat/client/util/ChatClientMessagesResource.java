@@ -11,6 +11,6 @@ public class ChatClientMessagesResource extends ResourceBundleMessageSource {
 
     public ChatClientMessagesResource() {
 
-        setBasename("messages");
+        setBasename("clientMessages");
     }
 }
