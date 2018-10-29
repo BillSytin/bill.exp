@@ -17,22 +17,38 @@ public class DefaultQueueCompletion<V, A> implements QueueCompletion<V, A> {
         submitNext(new RunCompletionHandler(runFunction, onCompleted));
     }
 
-    private synchronized void submitNext(RunCompletionHandler next) {
+    private void submitNext(RunCompletionHandler next) {
 
-        if (last == null) {
-            last = next;
+        if (enqueue(next)) {
+
             next.start();
-        } else {
-            last.setNext(next);
-            last = next;
         }
     }
 
-    private synchronized void runNext(RunCompletionHandler next) {
+    private synchronized boolean enqueue(RunCompletionHandler next) {
 
+        if (last == null) {
+            last = next;
+            return true;
+        } else {
+            last.setNext(next);
+            last = next;
+            return false;
+        }
+    }
+
+    private synchronized RunCompletionHandler dequeue(RunCompletionHandler prev) {
+
+        final RunCompletionHandler next = prev.getNext();
         if (next == null)
             last = null;
-        else
+        return next;
+    }
+
+    private void runNext(RunCompletionHandler prev) {
+
+        final RunCompletionHandler next = dequeue(prev);
+        if (next != null)
             next.start();
     }
 
@@ -60,6 +76,7 @@ public class DefaultQueueCompletion<V, A> implements QueueCompletion<V, A> {
         }
 
         public RunCompletionHandler getNext() {
+
             return next;
         }
 
@@ -73,7 +90,7 @@ public class DefaultQueueCompletion<V, A> implements QueueCompletion<V, A> {
             if (!nextWasHandled) {
 
                 nextWasHandled = true;
-                runNext(getNext());
+                runNext(this);
             }
         }
 

@@ -39,15 +39,15 @@ public class DefaultChatServerMessagesRepository implements ChatServerMessagesRe
         return stamp;
     }
 
-    private synchronized long getCurrentStamp() {
-
-        return stampSequence - records.length;
-    }
-
     @Override
-    public Iterable<ChatServerMessageRecord> getAllSince(long stamp) {
+    public synchronized Iterable<ChatServerMessageRecord> getAllSince(long stamp) {
 
-        return new RecordsIterable(records, stamp == 0 ? getCurrentStamp() : stamp);
+        final int length = this.records.length;
+        final long currentStamp = stampSequence - length;
+        final ChatServerMessageRecord[] records = new ChatServerMessageRecord[length];
+        System.arraycopy(this.records, 0, records, 0, length);
+
+        return new RecordsIterable(records, stamp == 0 || (stamp + length < currentStamp) ? currentStamp : stamp);
     }
 
     @Override

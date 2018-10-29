@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 @SuppressWarnings("unused")
 @Component
-@Profile({"server"})
+@Profile("!test")
 public class ChatServerCommandLineRunner implements CommandLineRunner {
     private final TaskExecutor executor;
     private final Runnable worker;

@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SuppressWarnings({"unused", "EmptyMethod"})
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles({"test"})
+@ActiveProfiles({"test", "sample"})
 public class ServerApplicationTests {
 
 	@Autowired

@@ -44,7 +44,7 @@ public class ChatServerMessagesCommandProcessor extends BaseChatServerCommandPro
 
                 final ChatMessage message = new ChatMessage();
                 message.setRoute(getCommandId());
-                message.setAction(ChatStandardAction.Notify.toString());
+                message.setStandardAction(ChatStandardAction.Notify);
                 message.setContent(context.getProcessingMessage().getContent());
                 context.getOutput().getMessages().add(message);
             }
@@ -70,7 +70,7 @@ public class ChatServerMessagesCommandProcessor extends BaseChatServerCommandPro
 
                             final ChatMessage message = new ChatMessage();
                             message.setRoute(getCommandId());
-                            message.setAction(ChatStandardAction.Fetch.toString());
+                            message.setStandardAction(ChatStandardAction.Fetch);
                             message.setStatus(Long.toString(record.getStamp()));
                             message.setAuthor(record.getUser());
                             message.setContent(record.getMessage().getContent());
@@ -93,8 +93,8 @@ public class ChatServerMessagesCommandProcessor extends BaseChatServerCommandPro
 
                 final ChatMessage message = new ChatMessage();
                 message.setRoute(getCommandId());
-                message.setAction(ChatStandardAction.None.toString());
-                message.setStatus(ChatStandardStatus.Success.toString());
+                message.setStandardAction(ChatStandardAction.None);
+                message.setStandardStatus(ChatStandardStatus.Success);
                 message.setContent(Long.toString(record.getStamp()));
                 context.getOutput().getMessages().add(message);
             }

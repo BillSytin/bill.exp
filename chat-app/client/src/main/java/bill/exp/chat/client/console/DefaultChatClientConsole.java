@@ -71,36 +71,36 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
     @Override
     public void printOutput(ChatMessage message) {
 
-        if (ChatStandardRoute.Error.toString().equals(message.getRoute())) {
+        if (message.isStandardRoute(ChatStandardRoute.Error)) {
 
             printError(message);
         }
-        else if (ChatStandardRoute.Message.toString().equals(message.getRoute())) {
+        else if (message.isStandardRoute(ChatStandardRoute.Message)) {
 
-            if (ChatStandardAction.Fetch.toString().equals(message.getAction())) {
+            if (message.isStandardAction(ChatStandardAction.Fetch)) {
 
                 printMessage(message);
             }
         }
-        else if (ChatStandardRoute.Auth.toString().equals(message.getRoute())) {
+        else if (message.isStandardRoute(ChatStandardRoute.Auth)) {
 
-            if (ChatStandardAction.Login.toString().equals(message.getAction())) {
+            if (message.isStandardAction(ChatStandardAction.Login)) {
 
-                if (ChatStandardStatus.Success.toString().equals(message.getStatus())) {
+                if (message.isStandardStatus(ChatStandardStatus.Success)) {
                     print("You are successfully logged in.");
                 }
                 else {
                     printError(message);
                 }
             }
-            else if (ChatStandardAction.Logout.toString().equals(message.getAction())) {
+            else if (message.isStandardAction(ChatStandardAction.Logout)) {
 
                 print("Bye.");
                 print("Press enter to exit the chat.");
                 setStopping();
             }
         }
-        else if (ChatStandardRoute.Help.toString().equals(message.getRoute())) {
+        else if (message.isStandardRoute(ChatStandardRoute.Help)) {
 
             printHelp(message);
         }

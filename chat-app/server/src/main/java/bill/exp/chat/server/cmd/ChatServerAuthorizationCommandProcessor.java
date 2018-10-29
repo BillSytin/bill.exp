@@ -142,9 +142,9 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
             } catch (final IllegalArgumentException e) {
 
                 final ChatMessage resultMessage = new ChatMessage();
-                resultMessage.setRoute(ChatStandardRoute.Auth.toString());
-                resultMessage.setAction(ChatStandardAction.Login.toString());
-                resultMessage.setStatus(ChatStandardStatus.Failed.toString());
+                resultMessage.setStandardRoute(ChatStandardRoute.Auth);
+                resultMessage.setStandardAction(ChatStandardAction.Login);
+                resultMessage.setStandardStatus(ChatStandardStatus.Failed);
                 resultMessage.setContent(String.format("User '%s' already exists", userName));
                 context.getOutput().getMessages().add(resultMessage);
                 context.setCompleted();
@@ -163,9 +163,9 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
                 context.setUser(user);
 
                 final ChatMessage resultMessage = new ChatMessage();
-                resultMessage.setRoute(ChatStandardRoute.Auth.toString());
-                resultMessage.setAction(ChatStandardAction.Login.toString());
-                resultMessage.setStatus(ChatStandardStatus.Success.toString());
+                resultMessage.setStandardRoute(ChatStandardRoute.Auth);
+                resultMessage.setStandardAction(ChatStandardAction.Login);
+                resultMessage.setStandardStatus(ChatStandardStatus.Success);
                 resultMessage.setAuthor(user.toModel());
                 resultMessage.setContent(userToken.toString());
                 context.getOutput().getMessages().add(resultMessage);
@@ -178,9 +178,9 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
             context.setUser(null);
 
             final ChatMessage resultMessage = new ChatMessage();
-            resultMessage.setRoute(ChatStandardRoute.Auth.toString());
-            resultMessage.setAction(ChatStandardAction.Logout.toString());
-            resultMessage.setStatus(ChatStandardStatus.Success.toString());
+            resultMessage.setStandardRoute(ChatStandardRoute.Auth);
+            resultMessage.setStandardAction(ChatStandardAction.Logout);
+            resultMessage.setStandardStatus(ChatStandardStatus.Success);
             context.getOutput().getMessages().add(resultMessage);
         }
     }

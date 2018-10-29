@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Component
-@Profile({"client"})
+@Profile("!test")
 public class ChatClientCommandLineRunner implements CommandLineRunner {
 
     private final ClientChannel clientChannel;
@@ -36,7 +36,7 @@ public class ChatClientCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         final ChatMessage message = new ChatMessage();
-        message.setRoute(ChatStandardRoute.Help.toString());
+        message.setStandardRoute(ChatStandardRoute.Help);
         message.setContent(String.format("Connecting to %s...", clientChannel.toString()));
         console.printOutput(message);
 

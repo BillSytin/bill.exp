@@ -23,7 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SuppressWarnings({"unused", "EmptyMethod", "ConstantConditions", "PointlessArithmeticExpression"})
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("performance")
+@ActiveProfiles({"test", "sample", "performance"})
 public class PerformanceTests {
 
     private final Log logger = LogFactory.getLog(getClass());

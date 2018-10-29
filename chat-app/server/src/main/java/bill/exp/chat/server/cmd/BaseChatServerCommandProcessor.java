@@ -124,8 +124,8 @@ public abstract class BaseChatServerCommandProcessor implements ChatServerComman
                 if (StringUtils.hasLength(helpText)) {
 
                     final ChatMessage message = new ChatMessage();
-                    message.setRoute(ChatStandardRoute.Help.toString());
-                    message.setAction(ChatStandardAction.Help.toString());
+                    message.setStandardRoute(ChatStandardRoute.Help);
+                    message.setStandardAction(ChatStandardAction.Help);
                     message.setStatus(getCommandId());
                     message.setContent(helpText);
                     context.getOutput().getMessages().add(message);

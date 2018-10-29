@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 @Component("tcpAcceptChannel")
-@Profile("server")
+@Profile({"server", "sample"})
 @Scope("prototype")
 public class TcpAcceptChannel implements Channel, Stoppable, DisposableBean {
 

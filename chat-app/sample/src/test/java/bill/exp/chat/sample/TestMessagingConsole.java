@@ -82,14 +82,14 @@ public class TestMessagingConsole implements ChatClientConsole {
 
         printOutputSync(message);
 
-        if (ChatStandardRoute.Auth.toString().equals(message.getRoute()) &&
-                ChatStandardAction.Logout.toString().equals(message.getAction())) {
+        if (message.isStandardRoute(ChatStandardRoute.Auth) &&
+                message.isStandardAction(ChatStandardAction.Logout)) {
 
             incrementInputDone();
         }
 
-        if (ChatStandardRoute.Message.toString().equals(message.getRoute()) &&
-                ChatStandardAction.Fetch.toString().equals(message.getAction())) {
+        if (message.isStandardRoute(ChatStandardRoute.Message) &&
+                message.isStandardAction(ChatStandardAction.Fetch)) {
 
             if (fetchCount.incrementAndGet() == 1) {
 

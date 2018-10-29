@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @SuppressWarnings("unused")
 @Component("mainWorker")
-@Profile("server")
+@Profile({"server", "sample"})
 public class MainWorker implements Runnable, Stoppable {
 
     private final TaskExecutor executor;

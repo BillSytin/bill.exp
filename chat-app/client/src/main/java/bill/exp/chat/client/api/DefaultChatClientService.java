@@ -156,7 +156,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
     private static boolean isHelpMessage(ChatMessage message) {
 
-        return ChatStandardRoute.Help.toString().equals(message.getRoute()) ||
+        return message.isStandardRoute(ChatStandardRoute.Help) ||
                 (StringUtils.isEmpty(message.getRoute()) && ("-" + ChatStandardAction.Help.toString()).equals(message.getContent()));
     }
 
@@ -170,9 +170,9 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
         if (getSession() == null) {
 
             final ChatMessage errorMessage = new ChatMessage();
-            errorMessage.setRoute(ChatStandardRoute.Error.toString());
-            errorMessage.setAction(ChatStandardAction.Default.toString());
-            errorMessage.setStatus(ChatStandardStatus.Failed.toString());
+            errorMessage.setStandardRoute(ChatStandardRoute.Error);
+            errorMessage.setStandardAction(ChatStandardAction.Default);
+            errorMessage.setStandardStatus(ChatStandardStatus.Failed);
             errorMessage.setContent(message.getContent());
 
             receiveMessage(message);
@@ -198,8 +198,8 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
             }
             else {
 
-                message.setRoute(ChatStandardRoute.Auth.toString());
-                message.setAction(ChatStandardAction.Login.toString());
+                message.setStandardRoute(ChatStandardRoute.Auth);
+                message.setStandardAction(ChatStandardAction.Login);
                 this.setAuthRequestFuture(new CompletableFuture<>());
             }
         }
@@ -226,8 +226,8 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
         if (getSession() != null && StringUtils.hasLength(getAuthToken()) && updatePendingMessagesStamp(stamp)) {
 
             final ChatMessage message = new ChatMessage();
-            message.setRoute(ChatStandardRoute.Message.toString());
-            message.setAction(ChatStandardAction.Fetch.toString());
+            message.setStandardRoute(ChatStandardRoute.Message);
+            message.setStandardAction(ChatStandardAction.Fetch);
             message.setContent(Long.toString(getFetchedMessagesStamp()));
             sendMessage(message);
         }
@@ -235,9 +235,9 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
     private void receiveMessage(ChatMessage message) {
 
-        if (ChatStandardRoute.Message.toString().equals(message.getRoute())) {
+        if (message.isStandardRoute(ChatStandardRoute.Message)) {
 
-            if (ChatStandardAction.Notify.toString().equals(message.getAction())) {
+            if (message.isStandardAction(ChatStandardAction.Notify)) {
 
                 long stamp = 0;
                 try {
@@ -254,7 +254,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
                     updateMessages(stamp);
                 }
             }
-            else if (ChatStandardAction.Fetch.toString().equals(message.getAction())) {
+            else if (message.isStandardAction(ChatStandardAction.Fetch)) {
 
                 long stamp = 0;
                 try {
@@ -275,27 +275,27 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
                 }
             }
         }
-        else if (ChatStandardRoute.Session.toString().equals(message.getRoute())) {
+        else if (message.isStandardRoute(ChatStandardRoute.Session)) {
 
-            if (ChatStandardAction.Open.toString().equals(message.getAction())) {
+            if (message.isStandardAction(ChatStandardAction.Open)) {
 
                 console.create();
                 final ChatMessage welcomeMessage = new ChatMessage();
-                welcomeMessage.setRoute(ChatStandardRoute.Help.toString());
-                welcomeMessage.setAction(ChatStandardAction.Welcome.toString());
+                welcomeMessage.setStandardRoute(ChatStandardRoute.Help);
+                welcomeMessage.setStandardAction(ChatStandardAction.Welcome);
                 welcomeMessage.setContent("");
                 sendMessage(welcomeMessage);
             }
-            else if (ChatStandardAction.Close.toString().equals(message.getAction())) {
+            else if (message.isStandardAction(ChatStandardAction.Close)) {
 
                 setStopping();
             }
             console.printOutput(message);
         }
-        else if (ChatStandardRoute.Help.toString().equals(message.getRoute())) {
+        else if (message.isStandardRoute(ChatStandardRoute.Help)) {
 
             console.printOutput(message);
-            if (ChatStandardAction.Welcome.toString().equals(message.getAction())) {
+            if (message.isStandardAction(ChatStandardAction.Welcome)) {
                 if (!isReading) {
 
                     isReading = true;
@@ -303,12 +303,12 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
                 }
             }
         }
-        else if (ChatStandardRoute.Auth.toString().equals(message.getRoute())) {
+        else if (message.isStandardRoute(ChatStandardRoute.Auth)) {
 
             String authToken = getAuthToken();
             final CompletableFuture<String> authRequestFuture = this.getAuthRequestFuture();
-            if (ChatStandardAction.Login.toString().equals(message.getAction())) {
-                if (ChatStandardStatus.Success.toString().equals(message.getStatus())) {
+            if (message.isStandardAction(ChatStandardAction.Login)) {
+                if (message.isStandardStatus(ChatStandardStatus.Success)) {
 
                     authToken = message.getContent();
                     message.setContent(null);
@@ -317,7 +317,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
                     updateMessages(getFetchedMessagesStamp());
                 }
             }
-            else if (ChatStandardAction.Logout.toString().equals(message.getAction())) {
+            else if (message.isStandardAction(ChatStandardAction.Logout)) {
 
                 authToken = null;
                 setAuthToken(null);
@@ -329,7 +329,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
                 authRequestFuture.complete(authToken);
             }
         }
-        else if (ChatStandardRoute.Error.toString().equals(message.getRoute())) {
+        else if (message.isStandardRoute(ChatStandardRoute.Error)) {
 
             final CompletableFuture<String> authRequestFuture = this.getAuthRequestFuture();
             if (authRequestFuture != null) {
@@ -351,8 +351,8 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
         if (intent.getAction() == ChatAction.OpenSession) {
 
             final ChatMessage message = new ChatMessage();
-            message.setRoute(ChatStandardRoute.Session.toString());
-            message.setAction(ChatStandardAction.Open.toString());
+            message.setStandardRoute(ChatStandardRoute.Session);
+            message.setStandardAction(ChatStandardAction.Open);
             message.setContent(session.toString());
             receiveMessage(message);
         }
@@ -381,8 +381,8 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
         if (intent.getAction() == ChatAction.CloseSession) {
 
             final ChatMessage message = new ChatMessage();
-            message.setRoute(ChatStandardRoute.Session.toString());
-            message.setAction(ChatStandardAction.Close.toString());
+            message.setStandardRoute(ChatStandardRoute.Session);
+            message.setStandardAction(ChatStandardAction.Close);
             message.setContent(session.toString());
             receiveMessage(message);
         }

@@ -32,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings({"unused", "EmptyMethod", "ConstantConditions"})
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("messaging")
+@ActiveProfiles({"test", "sample", "messaging"})
 public class MessagingTests {
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -171,8 +171,8 @@ public class MessagingTests {
                 final ChatClientConsole console = consoles.get(index);
 
                 final ChatMessage message = new ChatMessage();
-                message.setRoute(ChatStandardRoute.Auth.toString());
-                message.setAction(ChatStandardAction.Logout.toString());
+                message.setStandardRoute(ChatStandardRoute.Auth);
+                message.setStandardAction(ChatStandardAction.Logout);
                 final ChatClientEnvelope content = new ChatClientEnvelope();
                 content.setAuthToken(null);
                 content.setMessages(new ChatMessageList());

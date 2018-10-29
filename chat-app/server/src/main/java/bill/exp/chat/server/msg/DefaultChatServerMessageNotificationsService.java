@@ -78,8 +78,8 @@ public class DefaultChatServerMessageNotificationsService implements ChatServerM
 
         final ChatMessage notifyMessage = new ChatMessage();
         notifyMessage.setContent(Long.toString(stamp));
-        notifyMessage.setRoute(ChatStandardRoute.Message.toString());
-        notifyMessage.setAction(ChatStandardAction.Notify.toString());
+        notifyMessage.setStandardRoute(ChatStandardRoute.Message);
+        notifyMessage.setStandardAction(ChatStandardAction.Notify);
 
         final ChatClientEnvelope content = new ChatClientEnvelope();
         content.setMessages(new ChatMessageList());

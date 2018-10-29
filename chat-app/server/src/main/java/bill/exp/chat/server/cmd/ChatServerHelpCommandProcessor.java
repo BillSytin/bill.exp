@@ -25,7 +25,7 @@ public class ChatServerHelpCommandProcessor extends BaseChatServerCommandProcess
             final String welcomeText = getMessageResource(ChatStandardAction.Welcome.toString(), context);
             final ChatMessage message = new ChatMessage();
             message.setRoute(getCommandId());
-            message.setAction(ChatStandardAction.Welcome.toString());
+            message.setStandardAction(ChatStandardAction.Welcome);
             message.setContent(welcomeText);
             context.getOutput().getMessages().add(message);
         }

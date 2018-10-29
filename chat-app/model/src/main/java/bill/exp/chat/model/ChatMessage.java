@@ -1,5 +1,7 @@
 package bill.exp.chat.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @SuppressWarnings("unused")
 public class ChatMessage {
 
@@ -20,16 +22,51 @@ public class ChatMessage {
         return String.format("%s %s: %s %s", getRoute(), getAction(), getStatus(), getContent());
     }
 
+    @JsonIgnore
+    public boolean isStandardRoute(ChatStandardRoute route) {
+
+        return route.toString().equals(getRoute());
+    }
+    @JsonIgnore
+    public void setStandardRoute(ChatStandardRoute route) {
+
+        setRoute(route.toString());
+    }
+
     public String getRoute() { return route; }
 
     public void setRoute(String route) {
         this.route = route;
     }
 
+    @JsonIgnore
+    public boolean isStandardAction(ChatStandardAction action) {
+
+        return action.toString().equals(getAction());
+    }
+
+    @JsonIgnore
+    public void setStandardAction(ChatStandardAction action) {
+
+        setAction(action.toString());
+    }
+
     public String getAction() { return action; }
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    @JsonIgnore
+    public boolean isStandardStatus(ChatStandardStatus status) {
+
+        return status.toString().equals(getStatus());
+    }
+
+    @JsonIgnore
+    public void setStandardStatus(ChatStandardStatus status) {
+
+        setStatus(status.toString());
     }
 
     public String getStatus() { return status; }
@@ -63,7 +100,7 @@ public class ChatMessage {
         final ChatMessage result = new ChatMessage();
         result.setContent(content);
         result.setAction(action);
-        result.setRoute(ChatStandardRoute.Error.toString());
+        result.setStandardRoute(ChatStandardRoute.Error);
 
         return result;
     }

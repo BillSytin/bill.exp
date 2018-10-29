@@ -121,9 +121,9 @@ class TestPerformanceClientServer {
     private static ChatClientEnvelope generateOpenSessionResponse(String messageText) {
 
         final ChatMessage message = new ChatMessage();
-        message.setRoute(ChatStandardRoute.Help.toString());
-        message.setAction(ChatStandardAction.Default.toString());
-        message.setStatus(ChatStandardStatus.Success.toString());
+        message.setStandardRoute(ChatStandardRoute.Help);
+        message.setStandardAction(ChatStandardAction.Default);
+        message.setStandardStatus(ChatStandardStatus.Success);
         message.setContent(messageText);
 
         final ChatClientEnvelope output = new ChatClientEnvelope();
