@@ -14,6 +14,7 @@ import java.util.Scanner;
 @Component
 public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
 
+    private final Stoppable mainLifetimeManager;
     private final Stoppable lifetimeManager;
     private final PrintStream out;
     private final Scanner in;
@@ -23,8 +24,10 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
 
     @Autowired
     public DefaultChatClientConsole(
-            @Qualifier("mainLifetimeManager") Stoppable lifetimeManager
+            @Qualifier("mainLifetimeManager") Stoppable mainLifetimeManager,
+            @Qualifier("chatClientLifetimeManager") Stoppable lifetimeManager
     ) {
+        this.mainLifetimeManager = mainLifetimeManager;
         this.lifetimeManager = lifetimeManager;
         out = System.out;
         in = new Scanner(System.in);
@@ -115,8 +118,11 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
         final ChatMessage result = new ChatMessage();
         result.setContent(in.nextLine());
 
-        if (isStopping())
+        if (isStopping()) {
+
+            setStopped();
             return null;
+        }
 
         return result;
     }
@@ -124,7 +130,7 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
     @Override
     public boolean isStopping() {
 
-        return lifetimeManager.isStopping();
+        return mainLifetimeManager.isStopping() || lifetimeManager.isStopping();
     }
 
     @Override

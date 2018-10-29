@@ -434,10 +434,6 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
     public void setStopped() {
 
         lifetimeManager.setStopped();
-        if (console instanceof Stoppable) {
-
-            ((Stoppable) console).setStopped();
-        }
     }
 
     @Override

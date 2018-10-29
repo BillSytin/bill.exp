@@ -1,7 +1,14 @@
 package bill.exp.chat.client;
 
+import bill.exp.chat.client.api.ChatClientRequestHandler;
+import bill.exp.chat.client.api.ChatClientService;
+import bill.exp.chat.client.api.ConsoleChatClientService;
 import bill.exp.chat.client.console.ChatClientConsole;
+import bill.exp.chat.core.api.RequestHandler;
 import bill.exp.chat.core.client.io.ClientChannel;
+import bill.exp.chat.core.data.MessageProcessor;
+import bill.exp.chat.core.data.RequestMessageProcessor;
+import bill.exp.chat.core.io.Session;
 import bill.exp.chat.core.util.Stoppable;
 import bill.exp.chat.model.ChatMessage;
 import bill.exp.chat.model.ChatStandardRoute;
@@ -32,6 +39,25 @@ public class ChatClientCommandLineRunner implements CommandLineRunner {
         this.console = console;
     }
 
+    private static ChatClientService getSessionService(Session session) {
+
+        ChatClientService service = null;
+        for (final MessageProcessor processor : session.getProcessingManager().getProcessors()) {
+
+            if (processor instanceof RequestMessageProcessor) {
+
+                final RequestHandler requestHandler = ((RequestMessageProcessor) processor).getRequestHandler();
+                if (requestHandler instanceof ChatClientRequestHandler) {
+
+                    service = ((ChatClientRequestHandler) requestHandler).getService();
+                }
+                break;
+            }
+        }
+
+        return service;
+    }
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -40,25 +66,34 @@ public class ChatClientCommandLineRunner implements CommandLineRunner {
         message.setContent(String.format("Connecting to %s...", clientChannel.toString()));
         console.printOutput(message);
 
-        clientChannel.connect().get();
-        if (console instanceof Stoppable) {
+        final Session session = clientChannel.connect().get();
+        final ChatClientService service = getSessionService(session);
 
-            ((Stoppable) console).waitStopped(-1);
-            ((Stoppable) console).setStopping();
+        if (service instanceof Stoppable) {
+
+            ((Stoppable) service).waitStopped(-1);
+            ((Stoppable) service).setStopping();
         }
 
         lifeTimeManager.setStopping();
-        if (clientChannel instanceof Stoppable) {
-
-            ((Stoppable) clientChannel).setStopping();
-        }
 
         if (console instanceof Stoppable) {
 
             if (!((Stoppable) console).waitStopped(1000)) {
 
-                System.exit(-1);
+                message.setContent("Server has closed connection. Press enter to exit.");
+                console.printOutput(message);
+
+                if (!((Stoppable) console).waitStopped(10000)) {
+
+                    System.exit(-1);
+                }
             }
+        }
+
+        if (clientChannel instanceof Stoppable) {
+
+            ((Stoppable) clientChannel).setStopping();
         }
     }
 }
