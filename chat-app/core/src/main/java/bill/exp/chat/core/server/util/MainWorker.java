@@ -30,6 +30,12 @@ public class MainWorker implements Runnable, Stoppable {
     }
 
     @Override
+    public String toString() {
+
+        return channel.toString();
+    }
+
+    @Override
     public void run() {
 
         executor.execute(channel);

@@ -181,13 +181,23 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
 
         if (StringUtils.isEmpty(getAuthToken()) && !isHelpMessage(message)) {
 
+            boolean sendLogin = false;
             final Future<String> authRequestFuture = this.getAuthRequestFuture();
-            if (authRequestFuture != null) {
+            if (authRequestFuture == null) {
+
+                sendLogin = true;
+            }
+            else {
 
                 try {
 
                     final String token = authRequestFuture.get(5, TimeUnit.MINUTES);
                     this.setAuthRequestFuture(null);
+
+                    if (StringUtils.isEmpty(token)) {
+
+                        sendLogin = true;
+                    }
                 }
                 catch (final Exception e) {
 
@@ -196,7 +206,9 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
                 }
                 this.setAuthRequestFuture(null);
             }
-            else {
+
+
+            if (sendLogin) {
 
                 message.setStandardRoute(ChatStandardRoute.Auth);
                 message.setStandardAction(ChatStandardAction.Login);

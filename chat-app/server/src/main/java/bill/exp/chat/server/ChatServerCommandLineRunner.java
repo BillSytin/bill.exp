@@ -1,5 +1,6 @@
 package bill.exp.chat.server;
 
+import bill.exp.chat.core.io.Channel;
 import bill.exp.chat.core.util.Stoppable;
 import bill.exp.chat.server.msg.ChatServerMessageNotificationsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ public class ChatServerCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        System.out.println("Starting chat server");
-        System.out.println("\t- Type 'q' and press enter to quit the application");
+        System.out.println(String.format("Starting chat server on %s", worker.toString()));
+        System.out.println("\t- Type 'q' and press enter to stop");
         System.out.println();
 
         executor.execute(worker);
