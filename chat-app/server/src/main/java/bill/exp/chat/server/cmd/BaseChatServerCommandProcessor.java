@@ -43,7 +43,7 @@ public abstract class BaseChatServerCommandProcessor implements ChatServerComman
 
     protected String getMessageResource(String id, ChatServerCommandProcessingContext context) {
 
-        return StringUtils.hasLength(id) ? getMessagesResource().getMessage(id, null, getContextLocale(context)) : null;
+        return StringUtils.hasLength(id) ? getMessagesResource().getMessage("command." + id, null, getContextLocale(context)) : null;
     }
 
     protected String getHelpText(ChatServerCommandProcessingContext context) {

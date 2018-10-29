@@ -39,6 +39,7 @@ public class ChatServerCommandLineRunner implements CommandLineRunner {
         this.notificationsService = notificationsService;
     }
 
+    @SuppressWarnings("SameReturnValue")
     private Locale getLocale() {
 
         return Locale.US;
