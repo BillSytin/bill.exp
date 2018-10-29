@@ -1,13 +1,16 @@
 package bill.exp.chat.client.console;
 
+import bill.exp.chat.client.util.Utils;
 import bill.exp.chat.core.util.Stoppable;
 import bill.exp.chat.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.PrintStream;
+import java.util.Locale;
 import java.util.Scanner;
 
 @SuppressWarnings("unused")
@@ -21,14 +24,19 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
     private final String colorErrorPrefix;
     private final String colorHelpPrefix;
     private final String colorDefaultPrefix;
+    private final ResourceBundleMessageSource messageSource;
 
     @Autowired
     public DefaultChatClientConsole(
             @Qualifier("mainLifetimeManager") Stoppable mainLifetimeManager,
-            @Qualifier("chatClientLifetimeManager") Stoppable lifetimeManager
+            @Qualifier("chatClientLifetimeManager") Stoppable lifetimeManager,
+            @Qualifier("chatClientMessagesResource") ResourceBundleMessageSource messageSource
     ) {
+
         this.mainLifetimeManager = mainLifetimeManager;
         this.lifetimeManager = lifetimeManager;
+        this.messageSource = messageSource;
+
         out = System.out;
         in = new Scanner(System.in);
         colorErrorPrefix = (char)27 + "[33m";
@@ -66,6 +74,11 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
         return message.getContent();
     }
 
+    private Locale getLocale() {
+
+        return Utils.getCurrentLocale();
+    }
+
     @Override
     public void create() {
 
@@ -90,16 +103,18 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
             if (message.isStandardAction(ChatStandardAction.Login)) {
 
                 if (message.isStandardStatus(ChatStandardStatus.Success)) {
-                    print("You are successfully logged in.");
+
+                    print(messageSource.getMessage("login.success", null, getLocale()));
                 }
                 else {
+
                     printError(message);
                 }
             }
             else if (message.isStandardAction(ChatStandardAction.Logout)) {
 
-                print("Bye.");
-                print("Press enter to exit the chat.");
+                print(messageSource.getMessage("logout.bye", null, getLocale()));
+                print(messageSource.getMessage("logout.exit", null, getLocale()));
                 setStopping();
             }
         }
@@ -113,7 +128,7 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
     public ChatMessage readInput(boolean loginPrompt) {
 
         if (loginPrompt)
-            print("Please enter your name to log in");
+            print(messageSource.getMessage("login.prompt", null, getLocale()));
 
         final ChatMessage result = new ChatMessage();
         result.setContent(in.nextLine());

@@ -2,8 +2,8 @@ package bill.exp.chat.client;
 
 import bill.exp.chat.client.api.ChatClientRequestHandler;
 import bill.exp.chat.client.api.ChatClientService;
-import bill.exp.chat.client.api.ConsoleChatClientService;
 import bill.exp.chat.client.console.ChatClientConsole;
+import bill.exp.chat.client.util.Utils;
 import bill.exp.chat.core.api.RequestHandler;
 import bill.exp.chat.core.client.io.ClientChannel;
 import bill.exp.chat.core.data.MessageProcessor;
@@ -16,7 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 @Component
@@ -26,17 +29,25 @@ public class ChatClientCommandLineRunner implements CommandLineRunner {
     private final ClientChannel clientChannel;
     private final Stoppable lifeTimeManager;
     private final ChatClientConsole console;
+    private final ResourceBundleMessageSource messageSource;
 
     @Autowired
     public ChatClientCommandLineRunner(
             @Qualifier("mainLifetimeManager") Stoppable lifeTimeManager,
             @Qualifier("tcpConnectChannel") ClientChannel clientChannel,
+            @Qualifier("chatClientMessagesResource") ResourceBundleMessageSource messageSource,
             ChatClientConsole console
     ) {
 
         this.lifeTimeManager = lifeTimeManager;
         this.clientChannel = clientChannel;
+        this.messageSource = messageSource;
         this.console = console;
+    }
+
+    private Locale getLocale() {
+
+        return Utils.getCurrentLocale();
     }
 
     private static ChatClientService getSessionService(Session session) {
@@ -63,7 +74,7 @@ public class ChatClientCommandLineRunner implements CommandLineRunner {
 
         final ChatMessage message = new ChatMessage();
         message.setStandardRoute(ChatStandardRoute.Help);
-        message.setContent(String.format("Connecting to %s...", clientChannel.toString()));
+        message.setContent(messageSource.getMessage("connecting", new Object[] { clientChannel.toString() }, getLocale()));
         console.printOutput(message);
 
         final Session session = clientChannel.connect().get();
@@ -81,7 +92,10 @@ public class ChatClientCommandLineRunner implements CommandLineRunner {
 
             if (!((Stoppable) console).waitStopped(1000)) {
 
-                message.setContent("Server has closed connection. Press enter to exit.");
+                message.setContent(messageSource.getMessage("server.close", null, getLocale()));
+                console.printOutput(message);
+
+                message.setContent(messageSource.getMessage("logout.exit", null, getLocale()));
                 console.printOutput(message);
 
                 if (!((Stoppable) console).waitStopped(10000)) {
