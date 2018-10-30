@@ -2,10 +2,10 @@ package bill.exp.chat.server.api;
 
 import bill.exp.chat.core.api.*;
 import bill.exp.chat.core.data.SessionEvent;
-import bill.exp.chat.model.ChatAction;
-import bill.exp.chat.model.ChatClientEnvelope;
-import bill.exp.chat.model.ChatServerEnvelope;
-import bill.exp.chat.model.ModelConvert;
+import bill.exp.chat.core.model.ChatAction;
+import bill.exp.chat.core.model.ChatClientEnvelope;
+import bill.exp.chat.core.model.ChatServerEnvelope;
+import bill.exp.chat.core.model.ModelConvert;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;

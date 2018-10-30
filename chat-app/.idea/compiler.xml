@@ -8,7 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="chat-app-client" />
         <module name="chat-app-core" />
-        <module name="chat-app-model" />
         <module name="chat-app-sample" />
         <module name="chat-app-server" />
       </profile>

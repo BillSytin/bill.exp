@@ -1,7 +1,7 @@
 package bill.exp.chat.server.cmd;
 
 import bill.exp.chat.core.io.Session;
-import bill.exp.chat.model.*;
+import bill.exp.chat.core.model.*;
 import bill.exp.chat.server.users.ChatServerUser;
 
 @SuppressWarnings("unused")

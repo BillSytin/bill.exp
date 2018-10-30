@@ -1,9 +1,9 @@
 package bill.exp.chat.sample;
 
 import bill.exp.chat.client.console.ChatClientConsole;
-import bill.exp.chat.model.ChatMessage;
-import bill.exp.chat.model.ChatStandardAction;
-import bill.exp.chat.model.ChatStandardRoute;
+import bill.exp.chat.core.model.ChatMessage;
+import bill.exp.chat.core.model.ChatStandardAction;
+import bill.exp.chat.core.model.ChatStandardRoute;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Primary;

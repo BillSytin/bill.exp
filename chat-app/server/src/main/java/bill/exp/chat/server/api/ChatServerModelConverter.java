@@ -2,7 +2,7 @@ package bill.exp.chat.server.api;
 
 import bill.exp.chat.core.api.Request;
 import bill.exp.chat.core.api.Response;
-import bill.exp.chat.model.ChatClientEnvelope;
+import bill.exp.chat.core.model.ChatClientEnvelope;
 
 public interface ChatServerModelConverter {
 

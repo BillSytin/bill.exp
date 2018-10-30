@@ -1,9 +1,9 @@
 package bill.exp.chat.server.cmd;
 
-import bill.exp.chat.model.ChatMessage;
-import bill.exp.chat.model.ChatStandardAction;
-import bill.exp.chat.model.ChatStandardRoute;
-import bill.exp.chat.model.ChatStandardStatus;
+import bill.exp.chat.core.model.ChatMessage;
+import bill.exp.chat.core.model.ChatStandardAction;
+import bill.exp.chat.core.model.ChatStandardRoute;
+import bill.exp.chat.core.model.ChatStandardStatus;
 import bill.exp.chat.server.msg.ChatServerMessageRecord;
 import bill.exp.chat.server.msg.ChatServerMessagesRepository;
 import org.springframework.beans.factory.ObjectFactory;

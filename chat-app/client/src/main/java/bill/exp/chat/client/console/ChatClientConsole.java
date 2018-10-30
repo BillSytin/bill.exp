@@ -1,6 +1,6 @@
 package bill.exp.chat.client.console;
 
-import bill.exp.chat.model.ChatMessage;
+import bill.exp.chat.core.model.ChatMessage;
 
 @SuppressWarnings("unused")
 public interface ChatClientConsole {

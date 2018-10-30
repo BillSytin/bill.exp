@@ -5,7 +5,7 @@ import bill.exp.chat.client.api.ChatClientRequestIntent;
 import bill.exp.chat.client.api.ChatClientResponseIntent;
 import bill.exp.chat.core.client.io.TcpClientConfig;
 import bill.exp.chat.core.io.Session;
-import bill.exp.chat.model.*;
+import bill.exp.chat.core.model.*;
 import bill.exp.chat.server.api.ChatServerRequestIntent;
 import bill.exp.chat.server.api.ChatServerService;
 import bill.exp.chat.server.api.ChatServerResponseIntent;

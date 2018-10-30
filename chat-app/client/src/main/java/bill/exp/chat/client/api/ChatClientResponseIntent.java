@@ -1,8 +1,8 @@
 package bill.exp.chat.client.api;
 
 import bill.exp.chat.core.api.ResponseIntent;
-import bill.exp.chat.model.ChatAction;
-import bill.exp.chat.model.ChatClientEnvelope;
+import bill.exp.chat.core.model.ChatAction;
+import bill.exp.chat.core.model.ChatClientEnvelope;
 
 public class ChatClientResponseIntent implements ResponseIntent {
 

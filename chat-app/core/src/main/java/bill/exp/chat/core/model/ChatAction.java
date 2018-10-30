@@ -1,4 +1,4 @@
-package bill.exp.chat.model;
+package bill.exp.chat.core.model;
 
 public enum ChatAction {
     Unknown,

@@ -1,7 +1,7 @@
 package bill.exp.chat.server.msg;
 
-import bill.exp.chat.model.ChatMessage;
-import bill.exp.chat.model.ChatUser;
+import bill.exp.chat.core.model.ChatMessage;
+import bill.exp.chat.core.model.ChatUser;
 
 @SuppressWarnings("unused")
 public class ChatServerMessageRecord {

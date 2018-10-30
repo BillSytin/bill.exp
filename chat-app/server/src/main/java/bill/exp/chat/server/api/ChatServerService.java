@@ -1,7 +1,7 @@
 package bill.exp.chat.server.api;
 
 import bill.exp.chat.core.io.Session;
-import bill.exp.chat.model.ChatClientEnvelope;
+import bill.exp.chat.core.model.ChatClientEnvelope;
 
 @SuppressWarnings({"unused", "SameReturnValue"})
 public interface ChatServerService {

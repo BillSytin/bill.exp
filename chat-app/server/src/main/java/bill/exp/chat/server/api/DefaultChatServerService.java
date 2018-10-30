@@ -1,9 +1,9 @@
 package bill.exp.chat.server.api;
 
 import bill.exp.chat.core.io.Session;
-import bill.exp.chat.model.ChatAction;
-import bill.exp.chat.model.ChatClientEnvelope;
-import bill.exp.chat.model.ChatServerEnvelope;
+import bill.exp.chat.core.model.ChatAction;
+import bill.exp.chat.core.model.ChatClientEnvelope;
+import bill.exp.chat.core.model.ChatServerEnvelope;
 import bill.exp.chat.server.cmd.ChatServerCommandProcessingContext;
 import bill.exp.chat.server.cmd.ChatServerCommandProcessingManager;
 import org.springframework.beans.factory.annotation.Autowired;

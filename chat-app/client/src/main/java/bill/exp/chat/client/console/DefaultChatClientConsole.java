@@ -2,7 +2,7 @@ package bill.exp.chat.client.console;
 
 import bill.exp.chat.client.util.Utils;
 import bill.exp.chat.core.util.Stoppable;
-import bill.exp.chat.model.*;
+import bill.exp.chat.core.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.support.ResourceBundleMessageSource;

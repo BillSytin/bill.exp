@@ -39,11 +39,6 @@
         </dependency>
         <dependency>
             <groupId>bill.exp.org</groupId>
-            <artifactId>chat-app-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>bill.exp.org</groupId>
             <artifactId>chat-app-client</artifactId>
             <version>${project.version}</version>
         </dependency>

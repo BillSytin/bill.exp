@@ -11,7 +11,7 @@ import bill.exp.chat.core.data.*;
 import bill.exp.chat.core.io.Session;
 import bill.exp.chat.core.io.SessionManager;
 import bill.exp.chat.core.util.Stoppable;
-import bill.exp.chat.model.*;
+import bill.exp.chat.core.model.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Assert;

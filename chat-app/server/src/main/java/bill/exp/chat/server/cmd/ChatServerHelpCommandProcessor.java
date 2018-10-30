@@ -1,8 +1,8 @@
 package bill.exp.chat.server.cmd;
 
-import bill.exp.chat.model.ChatMessage;
-import bill.exp.chat.model.ChatStandardAction;
-import bill.exp.chat.model.ChatStandardRoute;
+import bill.exp.chat.core.model.ChatMessage;
+import bill.exp.chat.core.model.ChatStandardAction;
+import bill.exp.chat.core.model.ChatStandardRoute;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 

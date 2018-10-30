@@ -5,7 +5,7 @@ import bill.exp.chat.core.data.Message;
 import bill.exp.chat.core.data.RequestIntentMessage;
 import bill.exp.chat.core.io.SessionManager;
 import bill.exp.chat.core.util.Stoppable;
-import bill.exp.chat.model.*;
+import bill.exp.chat.core.model.*;
 import bill.exp.chat.server.api.ChatServerRequestIntent;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;

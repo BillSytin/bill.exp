@@ -1,6 +1,6 @@
 package bill.exp.chat.server.users;
 
-import bill.exp.chat.model.ChatUser;
+import bill.exp.chat.core.model.ChatUser;
 
 public interface ChatServerUser {
 

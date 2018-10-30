@@ -1,6 +1,6 @@
 package bill.exp.chat.server.cmd;
 
-import bill.exp.chat.model.ChatMessage;
+import bill.exp.chat.core.model.ChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
