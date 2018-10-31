@@ -1,6 +1,5 @@
 package chat.client_exe;
 
-import chat.core.model.ChatClientEnvelope;
 import chat.core.util.Stoppable;
 import org.junit.Assert;
 import org.junit.Test;

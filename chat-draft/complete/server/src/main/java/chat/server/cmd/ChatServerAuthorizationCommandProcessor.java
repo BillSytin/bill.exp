@@ -132,43 +132,56 @@ public class ChatServerAuthorizationCommandProcessor extends BaseChatServerComma
         if (detectProcessingAction(context, ChatStandardAction.Login.toString())) {
 
             final String userName = context.getProcessingMessage().getContent();
-            final SimpleChatServerUser user = new SimpleChatServerUser(userName, false, false);
 
-            ChatServerUserToken userToken = null;
-            try {
-
-                userToken = getUsers().login(Long.toString(context.getSession().getId()), user);
-
-            } catch (final IllegalArgumentException e) {
+            if (StringUtils.isEmpty(userName)) {
 
                 final ChatMessage resultMessage = new ChatMessage();
                 resultMessage.setStandardRoute(ChatStandardRoute.Auth);
                 resultMessage.setStandardAction(ChatStandardAction.Login);
                 resultMessage.setStandardStatus(ChatStandardStatus.Failed);
-                resultMessage.setContent(String.format("User '%s' already exists", userName));
+                resultMessage.setContent(getMessagesResource().getMessage("error.invalid-user-name", new String[] { userName}, getContextLocale(context)));
                 context.getOutput().getMessages().add(resultMessage);
-                context.setCompleted();
-
-            } catch (final Exception e) {
-
-                final ChatMessage errorMessage = ChatMessage.createErrorMessage(e);
-                context.getOutput().getMessages().add(errorMessage);
                 context.setCompleted();
             }
+            else {
+                final SimpleChatServerUser user = new SimpleChatServerUser(userName, false, false);
 
-            if (userToken != null) {
+                ChatServerUserToken userToken = null;
+                try {
 
-                login(userToken);
-                user.setAuthenticated(true);
-                context.setUser(user);
+                    userToken = getUsers().login(Long.toString(context.getSession().getId()), user);
 
-                final ChatMessage resultMessage = new ChatMessage();
-                resultMessage.setStandardRoute(ChatStandardRoute.Auth);
-                resultMessage.setStandardAction(ChatStandardAction.Login);
-                resultMessage.setStandardStatus(ChatStandardStatus.Success);
-                resultMessage.setAuthor(user.toModel());
-                resultMessage.setContent(userToken.toString());
-                context.getOutput().getMessages().add(resultMessage);
+                } catch (final IllegalArgumentException e) {
+
+                    final ChatMessage resultMessage = new ChatMessage();
+                    resultMessage.setStandardRoute(ChatStandardRoute.Auth);
+                    resultMessage.setStandardAction(ChatStandardAction.Login);
+                    resultMessage.setStandardStatus(ChatStandardStatus.Failed);
+                    resultMessage.setContent(getMessagesResource().getMessage("error.user-already-exists", new String[] { userName}, getContextLocale(context)));
+                    context.getOutput().getMessages().add(resultMessage);
+                    context.setCompleted();
+
+                } catch (final Exception e) {
+
+                    final ChatMessage errorMessage = ChatMessage.createErrorMessage(e);
+                    context.getOutput().getMessages().add(errorMessage);
+                    context.setCompleted();
+                }
+
+                if (userToken != null) {
+
+                    login(userToken);
+                    user.setAuthenticated(true);
+                    context.setUser(user);
+
+                    final ChatMessage resultMessage = new ChatMessage();
+                    resultMessage.setStandardRoute(ChatStandardRoute.Auth);
+                    resultMessage.setStandardAction(ChatStandardAction.Login);
+                    resultMessage.setStandardStatus(ChatStandardStatus.Success);
+                    resultMessage.setAuthor(user.toModel());
+                    resultMessage.setContent(userToken.toString());
+                    context.getOutput().getMessages().add(resultMessage);
+                }
             }
         }
 

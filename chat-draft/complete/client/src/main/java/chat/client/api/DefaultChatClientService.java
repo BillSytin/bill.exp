@@ -154,10 +154,12 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
         }
     }
 
-    private static boolean isHelpMessage(ChatMessage message) {
+    private static boolean isCommandMessage(ChatMessage message) {
 
-        return message.isStandardRoute(ChatStandardRoute.Help) ||
-                (StringUtils.isEmpty(message.getRoute()) && ("-" + ChatStandardAction.Help.toString()).equals(message.getContent()));
+        return StringUtils.hasLength(message.getRoute()) ||
+                (StringUtils.isEmpty(message.getRoute()) &&
+                        StringUtils.hasLength(message.getContent()) &&
+                        message.getContent().startsWith("-"));
     }
 
     private void sendMessage(ChatMessage message) {
@@ -179,7 +181,7 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
             return;
         }
 
-        if (StringUtils.isEmpty(getAuthToken()) && !isHelpMessage(message)) {
+        if (StringUtils.isEmpty(getAuthToken()) && !isCommandMessage(message)) {
 
             boolean sendLogin = false;
             final Future<String> authRequestFuture = this.getAuthRequestFuture();
