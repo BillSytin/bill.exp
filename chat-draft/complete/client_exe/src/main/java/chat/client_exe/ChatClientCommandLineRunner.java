@@ -77,13 +77,19 @@ public class ChatClientCommandLineRunner implements CommandLineRunner {
         message.setContent(messageSource.getMessage("connecting", new Object[] { clientChannel.toString() }, getLocale()));
         console.printOutput(message);
 
-        final Session session = clientChannel.connect().get();
-        final ChatClientService service = getSessionService(session);
+        try {
+            final Session session = clientChannel.connect().get();
+            final ChatClientService service = getSessionService(session);
 
-        if (service instanceof Stoppable) {
+            if (service instanceof Stoppable) {
 
-            ((Stoppable) service).waitStopped(-1);
-            ((Stoppable) service).setStopping();
+                ((Stoppable) service).waitStopped(-1);
+                ((Stoppable) service).setStopping();
+            }
+        }
+        catch (final Exception e) {
+
+            console.printOutput(ChatMessage.createErrorMessage(e));
         }
 
         lifeTimeManager.setStopping();

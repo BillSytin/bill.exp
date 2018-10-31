@@ -39,9 +39,9 @@ public class DefaultChatClientConsole implements ChatClientConsole, Stoppable {
 
         out = System.out;
         in = new Scanner(System.in);
-        colorErrorPrefix = (char)27 + "[33m";
-        colorHelpPrefix = (char)27 + "[31m";
-        colorDefaultPrefix = (char)27 + "[0m";
+        colorErrorPrefix = "";
+        colorHelpPrefix = "";
+        colorDefaultPrefix = "";
     }
 
     private void print(String output) {
