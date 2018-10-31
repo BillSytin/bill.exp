@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan({"bill.exp.chat.core", "bill.exp.chat.client"})
+@ComponentScan(basePackages = "bill.exp.chat")
 @EnableConfigurationProperties()
 public class ClientApplication {
 
