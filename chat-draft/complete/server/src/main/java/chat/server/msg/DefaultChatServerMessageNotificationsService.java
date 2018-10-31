@@ -11,6 +11,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Timer;
@@ -18,7 +19,7 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicLong;
 
 @SuppressWarnings("unused")
-@Service
+@Component
 public class DefaultChatServerMessageNotificationsService implements ChatServerMessageNotificationsService, Stoppable, DisposableBean {
 
     private static final int MessageStampNullValue = -1;

@@ -1,4 +1,4 @@
-package chat.server;
+package chat.server_exe;
 
 import chat.core.util.Stoppable;
 import chat.server.msg.ChatServerMessageNotificationsService;

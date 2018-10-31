@@ -7,17 +7,21 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="chat-app-client" />
+        <module name="chat-app-client-exe" />
         <module name="chat-app-core" />
         <module name="chat-app-sample" />
         <module name="chat-app-server" />
+        <module name="chat-app-server-exe" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="chat" target="1.5" />
       <module name="chat-app-client" target="1.8" />
+      <module name="chat-app-client-exe" target="1.8" />
       <module name="chat-app-core" target="1.8" />
       <module name="chat-app-sample" target="1.8" />
       <module name="chat-app-server" target="1.8" />
+      <module name="chat-app-server-exe" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

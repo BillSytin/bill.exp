@@ -22,7 +22,7 @@ public class CoreApplicationTests {
 
 	@SuppressWarnings("unused")
     @SpringBootApplication
-    private static class TestConfiguration {
+    public static class TestConfiguration {
 	}
 
 	@Test

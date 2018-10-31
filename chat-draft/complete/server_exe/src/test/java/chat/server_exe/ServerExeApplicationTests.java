@@ -1,5 +1,6 @@
-package chat.sample;
+package chat.server_exe;
 
+import chat.core.model.ChatClientEnvelope;
 import chat.core.util.Stoppable;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class SampleApplicationTests {
+public class ServerExeApplicationTests {
 
     @Autowired
     @Qualifier("mainLifetimeManager")
@@ -24,5 +25,12 @@ public class SampleApplicationTests {
     public void contextLoads() {
 
         Assert.assertNotNull(mainLifetimeManager);
+    }
+
+    @Test
+    public void envelopeInstantiated() {
+
+        final ChatClientEnvelope envelope = new ChatClientEnvelope();
+        Assert.assertNotNull(envelope);
     }
 }

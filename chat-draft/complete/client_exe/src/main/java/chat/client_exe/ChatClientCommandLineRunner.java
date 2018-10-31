@@ -1,4 +1,4 @@
-package chat.client;
+package chat.client_exe;
 
 import chat.client.api.ChatClientRequestHandler;
 import chat.client.api.ChatClientService;

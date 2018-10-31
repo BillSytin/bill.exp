@@ -1,5 +1,6 @@
-package chat.sample;
+package chat.client_exe;
 
+import chat.core.model.ChatClientEnvelope;
 import chat.core.util.Stoppable;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class SampleApplicationTests {
+public class ClientExeApplicationTests {
 
     @Autowired
     @Qualifier("mainLifetimeManager")

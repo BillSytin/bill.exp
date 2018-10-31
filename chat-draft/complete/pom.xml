@@ -11,7 +11,9 @@
     <modules>
         <module>core</module>
         <module>client</module>
+        <module>client_exe</module>
         <module>server</module>
+        <module>server_exe</module>
         <module>sample</module>
     </modules>
 
