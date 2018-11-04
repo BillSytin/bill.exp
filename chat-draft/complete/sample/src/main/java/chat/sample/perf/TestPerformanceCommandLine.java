@@ -1,21 +1,22 @@
 package chat.sample.perf;
 
-import chat.client.api.ChatClientService;
 import chat.core.client.io.ClientChannel;
-import chat.core.client.io.TcpClientConfig;
+import chat.core.client.io.ClientSession;
 import chat.core.io.Session;
 import chat.core.io.SessionManager;
 import chat.core.util.Stoppable;
-import chat.server.api.ChatServerService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Future;
 
 @SuppressWarnings("unused")
 @Component
@@ -31,15 +32,6 @@ public class TestPerformanceCommandLine implements CommandLineRunner {
 
     @Autowired
     private TestPerformanceClientServer clientServer;
-
-    @Autowired
-    private ObjectFactory<ChatServerService> serverServiceObjectFactory;
-
-    @Autowired
-    private ObjectFactory<ChatClientService> clientServiceObjectFactory;
-
-    @Autowired
-    private TcpClientConfig clientConfig;
 
     @Autowired
     @Qualifier("mainLifetimeManager")
@@ -66,30 +58,31 @@ public class TestPerformanceCommandLine implements CommandLineRunner {
     private SessionManager serverSessionManager;
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws Exception {
 
         if (args != null && args.length > 0 && "-run".equals(args[0])) {
 
             performanceTest();
+            System.exit(0);
         }
     }
 
-    private void performanceTest() {
+    private void performanceTest() throws Exception {
 
         executor.execute(worker);
 
-        for (int i = 0; i < TestPerformanceClientServer.CLIENT_COUNT; i++) {
-            try {
-                Thread.sleep(10 + clientServer.getRandomSleepTime() / 10);
-            }
-            catch (final Exception ignored) {
+        List<Future<ClientSession>> clients = new ArrayList<>();
+        for (int i = 0; i < clientServer.getClientCount(); i++) {
+            Thread.sleep(10 + clientServer.getRandomSleepTime() / 10);
 
-            }
-            clientChannel.connect();
+            clients.add(clientChannel.connect());
         }
 
-        boolean isCompleted = clientServer.waitCompleted();
-        stopAfterTimeout(isCompleted ? 1 : TestPerformanceClientServer.TEST_TIME_SEC);
+        for (final Future<ClientSession> client : clients)
+            client.get();
+
+        final boolean isCompleted = clientServer.waitCompleted();
+        stopAfterTimeout(isCompleted ? 1 : clientServer.getTestTimeSec());
 
         clientServer.checkResults();
     }

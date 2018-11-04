@@ -43,22 +43,37 @@ public class TestPerformanceClientServer {
     private final AtomicInteger interactCount = new AtomicInteger();
     private final CompletableFuture<Boolean> interactCompleted = new CompletableFuture<>();
 
-    public final static int CLIENT_COUNT = 10;
-    private final static boolean USE_LARGE_MESSAGE = CLIENT_COUNT <= 10;
-    private final static int CLIENT_SLEEP_TIME = 10;
-    public final static int TEST_TIME_SEC = 30;
-    private final static int TEST_INTERACT_COUNT = 5000;//3 * 100 * TEST_TIME_SEC * 1000 / (CLIENT_SLEEP_TIME + 10) / (USE_LARGE_MESSAGE ? 10 : 1);
+    private final int clientCount;
+    private final boolean useLargeMessage;
+    private final int clientSleepTime;
+
+    private final int testTimeSec;
+    private final int testInteractCount;
 
     private final TcpClientConfig clientConfig;
 
     private final Random random;
 
     @Autowired
-    public TestPerformanceClientServer(TcpClientConfig clientConfig) {
+    public TestPerformanceClientServer(TcpClientConfig clientConfig, TestPerformanceConfig performanceConfig) {
 
         this.clientConfig = clientConfig;
 
+        this.clientCount = performanceConfig.getClientCount();
+        this.useLargeMessage = clientCount <= 10;
+        this.clientSleepTime = performanceConfig.getClientSleepTime();
+        this.testTimeSec = performanceConfig.getTestTimeSec();
+        this.testInteractCount = 10 * 100 * testTimeSec * 1000 / (clientSleepTime + 100) / (useLargeMessage ? 10 : 1);
+
         random = new Random();
+    }
+
+    public int getClientCount() {
+        return clientCount;
+    }
+
+    public int getTestTimeSec() {
+        return testTimeSec;
     }
 
     public int incServerAcceptCount() {
@@ -115,7 +130,7 @@ public class TestPerformanceClientServer {
 
         boolean isCompleted = false;
         try {
-            if (interactCompleted.get(TEST_TIME_SEC, TimeUnit.SECONDS))
+            if (interactCompleted.get(testTimeSec, TimeUnit.SECONDS))
                 isCompleted = true;
         } catch (final Exception e) {
 
@@ -174,7 +189,7 @@ public class TestPerformanceClientServer {
 
     public String generateMessageString() {
 
-        return generateMessageString(USE_LARGE_MESSAGE);
+        return generateMessageString(useLargeMessage);
     }
 
     private String generateMessageString(boolean large) {
@@ -193,13 +208,13 @@ public class TestPerformanceClientServer {
 
         int count = interactCount.getAndIncrement();
 
-        if ((count % (TEST_INTERACT_COUNT / 10)) == 0)
-            getLogger().info(String.format("%d of %d%n", count, TEST_INTERACT_COUNT));
+        if ((count % (testInteractCount / 10)) == 0)
+            getLogger().info(String.format("%d of %d%n", count, testInteractCount));
 
-        if (count < TEST_INTERACT_COUNT)
+        if (count < testInteractCount)
             return true;
 
-        if (count == TEST_INTERACT_COUNT)
+        if (count == testInteractCount)
             interactCompleted.complete(true);
 
         return false;
@@ -207,11 +222,11 @@ public class TestPerformanceClientServer {
 
     public int getClientSleepTime() {
 
-        return CLIENT_SLEEP_TIME;
+        return clientSleepTime;
     }
 
     public int getRandomSleepTime() {
 
-        return CLIENT_SLEEP_TIME / 2 + random.nextInt(1 + CLIENT_SLEEP_TIME / 2);
+        return clientSleepTime / 2 + random.nextInt(1 + clientSleepTime / 2);
     }
 }
