@@ -15,6 +15,7 @@ import chat.core.io.Session;
 import chat.core.io.SessionManager;
 import chat.core.model.*;
 import chat.core.util.Stoppable;
+import chat.server.msg.ChatServerMessageNotificationsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.ObjectFactory;
@@ -70,6 +71,9 @@ class TestMessagingCommandLine implements CommandLineRunner {
     @Autowired
     @Qualifier("serverSessionManager")
     private SessionManager serverSessionManager;
+
+    @Autowired
+    private ChatServerMessageNotificationsService notificationsService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -181,7 +185,7 @@ class TestMessagingCommandLine implements CommandLineRunner {
                 content.getMessages().add(message);
                 final ResponseIntent responseIntent = new ChatClientResponseIntent(
                         ChatAction.Process,
-                        new ChatClientEnvelope[] { content });
+                        new ChatClientEnvelope[]{content});
                 final Message intentMessage = new ResponseIntentMessage(responseIntent);
 
                 session.submit(intentMessage);
@@ -190,10 +194,31 @@ class TestMessagingCommandLine implements CommandLineRunner {
             }
         }
 
+        stop();
+    }
+
+    private void stop() {
         getLogger().info("Stopping...");
         gracefulStopSessions(clientSessionManager);
         lifeTimeManager.setStopping();
+
+        if (clientChannel instanceof Stoppable) {
+
+            ((Stoppable) clientChannel).setStopping();
+        }
+
+        if (worker instanceof Stoppable) {
+
+            ((Stoppable) worker).setStopping();
+        }
+
+        if (notificationsService instanceof Stoppable) {
+
+            ((Stoppable) notificationsService).setStopping();
+        }
+
         lifeTimeManager.waitStopped(1000);
+        System.exit(0);
     }
 
     private static void gracefulStopSessions(SessionManager manager) {
