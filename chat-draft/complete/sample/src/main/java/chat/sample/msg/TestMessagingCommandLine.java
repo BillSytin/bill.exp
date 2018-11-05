@@ -75,6 +75,9 @@ class TestMessagingCommandLine implements CommandLineRunner {
     @Autowired
     private ChatServerMessageNotificationsService notificationsService;
 
+    @Autowired
+    private TestMessagingConfig config;
+
     @Override
     public void run(String... args) throws Exception {
 
@@ -86,7 +89,7 @@ class TestMessagingCommandLine implements CommandLineRunner {
 
     private void integrationTest() throws Exception {
 
-        final int TestClientCount = 3;
+        final int TestClientCount = config.getClientCount();
 
         getLogger().info("Starting...");
         executor.execute(worker);
@@ -133,6 +136,15 @@ class TestMessagingCommandLine implements CommandLineRunner {
 
             services.add(service);
             consoles.add(console);
+        }
+
+        if (consoles.size() == 1) {
+
+            final ChatMessage fakeMessage = new ChatMessage();
+            fakeMessage.setStandardRoute(ChatStandardRoute.Message);
+            fakeMessage.setStandardAction(ChatStandardAction.Fetch);
+            fakeMessage.setContent("");
+            consoles.get(0).printOutput(fakeMessage);
         }
 
         ArrayList<Integer> incomplete = new ArrayList<>(consoles.size());

@@ -97,6 +97,11 @@ public class DefaultChatServerModelConverter implements ChatServerModelConverter
     @Override
     public Response convertIntentToResponse(ChatServerResponseIntent intent) {
 
+        if (intent.getAction() == ChatAction.CloseSession) {
+
+            return new SessionEventResponse(0, SessionEvent.Close);
+        }
+
         final ChatServerEnvelope[] content = intent.getContent();
         if (content != null && content.length > 0) {
 
@@ -114,13 +119,6 @@ public class DefaultChatServerModelConverter implements ChatServerModelConverter
             }
 
             return new SimpleResponse(responseStrings);
-        }
-        else {
-
-            if (intent.getAction() == ChatAction.CloseSession) {
-
-                return new SessionEventResponse(0, SessionEvent.Close);
-            }
         }
 
         return null;

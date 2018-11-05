@@ -399,6 +399,11 @@ public class DefaultChatClientService implements ChatClientService, ConsoleChatC
             message.setStandardAction(ChatStandardAction.Close);
             message.setContent(session.toString());
             receiveMessage(message);
+
+            final ChatClientEnvelope envelope = new ChatClientEnvelope();
+            envelope.setAction(ChatAction.CloseSession);
+
+            return new ChatClientResponseIntent(ChatAction.Process, new ChatClientEnvelope[] { envelope });
         }
 
         return null;

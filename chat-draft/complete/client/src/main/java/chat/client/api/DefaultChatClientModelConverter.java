@@ -56,7 +56,7 @@ public class DefaultChatClientModelConverter implements ChatClientModelConverter
     @Override
     public ChatServerEnvelope[] convertIntentToModels(ChatClientRequestIntent intent) {
 
-        ChatServerEnvelope[] model = null;
+        ChatServerEnvelope[] models = null;
         final String[] content = intent.getContent();
         if (content != null && content.length > 0) {
 
@@ -68,13 +68,13 @@ public class DefaultChatClientModelConverter implements ChatClientModelConverter
 
             if (index > 0) {
 
-                model = new ChatServerEnvelope[index];
+                models = new ChatServerEnvelope[index];
                 index = 0;
                 for (final String s : content) {
 
                     try {
 
-                        model[index] = ModelConvert.deserialize(s, ChatServerEnvelope.class);
+                        models[index] = ModelConvert.deserialize(s, ChatServerEnvelope.class);
                     } catch (final Exception e) {
 
                         getLogger().error("Unexpected api deserialization error%n", e);
@@ -84,14 +84,19 @@ public class DefaultChatClientModelConverter implements ChatClientModelConverter
             }
         }
 
-        return model;
+        return models;
     }
 
     @Override
     public Response convertIntentToResponse(ChatClientResponseIntent intent) {
 
+        if (intent.getAction() == ChatAction.CloseSession) {
+
+            return new SessionEventResponse(0, SessionEvent.Close);
+        }
+
         final ChatClientEnvelope[] content = intent.getContent();
-        if (content != null) {
+        if (content != null && content.length > 0) {
 
             final String[] responseStrings = new String[content.length];
             for (int i = 0; i < content.length; i++) {
@@ -107,13 +112,6 @@ public class DefaultChatClientModelConverter implements ChatClientModelConverter
             }
 
             return new SimpleResponse(responseStrings);
-        }
-        else {
-
-            if (intent.getAction() == ChatAction.CloseSession) {
-
-                return new SessionEventResponse(0, SessionEvent.Close);
-            }
         }
 
         return null;
