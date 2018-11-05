@@ -42,8 +42,8 @@ public class TestPerformanceChatClientService implements ChatClientService {
 
             case OpenSession:
                 clientServer.incClientConnectCount();
-                clientServer.incClientOutputCount();
-                output = clientServer.generateOpenSessionResponse(clientServer.generateMessageString());
+                // clientServer.incClientOutputCount();
+                // output = clientServer.generateOpenSessionResponse(clientServer.generateMessageString());
                 break;
 
             case CloseSession:

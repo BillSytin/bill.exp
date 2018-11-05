@@ -1,9 +1,13 @@
 package chat.sample.perf;
 
+import chat.client.api.ChatClientResponseIntent;
 import chat.core.client.io.ClientChannel;
 import chat.core.client.io.ClientSession;
+import chat.core.data.ResponseIntentMessage;
 import chat.core.io.Session;
 import chat.core.io.SessionManager;
+import chat.core.model.ChatAction;
+import chat.core.model.ChatClientEnvelope;
 import chat.core.util.Stoppable;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -69,17 +73,31 @@ public class TestPerformanceCommandLine implements CommandLineRunner {
 
     private void performanceTest() throws Exception {
 
+        getLogger().info("Start server");
         executor.execute(worker);
 
+        getLogger().info("Connecting clients...");
         List<Future<ClientSession>> clients = new ArrayList<>();
         for (int i = 0; i < clientServer.getClientCount(); i++) {
             Thread.sleep(10 + clientServer.getRandomSleepTime() / 10);
 
             clients.add(clientChannel.connect());
         }
+        getLogger().info("Clients connected");
 
-        for (final Future<ClientSession> client : clients)
-            client.get();
+        List<ClientSession> sessions = new ArrayList<>();
+        for (final Future<ClientSession> client : clients) {
+            sessions.add(client.get());
+        }
+
+        final ChatClientEnvelope envelope = clientServer.generateOpenSessionResponse(clientServer.generateMessageString());
+        final ChatClientResponseIntent intent = new ChatClientResponseIntent(ChatAction.Process, new ChatClientEnvelope[] { envelope });
+        for (final Session session : sessions) {
+
+            clientServer.incClientOutputCount();
+            session.submit(new ResponseIntentMessage(intent));
+        }
+
 
         final boolean isCompleted = clientServer.waitCompleted();
         stopAfterTimeout(isCompleted ? 1 : clientServer.getTestTimeSec());
@@ -100,7 +118,6 @@ public class TestPerformanceCommandLine implements CommandLineRunner {
 
         gracefulStopSessions(clientSessionManager);
 
-        gracefulStopSessions(serverSessionManager);
 
         if (clientSessionManager instanceof Stoppable) {
 
@@ -109,6 +126,8 @@ public class TestPerformanceCommandLine implements CommandLineRunner {
         }
 
         stopper.setStopping();
+
+        gracefulStopSessions(serverSessionManager);
 
         if (serverSessionManager instanceof Stoppable) {
 

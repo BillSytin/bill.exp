@@ -198,6 +198,7 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
         }
     }
 
+    /*
     private static void SleepBeforeClose() {
 
         try {
@@ -208,6 +209,7 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
         catch (final Exception ignored) {
         }
     }
+    */
 
     private void writeBuffers(ByteBuffer[] output) {
 
@@ -355,7 +357,7 @@ public abstract class BaseAsyncSession implements AsyncSession, Session, Stoppab
                 public void completed(MessageProcessingAction result, MessageProcessingState attachment) {
 
                     processingCompletionHandler.completed(result, attachment);
-                    SleepBeforeClose();
+                    // SleepBeforeClose();
 
                     writeBuffers(new ByteBuffer[] { null }, new CompletionHandler<Integer, Session>() {
 

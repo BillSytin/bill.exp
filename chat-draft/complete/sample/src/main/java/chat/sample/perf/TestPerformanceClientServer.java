@@ -63,7 +63,7 @@ public class TestPerformanceClientServer {
         this.useLargeMessage = clientCount <= 10;
         this.clientSleepTime = performanceConfig.getClientSleepTime();
         this.testTimeSec = performanceConfig.getTestTimeSec();
-        this.testInteractCount = 10 * 100 * testTimeSec * 1000 / (clientSleepTime + 100) / (useLargeMessage ? 10 : 1);
+        this.testInteractCount = 10 * 1000 * testTimeSec * 1000 / (clientSleepTime + 100) / (useLargeMessage ? 10 : 1);
 
         random = new Random();
     }
