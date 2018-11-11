@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @SpringBootApplication(scanBasePackages = "chat")
 @EnableConfigurationProperties()
-class SampleApplication {
+public class SampleApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SampleApplication.class, args);

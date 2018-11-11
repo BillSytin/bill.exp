@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @SuppressWarnings({"unused", "EmptyMethod"})
@@ -20,6 +22,10 @@ public class CoreApplicationTests {
     @Qualifier("mainLifetimeManager")
     private Stoppable mainLifetimeManager;
 
+	@Autowired
+	@Qualifier("serverPoolExecutor")
+	private TaskExecutor serverPool;
+
 	@SuppressWarnings("unused")
     @SpringBootApplication
     public static class TestConfiguration {
@@ -29,6 +35,29 @@ public class CoreApplicationTests {
 	public void contextLoads() {
 
 	    Assert.assertNotNull(mainLifetimeManager);
+	}
+
+	@Test
+	public void waitStoppedCompletes() {
+
+		for (int i = 0; i < 10; i++) {
+			serverPool.execute(() -> Assert.assertTrue(mainLifetimeManager.waitStopped(10000)));
+		}
+
+        serverPool.execute(() -> {
+            try {
+                Thread.sleep(100);
+            }
+            catch (InterruptedException ignored) {
+            }
+            mainLifetimeManager.setStopped();
+        });
+
+		Assert.assertTrue(mainLifetimeManager.waitStopped(1000));
+
+		for (int i = 0; i < 10; i++) {
+			serverPool.execute(() -> Assert.assertTrue(mainLifetimeManager.waitStopped(10)));
+		}
 	}
 
 	@Test
