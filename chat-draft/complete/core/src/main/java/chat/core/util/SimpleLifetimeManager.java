@@ -27,10 +27,13 @@ public class SimpleLifetimeManager implements Stoppable {
 
         if (!isStopped) {
 
-            isStopped = true;
             synchronized(completeEvent) {
 
-                completeEvent.notifyAll();
+                if (!isStopped) {
+
+                    isStopped = true;
+                    completeEvent.notifyAll();
+                }
             }
         }
     }
@@ -42,15 +45,17 @@ public class SimpleLifetimeManager implements Stoppable {
 
             synchronized(completeEvent) {
 
-                try {
+                if (!isStopped) {
 
-                    if (timeout < 0)
-                        completeEvent.wait();
-                    else
-                        completeEvent.wait(timeout);
-                }
-                catch (final InterruptedException e) {
-                    return false;
+                    try {
+
+                        if (timeout < 0)
+                            completeEvent.wait();
+                        else
+                            completeEvent.wait(timeout);
+                    } catch (final InterruptedException e) {
+                        return false;
+                    }
                 }
             }
         }
